@@ -1,0 +1,14 @@
+{
+  "name": "tzll",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "babel-register": "^6.26.0",
+    "koa": "^2.4.1",
+    "koa-body": "^2.5.0",
+    "request": "^2.83.0"
+  },
+  "scripts": {
+    "start": "BROWSER=none node app.js"
+  }
+}
