@@ -4,6 +4,9 @@
 * [Ollenet API access](http://192.168.10.104/api)
 * [API Explorer](http://api.telldus.com/explore/index)
 
+## Info
+[Koa Async](https://medium.com/ninjadevs/node-7-6-koa-2-asynchronous-flow-control-made-right-b0d41c6ba570)
+
 ## Get token
 
 Local api access requiers an access token ([get new token](http://api.telldus.net/localapi/api.html)).

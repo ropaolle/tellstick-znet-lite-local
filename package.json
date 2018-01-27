@@ -6,7 +6,8 @@
     "babel-register": "^6.26.0",
     "koa": "^2.4.1",
     "koa-body": "^2.5.0",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
