@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "babel-register": "^6.26.0",
+    "chalk": "^2.3.0",
     "koa": "^2.4.1",
     "koa-body": "^2.5.0",
+    "nodemon": "^1.14.11",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
   },
@@ -19,7 +21,7 @@
     "prettier-eslint": "^8.6.0"
   },
   "scripts": {
-    "start": "BROWSER=none node app.js"
+    "start": "BROWSER=none nodemon app.js"
   },
   "eslintConfig": {
     "root": true,
