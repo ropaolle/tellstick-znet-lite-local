@@ -1,7 +1,7 @@
-require("babel-register");
+require('babel-register');
 
-const Koa = require("koa");
-const request = require("request");
+const Koa = require('koa');
+const request = require('request');
 
 const app = new Koa();
 const PORT = 3000;
@@ -12,25 +12,25 @@ app.use((ctx, next) => {
     const ms = Date.now() - start;
     console.log(
       `${ctx.method} ${ctx.url} - ${JSON.stringify(
-        ctx.request.query
-      )} - ${ms}ms`
+        ctx.request.query,
+      )} - ${ms}ms`,
     );
   });
 });
 
-app.use(ctx => {
+app.use((ctx) => {
   const { id, command } = ctx.request.query;
 
-  var url;
-  if (command == "info") {
-    url = "http://192.168.10.104/api/devices/list?supportedMethods=3";
-  } else if (id && command === "off") {
+  let url;
+  if (command == 'info') {
+    url = 'http://192.168.10.104/api/devices/list?supportedMethods=3';
+  } else if (id && command === 'off') {
     url = `http://192.168.10.104/api/device/turnOff?id=${id}`;
-  } else if (id && command === "on") {
+  } else if (id && command === 'on') {
     url = `http://192.168.10.104/api/device/turnOn?id=${id}`;
   }
 
-  console.log("INPUT:", id, command, url);
+  console.log('INPUT:', id, command, url);
 
   if (url) {
     const options = {
@@ -38,8 +38,8 @@ app.use(ctx => {
       // json: true,
       headers: {
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImF1ZCI6InJvcGFvbGxlLXNvdnJ1bSIsImV4cCI6MTUxNzkzMjMxN30.eyJyZW5ldyI6dHJ1ZSwidHRsIjoyNDE5MjAwfQ.XYDHxcGUKIViOcAC48Ezbu3NMXrsIaCD2zqzpMB67AU"
-      }
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImF1ZCI6InJvcGFvbGxlLXNvdnJ1bSIsImV4cCI6MTUxNzkzMjMxN30.eyJyZW5ldyI6dHJ1ZSwidHRsIjoyNDE5MjAwfQ.XYDHxcGUKIViOcAC48Ezbu3NMXrsIaCD2zqzpMB67AU',
+      },
     };
 
     request(options, (err, res, body) => {
