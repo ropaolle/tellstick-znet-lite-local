@@ -21,7 +21,7 @@
     "prettier-eslint": "^8.6.0"
   },
   "scripts": {
-    "start": "BROWSER=none nodemon app.js"
+    "start": "BROWSER=none nodemon api/app.js"
   },
   "eslintConfig": {
     "root": true,
