@@ -1,10 +1,12 @@
 const Koa = require('koa');
+const cors = require('koa2-cors');
 const request = require('request-promise');
 const logger = require('./utils').logger;
 
 const app = new Koa();
+app.use(cors());
 
-const PORT = 3000;
+const PORT = 3001;
 const API_URL = 'http://192.168.10.104/api/';
 const authorization = require('./authorization.json');
 
@@ -24,7 +26,11 @@ app.use(async (ctx, next) => {
 
   const options = {
     uri,
-    headers: { authorization: `Bearer ${authorization.accessToken}` },
+    headers: {
+      authorization: `Bearer ${authorization.accessToken}`,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT, OPTIONS, HEAD',
+    },
     json: true,
     // resolveWithFullResponse: true,
   };
@@ -40,7 +46,7 @@ app.use(async (ctx, next) => {
       this.locals = { status: 'error', uri, err };
     });
 
-  ctx.body = `Request Query: ${JSON.stringify(Object.assign(ctx.request.query, this.locals))}`;
+  ctx.body = JSON.stringify(Object.assign(ctx.request.query, this.locals));
 });
 
 app.listen(PORT, () => {
