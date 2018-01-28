@@ -12,16 +12,35 @@ const authorization = require('./authorization.json');
 
 app.use(logger(this));
 
+/* const TELLSTICK_TURNON = 1;
+const TELLSTICK_TURNOFF = 2;
+const TELLSTICK_BELL = 4;
+const TELLSTICK_TOGGLE = 8;
+const TELLSTICK_DIM = 16;
+const TELLSTICK_LEARN = 32;
+const TELLSTICK_EXECUTE = 64;
+const TELLSTICK_UP = 128;
+const TELLSTICK_DOWN = 256;
+const TELLSTICK_STOP = 512; */
+
 app.use(async (ctx, next) => {
-  const { id, command } = ctx.request.query;
+  const { id, command, level, supportedMethods } = ctx.request.query;
 
   let uri;
-  if (command === 'info') {
-    uri = `${API_URL}devices/list?supportedMethods=3`;
+  if (id && supportedMethods && command === 'info') {
+    uri = `${API_URL}device/info?id=${id}&supportedMethods=${supportedMethods}`;
   } else if (id && command === 'off') {
     uri = `${API_URL}device/turnOff?id=${id}`;
   } else if (id && command === 'on') {
     uri = `${API_URL}device/turnOn?id=${id}`;
+  } else if (id && level && command === 'dim') {
+    uri = `${API_URL}device/dim?id=${id}&level=${level}`;
+  } else if (id && command === 'history') {
+    uri = `${API_URL}device/history?id=${id}`;
+  } else if (supportedMethods && command === 'deviceList') {
+    uri = `${API_URL}devices/list?supportedMethods=${supportedMethods}`;
+  } else if (supportedMethods && command === 'sensorList') {
+    uri = `${API_URL}sensors/list?includeValues=1`;
   }
 
   const options = {
@@ -29,7 +48,7 @@ app.use(async (ctx, next) => {
     headers: {
       authorization: `Bearer ${authorization.accessToken}`,
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT, OPTIONS, HEAD',
+      'Access-Control-Allow-Methods': 'GET', // 'GET, POST, DELETE, PUT, OPTIONS, HEAD'
     },
     json: true,
     // resolveWithFullResponse: true,
@@ -38,7 +57,7 @@ app.use(async (ctx, next) => {
   await request(options)
     .then((response) => {
       // console.log('RESPONSE', response);
-      this.locals = { status: 'succcess', uri, response };
+      this.locals = { status: 'success', uri, response };
       next();
     })
     .catch((err) => {

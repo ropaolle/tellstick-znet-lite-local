@@ -29,18 +29,8 @@ export default class AppNavbar extends React.Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink to="/generator" activeClassName="active" tag={RRNavLink}>
-                  Sidgenerator
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/images" activeClassName="active" tag={RRNavLink}>
-                  Bilder
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/help" activeClassName="active" tag={RRNavLink}>
-                  Hjälp
+                <NavLink to="/devices" activeClassName="active" tag={RRNavLink}>
+                  Devices
                 </NavLink>
               </NavItem>
             </Nav>

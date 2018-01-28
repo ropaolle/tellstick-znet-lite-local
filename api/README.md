@@ -3,6 +3,7 @@
 * [Blogg - Tellstick Local API](http://developer.telldus.com/blog/2016/05/24/local-api-for-tellstick-znet-lite-beta-now-in-public-beta)
 * [Ollenet API access](http://192.168.10.104/api)
 * [API Explorer](http://api.telldus.com/explore/index)
+* [API flags](http://developer.telldus.se/doxygen/group__core.html#gaa732c3323e53d50e893c43492e5660c9) [extras](https://github.com/telldus/telldus/blob/master/examples/python/live/tdtool/tdtool.py)
 
 ## Info
 
@@ -47,3 +48,12 @@ const options = {
 };
 https.createServer(options, app.callback()).listen(443);
 ```
+
+### Controlling functions
+TellStick has a couple of functions for controlling devices. Each of them should only be called if the device support the feature. These functions all return zero if the call was successful and non-zero otherwise.
+
+tdTurnOn() - Devices supporting TELLSTICK_TURNON. Most of the normal switches (for lamp etc.) support this.
+tdTurnOff() - Devices supporting TELLSTICK_TURNOFF. Almost all of the devices supporting TELLSTICK_TURNON also support this.
+tdDim() - Devices supporting TELLSTICK_DIM. This is a quite unusual feature for dimmers. Many dimmers on the market that are dimmable have no way for sending a specific level which means it does not support this feature.
+tdBell() - Devices supporting TELLSTICK_BELL. This is mostly wireless doorbells.
+

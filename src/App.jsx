@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
 import AppNavbar from './AppNavbar';
 import Home from './pages/home/Home';
+import Devices from './pages/devices/Devices';
 import Help from './pages/help/Help';
 
 class App extends Component {
@@ -19,6 +20,7 @@ class App extends Component {
           <AppNavbar />
 
           <Route exact path="/" component={Home} />
+          <Route path="/devices" component={Devices} />
           <Route path="/help" component={Help} />
         </div>
       </Router>

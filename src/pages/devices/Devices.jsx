@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import map from 'lodash.map';
-import { Container, Button, Row, Col, Card, /* CardHeader,  */CardImg, CardBody, CardTitle, CardFooter } from 'reactstrap';
+import { Container, Button, Table /* , Row, Col */ } from 'reactstrap';
 import request from 'request-promise';
-import bedroom from './bedroom.jpeg';
-import livingroom from './livingroom.jpg';
-import window from './window.jpg';
 
 function telldusCommand(qs) {
   const options = {
@@ -57,6 +54,20 @@ class Devices extends Component {
     });
   }
 
+  // onClickDeviceOn = (e) => {
+  //   const id = e.target.id;
+  //   telldusCommand({ command: 'on', id }).then(() => {
+  //     this.onClickDeviceInfo(id);
+  //   });
+  // };
+
+  // onClickDeviceOff = (e) => {
+  //   const id = e.target.id;
+  //   telldusCommand({ command: 'off', id }).then(() => {
+  //     this.updateDeviceInfo(id);
+  //   });
+  // };
+
   onClickDeviceToggle = (e) => {
     const id = e.target.id;
     const device = this.state.devices[id];
@@ -87,34 +98,16 @@ class Devices extends Component {
     const { devices } = this.state;
 
     const deviceTable = map(devices, ((dev) => {
-      if (![6, 8, 18].includes(dev.id)) return '';
-      let img = bedroom;
-      if (dev.id === 8) img = window;
-      if (dev.id === 18) img = livingroom;
-
-      return (<Col xs="12" sm="6" md="4" key={dev.id} className="mb-4">
-        <Card className="home-cards">
-          <CardImg top width="100%" src={img} alt="Card image cap" />
-          <CardBody>
-            <CardTitle>{dev.name}</CardTitle>
-            <Button
-              onClick={this.onClickDeviceToggle}
-              id={dev.id}
-              color={dev.state === 2 ? 'success' : 'danger'}
-            >
-              {dev.state === 2 ? 'På' : 'Av'}
-            </Button>{' '}
-            <Button onClick={this.onClickDeviceDim} id={dev.id} color="warning">Dim</Button>
-          </CardBody>
-          <CardFooter>State: {dev.state}, Value: {dev.statevalue}</CardFooter>
-        </Card>
-      </Col>);
-    }));
-
-    /*
-<tr key={dev.id}>
+      console.log();
+      return (<tr key={dev.id}>
         <td>{dev.id}</td>
         <td>{dev.name}</td>
+        <td>{dev.state}</td>
+        <td>{dev.statevalue}</td>
+        <td>{dev.type}</td>
+        <td>{dev.methods}</td>
+        <td>{dev.model}</td>
+        <td>{dev.protocol}</td>
         <td>
           <Button
             onClick={this.onClickDeviceToggle}
@@ -123,15 +116,35 @@ class Devices extends Component {
           >
             {dev.state === 2 ? 'På' : 'Av'}
           </Button>{' '}
+          {/* <Button onClick={this.onClickDeviceOn} id={dev.id} color="warning">På</Button>{' '}
+          <Button onClick={this.onClickDeviceOff} id={dev.id} color="warning">Av</Button>{' '} */}
           <Button onClick={this.onClickDeviceDim} id={dev.id} color="warning">Dim</Button>
         </td>
-      </tr>
-*/
+      </tr>);
+    }));
 
     return (
       <Container fluid className="page-content home-page">
         <h1>Devices</h1>
-        <Row>{deviceTable}</Row>
+        <Table striped hover responsive>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>State</th>
+              <th>Value</th>
+              <th>Type</th>
+              <th>Methods</th>
+              <th>Model</th>
+              <th>Protocol</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {deviceTable}
+          </tbody>
+        </Table>
+
       </Container>
     );
   }
