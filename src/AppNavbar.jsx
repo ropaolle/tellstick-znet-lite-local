@@ -23,7 +23,7 @@ export default class AppNavbar extends React.Component {
       <div>
         <Navbar color="dark" dark expand="md">
           <NavbarBrand to="/" tag={RRNavLink}>
-            Tellstick Znet Lite Local
+            <img src="./favicon-32x32.png" alt="" />Tellstick Znet Lite Local
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>

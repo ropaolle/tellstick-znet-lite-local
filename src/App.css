@@ -24,15 +24,8 @@
   margin-top: 4px;
 }
 
-.home-page .rangeslider-horizontal {
-  margin-top: 10px;
-}
-
-.home-page .slider-value {
-  display: inline-block;
-  margin-top: -60px;
-  position: absolute;
-  right: 25px;
+.home-page .slider {
+  margin-top: 9px;
 }
 
 /**

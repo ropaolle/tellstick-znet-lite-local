@@ -4,7 +4,9 @@ import map from 'lodash.map';
 import { Container, Row, Col } from 'reactstrap';
 import request from 'request-promise';
 import Toggle from 'react-toggle';
-import Slider from './Slider';
+// import Slider from './Slider';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 
 function telldusCommand(qs) {
   const options = {
@@ -50,6 +52,12 @@ class Devices extends Component {
     });
   };
 
+  onSliderChange = id => (value) => {
+    const { devices } = this.state; // TODO clone
+    devices[id].statevalue = value;
+    this.setState({ devices });
+  };
+
   handleDeviceToggle = (e) => {
     const id = Number(e.target.id);
     const device = this.state.devices[id];
@@ -61,7 +69,6 @@ class Devices extends Component {
   };
 
   handleDeviceDimmer = id => (value) => {
-    console.log('S1', id, value);
     telldusCommand({ command: 'dim', id, level: value }).then(() => {
       this.updateDeviceInfo(id);
     });
@@ -70,7 +77,6 @@ class Devices extends Component {
   updateDeviceInfo = (id, delay = 1000) => {
     setTimeout(() => {
       requestDeviceInfo(Number(id)).then((device) => {
-        console.log('S2', id, device);
         const clone = Object.assign({}, this.state.devices, { [device.id]: device });
         this.setState({ devices: clone });
       });
@@ -101,8 +107,12 @@ class Devices extends Component {
             <Col className="col-10">
               <div className="slider">
                 <Slider
+                  min={0}
+                  max={255}
                   value={Number(dev.statevalue)}
-                  onChangeComplete={this.handleDeviceDimmer(dev.id)}
+                  disabled={!(dev.methods & 16)} // eslint-disable-line no-bitwise
+                  onChange={this.onSliderChange(dev.id)}
+                  onAfterChange={this.handleDeviceDimmer(dev.id)}
                 />
               </div>
             </Col>
