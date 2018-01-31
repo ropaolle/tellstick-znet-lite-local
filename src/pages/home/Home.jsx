@@ -8,7 +8,7 @@ import Slider from './Slider';
 
 function telldusCommand(qs) {
   const options = {
-    uri: 'http://192.168.10.100:3001',
+    uri: 'http://192.168.10.159:3001',
     qs,
     json: true,
     // resolveWithFullResponse: true,
@@ -48,7 +48,7 @@ class Devices extends Component {
 
       this.setState({ devices: indexedById });
     });
-  }
+  };
 
   handleDeviceToggle = (e) => {
     const id = Number(e.target.id);
@@ -61,48 +61,55 @@ class Devices extends Component {
   };
 
   handleDeviceDimmer = id => (value) => {
+    console.log('S1', id, value);
     telldusCommand({ command: 'dim', id, level: value }).then(() => {
       this.updateDeviceInfo(id);
     });
   };
 
-  updateDeviceInfo = ((id, delay = 1000) => {
+  updateDeviceInfo = (id, delay = 1000) => {
     setTimeout(() => {
       requestDeviceInfo(Number(id)).then((device) => {
+        console.log('S2', id, device);
         const clone = Object.assign({}, this.state.devices, { [device.id]: device });
         this.setState({ devices: clone });
       });
     }, delay);
-  });
+  };
 
   render() {
     const { devices } = this.state;
 
-    const deviceList = map(devices, ((dev) => {
+    const deviceList = map(devices, (dev) => {
       if (![6, 8, 18].includes(dev.id)) return '';
 
-      return (<div key={dev.id}>
-        <Row><Col>{dev.name}</Col></Row>
-        <Row>
-          <Col className="col-2">
-            <label htmlFor={`toggle-${dev.id}`}>
-              <Toggle
-                checked={dev.state === 1}
-                id={dev.id}
-                onChange={this.handleDeviceToggle}
-              />
-            </label>
-          </Col>
-          <Col className="col-10">
-            <div className="slider">
-              <Slider
-                value={Number(dev.statevalue)}
-                onChangeComplete={this.handleDeviceDimmer(dev.id)}
-              />
-            </div>
-          </Col>
-        </Row></div>);
-    }));
+      return (
+        <div key={dev.id}>
+          <Row>
+            <Col>{dev.name}</Col>
+          </Row>
+          <Row>
+            <Col className="col-2">
+              <label htmlFor={`toggle-${dev.id}`}>
+                <Toggle
+                  checked={dev.state === 1}
+                  id={dev.id.toString()}
+                  onChange={this.handleDeviceToggle}
+                />
+              </label>
+            </Col>
+            <Col className="col-10">
+              <div className="slider">
+                <Slider
+                  value={Number(dev.statevalue)}
+                  onChangeComplete={this.handleDeviceDimmer(dev.id)}
+                />
+              </div>
+            </Col>
+          </Row>
+        </div>
+      );
+    });
 
     return (
       <Container fluid className="page-content home-page">

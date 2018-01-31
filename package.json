@@ -39,16 +39,12 @@
     "app": "start && api"
   },
   "babel": {
-    "presets": [
-      "react-app"
-    ]
+    "presets": ["react-app"]
   },
   "eslintConfig": {
     "root": true,
     "extends": "airbnb",
-    "plugins": [
-      "react"
-    ],
+    "plugins": ["react"],
     "parser": "babel-eslint",
     "parserOptions": {
       "ecmaVersion": 6,
@@ -65,10 +61,7 @@
       "react/jsx-filename-extension": [
         1,
         {
-          "extensions": [
-            ".js",
-            ".jsx"
-          ]
+          "extensions": [".js", ".jsx"]
         }
       ]
     }

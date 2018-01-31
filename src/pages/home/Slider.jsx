@@ -26,8 +26,9 @@ class Horizontal extends Component {
     return (
       <div className="slider">
         <Slider
-          min={80}
+          min={0}
           max={255}
+          disabled
           value={value}
           onChange={this.handleChange}
           onChangeComplete={this.handleChangeComplete}
