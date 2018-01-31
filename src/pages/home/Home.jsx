@@ -16,7 +16,6 @@ function telldusCommand(qs) {
 
   return request(options)
     .then((response) => {
-      // console.log('Response', response, response.status);
       if (response.status !== 'success') return Promise.reject(response);
       return Promise.resolve(response.response);
     })
@@ -32,11 +31,6 @@ function requestDeviceList() {
 function requestDeviceInfo(id) {
   return telldusCommand({ command: 'info', supportedMethods: 19, id });
 }
-
-// function requestSensorList() {
-//   return telldusCommand({ command: 'sensorList' });
-// }
-
 
 class Devices extends Component {
   constructor(props) {
@@ -56,32 +50,20 @@ class Devices extends Component {
     });
   }
 
-  // onClickDeviceToggle = (e) => {
-  //   const id = e.target.id;
-  //   const device = this.state.devices[id];
-  //   const command = device.state === 2 ? 'on' : 'off';
+  handleDeviceToggle = (e) => {
+    const id = Number(e.target.id);
+    const device = this.state.devices[id];
+    const command = device.state === 1 ? 'off' : 'on';
 
-  //   telldusCommand({ command, id }).then(() => {
-  //     this.updateDeviceInfo(id);
-  //   });
-  // };
+    telldusCommand({ command, id }).then(() => {
+      this.updateDeviceInfo(id);
+    });
+  };
 
-  // onClickDeviceDim = (e) => {
-  //   const id = e.target.id;
-  //   telldusCommand({ command: 'dim', id, level: 80 }).then(() => {
-  //     this.updateDeviceInfo(id);
-  //   });
-  // };
-
-  onClickDeviceToggle = (e, k) => {
-    console.log(e, k);
-    // const id = e.target.id;
-    // const device = this.state.devices[id];
-    // const command = device.state === 2 ? 'on' : 'off';
-
-    // telldusCommand({ command, id }).then(() => {
-    //   this.updateDeviceInfo(id);
-    // });
+  handleDeviceDimmer = id => (value) => {
+    telldusCommand({ command: 'dim', id, level: value }).then(() => {
+      this.updateDeviceInfo(id);
+    });
   };
 
   updateDeviceInfo = ((id, delay = 1000) => {
@@ -93,29 +75,21 @@ class Devices extends Component {
     }, delay);
   });
 
-  handleDeviceDimmer = id => (value) => {
-    telldusCommand({ command: 'dim', id, level: value }).then(() => {
-      this.updateDeviceInfo(id);
-    });
-  };
-
   render() {
     const { devices } = this.state;
 
     const deviceList = map(devices, ((dev) => {
       if (![6, 8, 18].includes(dev.id)) return '';
 
-      console.log(dev, Number(dev.statevalue));
-
-      return (<div>
+      return (<div key={dev.id}>
         <Row><Col>{dev.name}</Col></Row>
         <Row>
           <Col className="col-2">
             <label htmlFor={`toggle-${dev.id}`}>
               <Toggle
                 checked={dev.state === 1}
-                id={`toggle-${dev.id}`}
-                onChange={this.onClickDeviceToggle}
+                id={dev.id}
+                onChange={this.handleDeviceToggle}
               />
             </label>
           </Col>

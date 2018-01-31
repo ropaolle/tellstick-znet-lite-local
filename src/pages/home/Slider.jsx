@@ -17,7 +17,7 @@ class Horizontal extends Component {
     });
   };
 
-  handleChangeComplete = (/* value */) => {
+  handleChangeComplete = () => {
     this.props.onChangeComplete(this.state.value);
   };
 
@@ -26,13 +26,13 @@ class Horizontal extends Component {
     return (
       <div className="slider">
         <Slider
-          min={0}
+          min={80}
           max={255}
           value={value}
           onChange={this.handleChange}
           onChangeComplete={this.handleChangeComplete}
         />
-        <div className="value">{value}</div>
+        <div className="value slider-value">{value}</div>
       </div>
     );
   }
