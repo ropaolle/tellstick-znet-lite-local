@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import map from 'lodash.map';
-import { Container, Button, Row, Col, Card, /* CardHeader,  */CardImg, CardBody, CardTitle, CardFooter } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import request from 'request-promise';
-import bedroom from './bedroom.jpeg';
-import livingroom from './livingroom.jpg';
-import window from './window.jpg';
+import Toggle from 'react-toggle';
+import Slider from './Slider';
 
 function telldusCommand(qs) {
   const options = {
@@ -57,21 +56,32 @@ class Devices extends Component {
     });
   }
 
-  onClickDeviceToggle = (e) => {
-    const id = e.target.id;
-    const device = this.state.devices[id];
-    const command = device.state === 2 ? 'on' : 'off';
+  // onClickDeviceToggle = (e) => {
+  //   const id = e.target.id;
+  //   const device = this.state.devices[id];
+  //   const command = device.state === 2 ? 'on' : 'off';
 
-    telldusCommand({ command, id }).then(() => {
-      this.updateDeviceInfo(id);
-    });
-  };
+  //   telldusCommand({ command, id }).then(() => {
+  //     this.updateDeviceInfo(id);
+  //   });
+  // };
 
-  onClickDeviceDim = (e) => {
-    const id = e.target.id;
-    telldusCommand({ command: 'dim', id, level: 80 }).then(() => {
-      this.updateDeviceInfo(id);
-    });
+  // onClickDeviceDim = (e) => {
+  //   const id = e.target.id;
+  //   telldusCommand({ command: 'dim', id, level: 80 }).then(() => {
+  //     this.updateDeviceInfo(id);
+  //   });
+  // };
+
+  onClickDeviceToggle = (e, k) => {
+    console.log(e, k);
+    // const id = e.target.id;
+    // const device = this.state.devices[id];
+    // const command = device.state === 2 ? 'on' : 'off';
+
+    // telldusCommand({ command, id }).then(() => {
+    //   this.updateDeviceInfo(id);
+    // });
   };
 
   updateDeviceInfo = ((id, delay = 1000) => {
@@ -83,55 +93,47 @@ class Devices extends Component {
     }, delay);
   });
 
+  handleDeviceDimmer = id => (value) => {
+    telldusCommand({ command: 'dim', id, level: value }).then(() => {
+      this.updateDeviceInfo(id);
+    });
+  };
+
   render() {
     const { devices } = this.state;
 
-    const deviceTable = map(devices, ((dev) => {
+    const deviceList = map(devices, ((dev) => {
       if (![6, 8, 18].includes(dev.id)) return '';
-      let img = bedroom;
-      if (dev.id === 8) img = window;
-      if (dev.id === 18) img = livingroom;
 
-      return (<Col xs="12" sm="6" md="4" key={dev.id} className="mb-4">
-        <Card className="home-cards">
-          <CardImg top width="100%" src={img} alt="Card image cap" />
-          <CardBody>
-            <CardTitle>{dev.name}</CardTitle>
-            <Button
-              onClick={this.onClickDeviceToggle}
-              id={dev.id}
-              color={dev.state === 2 ? 'success' : 'danger'}
-            >
-              {dev.state === 2 ? 'På' : 'Av'}
-            </Button>{' '}
-            <Button onClick={this.onClickDeviceDim} id={dev.id} color="warning">Dim</Button>
-          </CardBody>
-          <CardFooter>State: {dev.state}, Value: {dev.statevalue}</CardFooter>
-        </Card>
-      </Col>);
+      console.log(dev, Number(dev.statevalue));
+
+      return (<div>
+        <Row><Col>{dev.name}</Col></Row>
+        <Row>
+          <Col className="col-2">
+            <label htmlFor={`toggle-${dev.id}`}>
+              <Toggle
+                checked={dev.state === 1}
+                id={`toggle-${dev.id}`}
+                onChange={this.onClickDeviceToggle}
+              />
+            </label>
+          </Col>
+          <Col className="col-10">
+            <div className="slider">
+              <Slider
+                value={Number(dev.statevalue)}
+                onChangeComplete={this.handleDeviceDimmer(dev.id)}
+              />
+            </div>
+          </Col>
+        </Row></div>);
     }));
-
-    /*
-<tr key={dev.id}>
-        <td>{dev.id}</td>
-        <td>{dev.name}</td>
-        <td>
-          <Button
-            onClick={this.onClickDeviceToggle}
-            id={dev.id}
-            color={dev.state === 2 ? 'success' : 'danger'}
-          >
-            {dev.state === 2 ? 'På' : 'Av'}
-          </Button>{' '}
-          <Button onClick={this.onClickDeviceDim} id={dev.id} color="warning">Dim</Button>
-        </td>
-      </tr>
-*/
 
     return (
       <Container fluid className="page-content home-page">
         <h1>Devices</h1>
-        <Row>{deviceTable}</Row>
+        {deviceList}
       </Container>
     );
   }
