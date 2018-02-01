@@ -36,15 +36,19 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "api": "node api/app.js",
-    "app": "start && api"
+    "app": "npm start && npm run api"
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": [
+      "react-app"
+    ]
   },
   "eslintConfig": {
     "root": true,
     "extends": "airbnb",
-    "plugins": ["react"],
+    "plugins": [
+      "react"
+    ],
     "parser": "babel-eslint",
     "parserOptions": {
       "ecmaVersion": 6,
@@ -61,7 +65,10 @@
       "react/jsx-filename-extension": [
         1,
         {
-          "extensions": [".js", ".jsx"]
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
         }
       ]
     }

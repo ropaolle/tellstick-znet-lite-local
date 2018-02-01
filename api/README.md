@@ -48,12 +48,3 @@ const options = {
 };
 https.createServer(options, app.callback()).listen(443);
 ```
-
-### Controlling functions
-TellStick has a couple of functions for controlling devices. Each of them should only be called if the device support the feature. These functions all return zero if the call was successful and non-zero otherwise.
-
-tdTurnOn() - Devices supporting TELLSTICK_TURNON. Most of the normal switches (for lamp etc.) support this.
-tdTurnOff() - Devices supporting TELLSTICK_TURNOFF. Almost all of the devices supporting TELLSTICK_TURNON also support this.
-tdDim() - Devices supporting TELLSTICK_DIM. This is a quite unusual feature for dimmers. Many dimmers on the market that are dimmable have no way for sending a specific level which means it does not support this feature.
-tdBell() - Devices supporting TELLSTICK_BELL. This is mostly wireless doorbells.
-

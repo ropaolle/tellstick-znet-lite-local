@@ -1,27 +1,7 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
 import map from 'lodash.map';
-import { Container, Button, Table /* , Row, Col */ } from 'reactstrap';
-import request from 'request-promise';
-
-function telldusCommand(qs) {
-  const options = {
-    uri: 'http://192.168.10.159:3001',
-    qs,
-    json: true,
-    // resolveWithFullResponse: true,
-  };
-
-  return request(options)
-    .then((response) => {
-      // console.log('Response', response, response.status);
-      if (response.status !== 'success') return Promise.reject(response);
-      return Promise.resolve(response.response);
-    })
-    .catch((err) => {
-      console.log('ERROR', err.message);
-    });
-}
+import { Container, Button, Table } from 'reactstrap';
+import telldusCommand from '../../utils';
 
 function requestDeviceList() {
   return telldusCommand({ command: 'deviceList', supportedMethods: 19 });
@@ -30,10 +10,6 @@ function requestDeviceList() {
 function requestDeviceInfo(id) {
   return telldusCommand({ command: 'info', supportedMethods: 19, id });
 }
-
-// function requestSensorList() {
-//   return telldusCommand({ command: 'sensorList' });
-// }
 
 class Devices extends Component {
   constructor(props) {
@@ -52,20 +28,6 @@ class Devices extends Component {
       this.setState({ devices: indexedById });
     });
   };
-
-  // onClickDeviceOn = (e) => {
-  //   const id = e.target.id;
-  //   telldusCommand({ command: 'on', id }).then(() => {
-  //     this.onClickDeviceInfo(id);
-  //   });
-  // };
-
-  // onClickDeviceOff = (e) => {
-  //   const id = e.target.id;
-  //   telldusCommand({ command: 'off', id }).then(() => {
-  //     this.updateDeviceInfo(id);
-  //   });
-  // };
 
   onClickDeviceToggle = (e) => {
     const id = e.target.id;
@@ -96,9 +58,7 @@ class Devices extends Component {
   render() {
     const { devices } = this.state;
 
-    const deviceTable = map(devices, (dev) => {
-      console.log();
-      return (
+    const deviceTable = map(devices, (dev) => (
         <tr key={dev.id}>
           <td>{dev.id}</td>
           <td>{dev.name}</td>
@@ -116,15 +76,12 @@ class Devices extends Component {
             >
               {dev.state === 2 ? 'På' : 'Av'}
             </Button>{' '}
-            {/* <Button onClick={this.onClickDeviceOn} id={dev.id} color="warning">På</Button>{' '}
-          <Button onClick={this.onClickDeviceOff} id={dev.id} color="warning">Av</Button>{' '} */}
             <Button onClick={this.onClickDeviceDim} id={dev.id} color="warning">
               Dim
             </Button>
           </td>
         </tr>
-      );
-    });
+      ));
 
     return (
       <Container fluid className="page-content home-page">

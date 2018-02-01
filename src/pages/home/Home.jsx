@@ -1,30 +1,10 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
 import map from 'lodash.map';
 import { Container, Row, Col } from 'reactstrap';
-import request from 'request-promise';
 import Toggle from 'react-toggle';
-// import Slider from './Slider';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-
-function telldusCommand(qs) {
-  const options = {
-    uri: 'http://192.168.10.159:3001',
-    qs,
-    json: true,
-    // resolveWithFullResponse: true,
-  };
-
-  return request(options)
-    .then((response) => {
-      if (response.status !== 'success') return Promise.reject(response);
-      return Promise.resolve(response.response);
-    })
-    .catch((err) => {
-      console.log('ERROR', err.message);
-    });
-}
+import telldusCommand from '../../utils';
 
 function requestDeviceList() {
   return telldusCommand({ command: 'deviceList', supportedMethods: 19 });
