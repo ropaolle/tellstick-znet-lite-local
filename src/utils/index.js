@@ -2,8 +2,7 @@ import request from 'request-promise';
 
 export default function telldusCommand(qs) {
   const options = {
-    // uri: 'http://192.168.10.159:3001',
-    uri: 'http://192.168.10.146:4001',
+    uri: 'http://192.168.10.146:4000',
     qs,
     json: true,
     // resolveWithFullResponse: true,
@@ -16,5 +15,6 @@ export default function telldusCommand(qs) {
     })
     .catch((err) => {
       console.log('ERROR', err.message); // eslint-disable-line no-console
+      Promise.reject(err);
     });
 }
