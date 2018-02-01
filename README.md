@@ -1,9 +1,10 @@
-## Check status
+## Start App/Api
 ``` bash
 # App
-service nginx status
+service nginx start/status
 # Api
-pm2 status
+cd /home/olle/tellstick-znet-lite-local/api && pm2 start app.js
+# pm2 status
 ```
 
 ## Nginx

@@ -5,7 +5,7 @@ export default function telldusCommand(qs) {
     uri: 'http://192.168.10.146:4000',
     qs,
     json: true,
-    // resolveWithFullResponse: true,
+    resolveWithFullResponse: true,
   };
 
   return request(options)
@@ -13,8 +13,5 @@ export default function telldusCommand(qs) {
       if (response.status !== 'success') return Promise.reject(response);
       return Promise.resolve(response.response);
     })
-    .catch((err) => {
-      console.log('ERROR', err.message); // eslint-disable-line no-console
-      Promise.reject(err);
-    });
+    .catch(err => Promise.reject(err.message));
 }
