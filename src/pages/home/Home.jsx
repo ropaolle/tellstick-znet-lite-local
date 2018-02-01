@@ -87,7 +87,7 @@ class Devices extends Component {
             <Col className="col-10">
               <div className="slider">
                 <Slider
-                  min={0}
+                  min={1}
                   max={255}
                   value={Number(dev.statevalue)}
                   disabled={!(dev.methods & 16)} // eslint-disable-line no-bitwise
