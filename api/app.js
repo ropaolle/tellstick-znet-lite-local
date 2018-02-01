@@ -2,11 +2,14 @@ const Koa = require('koa');
 const cors = require('koa2-cors');
 const request = require('request-promise');
 const logger = require('./utils').logger;
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
 
 const app = new Koa();
 app.use(cors());
 
-const PORT = 3001;
+// const PORT = 3001;
 const API_URL = 'http://192.168.10.104/api/';
 const authorization = require('./authorization.json');
 
@@ -68,6 +71,14 @@ app.use(async (ctx, next) => {
   ctx.body = JSON.stringify(Object.assign(ctx.request.query, this.locals));
 });
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port: ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Server listening on port: ${PORT}`);
+// });
+
+http.createServer(app.callback()).listen(80);
+
+const options = {
+  key: fs.readFileSync('nginx.pem', 'utf8'),
+  cert: fs.readFileSync('nginx-selfsigned.crt', 'utf8'),
+};
+https.createServer(options, app.callback()).listen(443);
