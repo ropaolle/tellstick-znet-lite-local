@@ -82,12 +82,17 @@ sudo env PATH=$PATH:/usr/bin /home/olle/.npm-global/lib/node_modules/pm2/bin/pm2
 ```
 
 ### Force overwrite of local file with what's it origin repo?
-If you want to overwrite only one file:
 
 ``` bash
+git pull origin master
+
+# or
+
 git fetch
 git checkout origin/master <filepath>
 If you want to overwrite all changed files:
+
+# or
 
 git fetch
 git reset --hard origin/master

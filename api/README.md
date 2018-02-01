@@ -30,7 +30,6 @@ curl -i -X GET http://0.0.0.0/api/refreshToken -H "Authorization: Bearer eyJhbGc
 
 ## SSL
 
-https://github.com/dotcypress/koa-force-ssl
 http://blog.bguiz.com/2015/12/17/letsencrypt-tls-certs-nodejs/
 
 ```bash

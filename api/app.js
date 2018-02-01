@@ -9,7 +9,8 @@ const https = require('https');
 const app = new Koa();
 app.use(cors());
 
-// const PORT = 3001;
+const HTTP_PORT = 4000;
+const HTTPS_PORT = 4001;
 const API_URL = 'http://192.168.10.104/api/';
 const authorization = require('./authorization.json');
 
@@ -75,10 +76,11 @@ app.use(async (ctx, next) => {
 //   console.log(`Server listening on port: ${PORT}`);
 // });
 
-http.createServer(app.callback()).listen(80);
+// HTTP/HTTPS servers
+http.createServer(app.callback()).listen(HTTP_PORT);
 
 const options = {
-  key: fs.readFileSync('nginx.pem', 'utf8'),
-  cert: fs.readFileSync('nginx-selfsigned.crt', 'utf8'),
+  key: fs.readFileSync('./ssh/tzll.pem', 'utf8'),
+  cert: fs.readFileSync('./ssh/tzll.crt', 'utf8'),
 };
-https.createServer(options, app.callback()).listen(443);
+https.createServer(options, app.callback()).listen(HTTPS_PORT);
