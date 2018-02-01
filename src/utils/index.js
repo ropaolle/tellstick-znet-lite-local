@@ -3,7 +3,7 @@ import request from 'request-promise';
 export default function telldusCommand(qs) {
   const options = {
     // uri: 'http://192.168.10.159:3001',
-    uri: 'http://localhost:3001',
+    uri: 'http://localhost:4001',
     qs,
     json: true,
     // resolveWithFullResponse: true,

@@ -80,7 +80,7 @@ app.use(async (ctx, next) => {
 http.createServer(app.callback()).listen(HTTP_PORT);
 
 const options = {
-  key: fs.readFileSync('./ssh/tzll.pem', 'utf8'),
+  key: fs.readFileSync('./ssh/tzll.key', 'utf8'),
   cert: fs.readFileSync('./ssh/tzll.crt', 'utf8'),
 };
 https.createServer(options, app.callback()).listen(HTTPS_PORT);
