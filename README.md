@@ -1,3 +1,9 @@
+Tellstick Znet Lite local is a web app that lets you control your Tellstick devices locally without an internet connection.
+
+![img](extras/dev-settings.png)
+
+![img](extras/devices.png)
+
 ## Start App/Api
 ``` bash
 # App

@@ -1,13 +1,10 @@
 {
-  "name": "adb",
+  "name": "tzll",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "bootstrap": "^4.0.0-beta.3",
     "firebase": "^4.9.0",
-    "firebase-admin": "^5.8.1",
-    "jquery": "^3.3.1",
-    "lodash.chunk": "^4.2.0",
     "lodash.map": "^4.6.0",
     "prop-types": "^15.6.0",
     "rc-slider": "^8.6.0",
@@ -17,8 +14,7 @@
     "react-scripts": "1.1.0",
     "react-toggle": "^4.0.2",
     "reactstrap": "^5.0.0-alpha.4",
-    "request-promise": "^4.2.2",
-    "xlsx": "^0.11.17"
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
