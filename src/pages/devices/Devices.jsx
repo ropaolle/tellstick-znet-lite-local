@@ -58,30 +58,30 @@ class Devices extends Component {
   render() {
     const { devices } = this.state;
 
-    const deviceTable = map(devices, (dev) => (
-        <tr key={dev.id}>
-          <td>{dev.id}</td>
-          <td>{dev.name}</td>
-          <td>{dev.state}</td>
-          <td>{dev.statevalue}</td>
-          <td>{dev.type}</td>
-          <td>{dev.methods}</td>
-          <td>{dev.model}</td>
-          <td>{dev.protocol}</td>
-          <td>
-            <Button
-              onClick={this.onClickDeviceToggle}
-              id={dev.id}
-              color={dev.state === 2 ? 'success' : 'danger'}
-            >
-              {dev.state === 2 ? 'På' : 'Av'}
-            </Button>{' '}
-            <Button onClick={this.onClickDeviceDim} id={dev.id} color="warning">
+    const deviceTable = map(devices, dev => (
+      <tr key={dev.id}>
+        <td>{dev.id}</td>
+        <td>{dev.name}</td>
+        <td>{dev.state}</td>
+        <td>{dev.statevalue}</td>
+        <td>{dev.type}</td>
+        <td>{dev.methods}</td>
+        <td>{dev.model}</td>
+        <td>{dev.protocol}</td>
+        <td>
+          <Button
+            onClick={this.onClickDeviceToggle}
+            id={dev.id}
+            color={dev.state === 2 ? 'success' : 'danger'}
+          >
+            {dev.state === 2 ? 'På' : 'Av'}
+          </Button>{' '}
+          <Button onClick={this.onClickDeviceDim} id={dev.id} color="warning">
               Dim
-            </Button>
-          </td>
-        </tr>
-      ));
+          </Button>
+        </td>
+      </tr>
+    ));
 
     return (
       <Container fluid className="page-content home-page">

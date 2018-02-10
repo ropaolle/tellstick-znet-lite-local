@@ -10,8 +10,6 @@ const HTTP_PORT = 4000;
 const API_URL = 'http://192.168.10.104/api/';
 const authorization = require('./authorization.json');
 
-app.use(logger(this));
-
 // const TELLSTICK_TURNON = 1;
 // const TELLSTICK_TURNOFF = 2;
 // const TELLSTICK_BELL = 4;
@@ -23,10 +21,13 @@ app.use(logger(this));
 // const TELLSTICK_DOWN = 256;
 // const TELLSTICK_STOP = 512;
 
-app.use(async (ctx, next) => {
-  const { id, command, level, supportedMethods } = ctx.request.query;
+function getOptions(query) {
+  const { id, command, level, supportedMethods, requestToken } = query;
 
+  let options;
   let uri;
+
+  // Device commands
   if (id && supportedMethods && command === 'info') {
     uri = `${API_URL}device/info?id=${id}&supportedMethods=${supportedMethods}`;
   } else if (id && command === 'off') {
@@ -43,27 +44,55 @@ app.use(async (ctx, next) => {
     uri = `${API_URL}sensors/list?includeValues=1`;
   }
 
-  const options = {
-    uri,
-    headers: {
-      authorization: `Bearer ${authorization.accessToken}`,
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET', // 'GET, POST, DELETE, PUT, OPTIONS, HEAD'
-    },
-    json: true,
-    // resolveWithFullResponse: true,
-  };
+  if (uri) {
+    options = {
+      uri,
+      headers: {
+        authorization: `Bearer ${authorization.accessToken}`,
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+      },
+      json: true,
+    };
+  }
 
-  await request(options)
-    .then((response) => {
-      // console.log('RESPONSE', response);
-      this.locals = { status: 'success', uri, response };
-      next();
-    })
-    .catch((err) => {
-      console.log('Error', err.message);
-      this.locals = { status: 'error', uri, err };
-    });
+  // Authentication
+  if (command === 'requestToken') {
+    options = {
+      method: 'PUT',
+      uri: `${API_URL}token`,
+      form: { app: 'tzll' },
+      json: true,
+    };
+  } else if (command === 'accessToken') {
+    options = {
+      uri: `${API_URL}?token=${requestToken}`,
+      json: true,
+    };
+  }
+
+  return options;
+}
+
+app.use(logger(this));
+
+app.use(async (ctx/* , next */) => {
+  this.locals = { success: false, message: 'Unknown command' };
+
+  // Parse command and get options
+  const options = getOptions(ctx.request.query);
+
+  if (options) {
+    await request(options)
+      .then((res) => {
+        this.locals.success = true;
+        this.locals.message = res;
+      // next();
+      })
+      .catch((err) => {
+        this.locals.message = err.message;
+      });
+  }
 
   ctx.body = JSON.stringify(Object.assign(ctx.request.query, this.locals));
 });

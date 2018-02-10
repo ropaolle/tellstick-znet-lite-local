@@ -6,14 +6,6 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import telldusCommand from '../../utils';
 
-function requestDeviceList() {
-  return telldusCommand({ command: 'deviceList', supportedMethods: 19 });
-}
-
-function requestDeviceInfo(id) {
-  return telldusCommand({ command: 'info', supportedMethods: 19, id });
-}
-
 class Devices extends Component {
   constructor(props) {
     super(props);
@@ -22,14 +14,15 @@ class Devices extends Component {
   }
 
   componentDidMount = () => {
-    requestDeviceList().then((response) => {
-      const indexedById = response.device.reduce((acc, val) => {
-        acc[val.id] = val;
-        return acc;
-      }, {});
+    telldusCommand({ command: 'deviceList', supportedMethods: 19 })
+      .then((response) => {
+        const indexedById = response.device.reduce((acc, val) => {
+          acc[val.id] = val;
+          return acc;
+        }, {});
 
-      this.setState({ devices: indexedById });
-    });
+        this.setState({ devices: indexedById });
+      }).catch(err => err); // TODO: Need catch to get rid of uncaught error.
   };
 
   onSliderChange = id => (value) => {
@@ -45,21 +38,22 @@ class Devices extends Component {
 
     telldusCommand({ command, id }).then(() => {
       this.updateDeviceInfo(id);
-    });
+    }).catch(err => err); // TODO: Need catch to get rid of uncaught error.
   };
 
   handleDeviceDimmer = id => (value) => {
     telldusCommand({ command: 'dim', id, level: value }).then(() => {
       this.updateDeviceInfo(id);
-    });
+    }).catch(err => err); // TODO: Need catch to get rid of uncaught error.
   };
 
   updateDeviceInfo = (id, delay = 1000) => {
     setTimeout(() => {
-      requestDeviceInfo(Number(id)).then((device) => {
-        const clone = Object.assign({}, this.state.devices, { [device.id]: device });
-        this.setState({ devices: clone });
-      });
+      telldusCommand({ command: 'info', supportedMethods: 19, id: Number(id) })
+        .then((device) => {
+          const clone = Object.assign({}, this.state.devices, { [device.id]: device });
+          this.setState({ devices: clone });
+        }).catch(err => err); // TODO: Need catch to get rid of uncaught error.
     }, delay);
   };
 

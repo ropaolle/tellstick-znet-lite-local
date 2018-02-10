@@ -4,6 +4,7 @@ import './App.css';
 import AppNavbar from './AppNavbar';
 import Home from './pages/home/Home';
 import Devices from './pages/devices/Devices';
+import Auth from './pages/auth/Auth';
 
 class App extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class App extends Component {
 
           <Route exact path="/" component={Home} />
           <Route path="/devices" component={Devices} />
+          <Route path="/auth" component={Auth} />
         </div>
       </Router>
     );
