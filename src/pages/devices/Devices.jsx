@@ -1,15 +1,7 @@
 import React, { Component } from 'react';
 import map from 'lodash.map';
 import { Container, Button, Table } from 'reactstrap';
-import telldusCommand from '../../utils';
-
-function requestDeviceList() {
-  return telldusCommand({ command: 'deviceList', supportedMethods: 19 });
-}
-
-function requestDeviceInfo(id) {
-  return telldusCommand({ command: 'info', supportedMethods: 19, id });
-}
+import telldusCommand, { updateDeviceInfo } from '../../utils';
 
 class Devices extends Component {
   constructor(props) {
@@ -19,7 +11,7 @@ class Devices extends Component {
   }
 
   componentDidMount = () => {
-    requestDeviceList().then((response) => {
+    telldusCommand({ command: 'deviceList' }).then((response) => {
       const indexedById = response.device.reduce((acc, val) => {
         acc[val.id] = val;
         return acc;
@@ -29,30 +21,29 @@ class Devices extends Component {
     });
   };
 
-  onClickDeviceToggle = (e) => {
-    const id = e.target.id;
-    const device = this.state.devices[id];
-    const command = device.state === 2 ? 'on' : 'off';
+  updateDevice = (device) => {
+    const clone = Object.assign({}, this.state.devices, { [device.id]: device });
+    this.setState({ devices: clone });
+  }
 
+  handleDeviceToggle = (e) => {
+    const id = Number(e.target.id);
+    const device = this.state.devices[id];
+    device.state = device.state === 1 ? 2 : 1; // Toggle state
+    this.updateDevice(device); // Update state
+
+    const command = device.state === 1 ? 'on' : 'off';
     telldusCommand({ command, id }).then(() => {
-      this.updateDeviceInfo(id);
+      // Get dev info to sync changes
+      updateDeviceInfo(id, this.updateDevice);
     });
   };
 
-  onClickDeviceDim = (e) => {
+  handleDeviceDimmer = (e) => {
     const id = e.target.id;
     telldusCommand({ command: 'dim', id, level: 80 }).then(() => {
-      this.updateDeviceInfo(id);
+      updateDeviceInfo(id, this.updateDevice);
     });
-  };
-
-  updateDeviceInfo = (id, delay = 1000) => {
-    setTimeout(() => {
-      requestDeviceInfo(Number(id)).then((device) => {
-        const clone = Object.assign({}, this.state.devices, { [device.id]: device });
-        this.setState({ devices: clone });
-      });
-    }, delay);
   };
 
   render() {
@@ -70,13 +61,13 @@ class Devices extends Component {
         <td>{dev.protocol}</td>
         <td>
           <Button
-            onClick={this.onClickDeviceToggle}
+            onClick={this.handleDeviceToggle}
             id={dev.id}
             color={dev.state === 2 ? 'success' : 'danger'}
           >
             {dev.state === 2 ? 'På' : 'Av'}
           </Button>{' '}
-          <Button onClick={this.onClickDeviceDim} id={dev.id} color="warning">
+          <Button onClick={this.handleDeviceDimmer} id={dev.id} color="warning">
               Dim
           </Button>
         </td>

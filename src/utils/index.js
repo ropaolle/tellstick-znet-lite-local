@@ -1,6 +1,6 @@
 import request from 'request-promise';
 
-export default function telldusCommand(qs) {
+const telldusCommand = async function telldusCommand(qs) {
   const options = {
     // uri: 'http://192.168.10.146:4000',
     uri: 'http://localhost:4000',
@@ -8,12 +8,19 @@ export default function telldusCommand(qs) {
     json: true,
   };
 
-  return request(options)
-    .then(response =>
-      ((response.success) ? Promise.resolve(response.message) : Promise.reject(response)),
-    )
-    .catch((err) => {
-      console.log('telldusCommand error', err && err.message);
-      return Promise.reject(err);
+  const res = await request(options)
+    .then(response => response)
+    .catch(err => ({ success: false, message: err.message }));
+
+  return res.success ? res.message : res;
+};
+
+export function updateDeviceInfo(id, update) {
+  setTimeout(() => {
+    telldusCommand({ command: 'info', id: Number(id) }).then((device) => {
+      update(device);
     });
+  }, 1000);
 }
+
+export default telldusCommand;

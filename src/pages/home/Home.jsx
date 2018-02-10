@@ -4,7 +4,7 @@ import { Container, Row, Col } from 'reactstrap';
 import Toggle from 'react-toggle';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import telldusCommand from '../../utils';
+import telldusCommand, { updateDeviceInfo } from '../../utils';
 
 class Devices extends Component {
   constructor(props) {
@@ -14,15 +14,14 @@ class Devices extends Component {
   }
 
   componentDidMount = () => {
-    telldusCommand({ command: 'deviceList', supportedMethods: 19 })
-      .then((response) => {
-        const indexedById = response.device.reduce((acc, val) => {
-          acc[val.id] = val;
-          return acc;
-        }, {});
+    telldusCommand({ command: 'deviceList' }).then((response) => {
+      const indexedById = response.device.reduce((acc, val) => {
+        acc[val.id] = val;
+        return acc;
+      }, {});
 
-        this.setState({ devices: indexedById });
-      }).catch(err => err); // TODO: Need catch to get rid of uncaught error.
+      this.setState({ devices: indexedById });
+    });
   };
 
   onSliderChange = id => (value) => {
@@ -31,30 +30,28 @@ class Devices extends Component {
     this.setState({ devices });
   };
 
+  updateDevice = (device) => {
+    const clone = Object.assign({}, this.state.devices, { [device.id]: device });
+    this.setState({ devices: clone });
+  }
+
   handleDeviceToggle = (e) => {
     const id = Number(e.target.id);
     const device = this.state.devices[id];
-    const command = device.state === 1 ? 'off' : 'on';
+    device.state = device.state === 1 ? 2 : 1; // Toggle state
+    this.updateDevice(device); // Update state
 
+    const command = device.state === 1 ? 'on' : 'off';
     telldusCommand({ command, id }).then(() => {
-      this.updateDeviceInfo(id);
-    }).catch(err => err); // TODO: Need catch to get rid of uncaught error.
+      // Get dev info to sync changes
+      updateDeviceInfo(id, this.updateDevice);
+    });
   };
 
   handleDeviceDimmer = id => (value) => {
     telldusCommand({ command: 'dim', id, level: value }).then(() => {
-      this.updateDeviceInfo(id);
-    }).catch(err => err); // TODO: Need catch to get rid of uncaught error.
-  };
-
-  updateDeviceInfo = (id, delay = 1000) => {
-    setTimeout(() => {
-      telldusCommand({ command: 'info', supportedMethods: 19, id: Number(id) })
-        .then((device) => {
-          const clone = Object.assign({}, this.state.devices, { [device.id]: device });
-          this.setState({ devices: clone });
-        }).catch(err => err); // TODO: Need catch to get rid of uncaught error.
-    }, delay);
+      updateDeviceInfo(id, this.updateDevice);
+    });
   };
 
   render() {

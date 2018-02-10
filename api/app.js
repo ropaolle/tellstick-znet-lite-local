@@ -22,10 +22,12 @@ const authorization = require('./authorization.json');
 // const TELLSTICK_STOP = 512;
 
 function getOptions(query) {
-  const { id, command, level, supportedMethods, requestToken } = query;
+  const { id, command, level, /* supportedMethods,  */requestToken } = query;
 
   let options;
   let uri;
+
+  const supportedMethods = 19;
 
   // Device commands
   if (id && supportedMethods && command === 'info') {
