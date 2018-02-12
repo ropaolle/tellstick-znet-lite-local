@@ -2,13 +2,16 @@ const Koa = require('koa');
 const cors = require('koa2-cors');
 const request = require('request-promise');
 const logger = require('./utils').logger;
+const fs = require('fs');
+const promisify = require('util').promisify;
 
 const app = new Koa();
 app.use(cors());
 
 const HTTP_PORT = 4000;
 const API_URL = 'http://192.168.10.104/api/';
-const authorization = require('./authorization.json');
+const AUTH_PATH = `${__dirname}/authorization.json`;
+let authorization = require('./authorization.json');
 
 // const TELLSTICK_TURNON = 1;
 // const TELLSTICK_TURNOFF = 2;
@@ -22,7 +25,7 @@ const authorization = require('./authorization.json');
 // const TELLSTICK_STOP = 512;
 
 function getOptions(query) {
-  const { id, command, level, /* supportedMethods,  */requestToken } = query;
+  const { id, command, level, requestToken } = query;
 
   let options;
   let uri;
@@ -44,6 +47,8 @@ function getOptions(query) {
     uri = `${API_URL}devices/list?supportedMethods=${supportedMethods}`;
   } else if (supportedMethods && command === 'sensorList') {
     uri = `${API_URL}sensors/list?includeValues=1`;
+  } else if (command === 'refreshToken') {
+    uri = `${API_URL}refreshToken`;
   }
 
   if (uri) {
@@ -68,7 +73,7 @@ function getOptions(query) {
     };
   } else if (command === 'accessToken') {
     options = {
-      uri: `${API_URL}?token=${requestToken}`,
+      uri: `${API_URL}token?token=${requestToken}`,
       json: true,
     };
   }
@@ -79,24 +84,38 @@ function getOptions(query) {
 app.use(logger(this));
 
 app.use(async (ctx/* , next */) => {
-  this.locals = { success: false, message: 'Unknown command' };
-
-  // Parse command and get options
+  // Parse query and get options
   const options = getOptions(ctx.request.query);
+
+  this.locals = { success: false, uri: options && options.uri, message: 'Unknown command' };
 
   if (options) {
     await request(options)
       .then((res) => {
         this.locals.success = true;
         this.locals.message = res;
-      // next();
+        // next();
       })
       .catch((err) => {
         this.locals.message = err.message;
       });
   }
 
-  ctx.body = JSON.stringify(Object.assign(ctx.request.query, this.locals));
+  const { command } = ctx.request.query;
+
+  if ((command === 'accessToken' || command === 'refreshToken') && this.locals.message.token) {
+    authorization = { ...this.locals.message, accessToken: this.locals.message.token };
+    const writeFile = promisify(fs.writeFile);
+    await writeFile(AUTH_PATH, JSON.stringify(authorization))
+      .then(() => {
+        delete this.locals.message.token;
+      })
+      .catch((err) => {
+        this.locals.message = err.message;
+      });
+  }
+
+  ctx.body = JSON.stringify(Object.assign(/* ctx.request.query,  */this.locals));
 });
 
 app.listen(HTTP_PORT, () => {

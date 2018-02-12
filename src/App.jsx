@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { UncontrolledAlert } from 'reactstrap';
 import './App.css';
 import AppNavbar from './AppNavbar';
 import Home from './pages/home/Home';
@@ -10,7 +11,11 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { dummy: '' };
+    this.state = { alert: 'a' };
+  }
+
+  setAlert = (alert) => {
+    this.setState({ alert });
   }
 
   render() {
@@ -18,10 +23,12 @@ class App extends Component {
       <Router>
         <div className="app">
           <AppNavbar />
-
-          <Route exact path="/" component={Home} />
-          <Route path="/devices" component={Devices} />
-          <Route path="/auth" component={Auth} />
+          {this.state.alert && <UncontrolledAlert color="warning">{this.state.alert}</UncontrolledAlert>}
+          <Route exact path="/" render={routeProps => (<Home {...routeProps} setAlert={this.setAlert} />)} />
+          <Route path="/devices" render={routeProps => (<Devices {...routeProps} setAlert={this.setAlert} />)} />
+          <Route path="/auth" render={routeProps => (<Auth {...routeProps} setAlert={this.setAlert} />)} />
+          {/* <Route path="/devices" component={Devices} />
+          <Route path="/auth" component={Auth} /> */}
         </div>
       </Router>
     );

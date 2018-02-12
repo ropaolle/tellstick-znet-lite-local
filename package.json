@@ -32,7 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "api": "node api/app.js",
+    "api": "cd api && node app.js",
     "app": "npm start && npm run api"
   },
   "babel": {

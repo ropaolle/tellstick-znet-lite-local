@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 import React, { Component } from 'react';
 import map from 'lodash.map';
 import { Container, Row, Col } from 'reactstrap';
@@ -5,6 +7,7 @@ import Toggle from 'react-toggle';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import telldusCommand, { updateDeviceInfo } from '../../utils';
+
 
 class Devices extends Component {
   constructor(props) {
@@ -14,7 +17,8 @@ class Devices extends Component {
   }
 
   componentDidMount = () => {
-    telldusCommand({ command: 'deviceList' }).then((response) => {
+    // telldusCommand({ command: 'deviceList' }, this.props.setAlert).then((response) => {
+    this.tc({ command: 'deviceList' }).then((response) => {
       const indexedById = response.device.reduce((acc, val) => {
         acc[val.id] = val;
         return acc;
@@ -30,6 +34,8 @@ class Devices extends Component {
     this.setState({ devices });
   };
 
+  tc = command => telldusCommand(command, this.props.setAlert);
+
   updateDevice = (device) => {
     const clone = Object.assign({}, this.state.devices, { [device.id]: device });
     this.setState({ devices: clone });
@@ -42,14 +48,14 @@ class Devices extends Component {
     this.updateDevice(device); // Update state
 
     const command = device.state === 1 ? 'on' : 'off';
-    telldusCommand({ command, id }).then(() => {
+    telldusCommand({ command, id }, this.props.setAlert).then(() => {
       // Get dev info to sync changes
       updateDeviceInfo(id, this.updateDevice);
     });
   };
 
   handleDeviceDimmer = id => (value) => {
-    telldusCommand({ command: 'dim', id, level: value }).then(() => {
+    telldusCommand({ command: 'dim', id, level: value }, this.props.setAlert).then(() => {
       updateDeviceInfo(id, this.updateDevice);
     });
   };

@@ -1,6 +1,8 @@
 import request from 'request-promise';
 
-const telldusCommand = async function telldusCommand(qs) {
+const telldusCommand = async function telldusCommand(qs, alert) {
+  if (typeof alert === 'function') alert(''); // Clear alert
+
   const options = {
     // uri: 'http://192.168.10.146:4000',
     uri: 'http://localhost:4000',
@@ -12,7 +14,9 @@ const telldusCommand = async function telldusCommand(qs) {
     .then(response => response)
     .catch(err => ({ success: false, message: err.message }));
 
-  return res.success ? res.message : res;
+  if (!res.success && typeof alert === 'function') alert(res.message);
+
+  return res.success ? res.message : { device: [] };
 };
 
 export function updateDeviceInfo(id, update) {
