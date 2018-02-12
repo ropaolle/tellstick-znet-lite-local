@@ -33,10 +33,8 @@ export default class AppNavbar extends React.Component {
                   Devices
                 </NavLink>
               </NavItem>
-              <NavItem>
-                <NavLink to="/auth" activeClassName="active" tag={RRNavLink}>
-                  Auth
-                </NavLink>
+              <NavItem >
+                <NavLink href="#" onClick={this.props.showDialog}>Auth</NavLink>
               </NavItem>
             </Nav>
           </Collapse>

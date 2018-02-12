@@ -15,24 +15,16 @@ class Devices extends Component {
     this.state = { devices: {}, sensors: {} };
   }
 
-  componentDidMount = () => {
-    this.tc({ command: 'deviceList' }).then((response) => {
-      const indexedById = response.device.reduce((acc, val) => {
-        acc[val.id] = val;
-        return acc;
-      }, {});
-
-      this.setState({ devices: indexedById });
-    });
-  };
+  componentWillReceiveProps = (nextProps) => {
+    // console.log('nextProps', nextProps);
+    this.setState({ devices: nextProps.devices });
+  }
 
   onSliderChange = id => (value) => {
     const { devices } = this.state; // TODO clone
     devices[id].statevalue = value;
     this.setState({ devices });
   };
-
-  tc = command => telldusCommand(command, this.props.setAlert);
 
   updateDevice = (device) => {
     const clone = Object.assign({}, this.state.devices, { [device.id]: device });
