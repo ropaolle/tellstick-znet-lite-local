@@ -100,7 +100,7 @@ class Devices extends Component {
 
     return (
       <Container fluid className="page-content home-page">
-        <h1>Devices</h1>
+        <h1>Home</h1>
         {deviceList}
       </Container>
     );
