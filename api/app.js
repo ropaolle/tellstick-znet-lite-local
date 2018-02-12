@@ -45,8 +45,18 @@ function getOptions(query) {
     uri = `${API_URL}device/history?id=${id}`;
   } else if (supportedMethods && command === 'deviceList') {
     uri = `${API_URL}devices/list?supportedMethods=${supportedMethods}`;
-  } else if (supportedMethods && command === 'sensorList') {
+
+  // Sensor commands
+  } else if (command === 'sensorList') {
     uri = `${API_URL}sensors/list?includeValues=1`;
+  } else if (id && command === 'sensorInfo') {
+    uri = `${API_URL}sensor/info?id=${id}`;
+
+  // Authentication
+  } else if (command === 'requestToken') {
+    uri = `${API_URL}token`;
+  } else if (command === 'accessToken') {
+    uri = `${API_URL}token?token=${requestToken}`;
   } else if (command === 'refreshToken') {
     uri = `${API_URL}refreshToken`;
   }

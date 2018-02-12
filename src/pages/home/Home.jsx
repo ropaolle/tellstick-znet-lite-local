@@ -8,7 +8,6 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import telldusCommand, { updateDeviceInfo } from '../../utils';
 
-
 class Devices extends Component {
   constructor(props) {
     super(props);
@@ -17,7 +16,6 @@ class Devices extends Component {
   }
 
   componentDidMount = () => {
-    // telldusCommand({ command: 'deviceList' }, this.props.setAlert).then((response) => {
     this.tc({ command: 'deviceList' }).then((response) => {
       const indexedById = response.device.reduce((acc, val) => {
         acc[val.id] = val;
