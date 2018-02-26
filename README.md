@@ -1,5 +1,12 @@
 Tellstick Znet Lite local is a web app that lets you control your Tellstick devices locally without an internet connection.
 
+[![codebeat badge](https://codebeat.co/badges/f5872716-6875-467e-abb6-17546612de7f)](https://codebeat.co/projects/github-com-ropaolle-tellstick-znet-lite-local-master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8dc951c84b004f56b2425e10fddcb5fe)](https://www.codacy.com/app/ropaolle/tellstick-znet-lite-local?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ropaolle/tellstick-znet-lite-local&amp;utm_campaign=Badge_Grade)
+[![David badge](https://david-dm.org/ropaolle/tellstick-znet-lite-local.svg)](https://david-dm.org/ropaolle/tellstick-znet-lite-local)
+[![DevDependencies](https://img.shields.io/david/dev/ropaolle/tellstick-znet-lite-local.svg)](https://david-dm.org/ropaolle/tellstick-znet-lite-local#info=devDependencies&view=list)
+
+[![Known Vulnerabilities](https://snyk.io/test/github/ropaolle/tellstick-znet-lite-local/badge.svg?targetFile=api%2Fpackage.json)](https://snyk.io/test/github/ropaolle/tellstick-znet-lite-local?targetFile=api%2Fpackage.json)
+
 ![img](extras/dev-settings.png)
 
 ![img](extras/devices.png)
