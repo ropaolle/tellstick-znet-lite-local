@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 
 export default class AppNavbar extends React.Component {
@@ -12,9 +13,7 @@ export default class AppNavbar extends React.Component {
   }
 
   toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    });
+    this.setState({ isOpen: !this.state.isOpen });
   }
 
   render() {
@@ -37,3 +36,7 @@ export default class AppNavbar extends React.Component {
     );
   }
 }
+
+AppNavbar.propTypes = {
+  showDialog: PropTypes.bool.isRequired,
+};

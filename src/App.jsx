@@ -22,7 +22,6 @@ class App extends Component {
 
   componentDidMount = () => {
     telldusCommand({ command: 'deviceList' }, this.setAlert).then((response) => {
-      console.log(response);
       const indexedById = response.device.reduce((acc, val) => {
         acc[val.id] = val;
         return acc;
