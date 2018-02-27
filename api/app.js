@@ -24,13 +24,12 @@ let authorization = require('./authorization.json');
 // const TELLSTICK_DOWN = 256;
 // const TELLSTICK_STOP = 512;
 
-function getOptions(query) {
+function parseCommand(query) {
   const { id, command, level, requestToken } = query;
 
-  let options;
-  let uri;
-
   const supportedMethods = 19;
+
+  let uri;
 
   // Device commands
   if (id && supportedMethods && command === 'info') {
@@ -46,13 +45,13 @@ function getOptions(query) {
   } else if (supportedMethods && command === 'deviceList') {
     uri = `${API_URL}devices/list?supportedMethods=${supportedMethods}`;
 
-  // Sensor commands
+    // Sensor commands
   } else if (command === 'sensorList') {
     uri = `${API_URL}sensors/list?includeValues=1`;
   } else if (id && command === 'sensorInfo') {
     uri = `${API_URL}sensor/info?id=${id}`;
 
-  // Authentication
+    // Authentication
   } else if (command === 'requestToken') {
     uri = `${API_URL}token`;
   } else if (command === 'accessToken') {
@@ -60,6 +59,13 @@ function getOptions(query) {
   } else if (command === 'refreshToken') {
     uri = `${API_URL}refreshToken`;
   }
+
+  return uri;
+}
+
+function getOptions(query) {
+  const uri = parseCommand(query);
+  let options;
 
   if (uri) {
     options = {
@@ -74,12 +80,12 @@ function getOptions(query) {
   }
 
   // Authentication
-  if (command === 'requestToken') {
+  if (query.command === 'requestToken') {
     options.method = 'PUT';
     options.form = { app: 'tzll' };
   }
 
-  if (['accessToken', 'requestToken'].includes(command)) {
+  if (['accessToken', 'requestToken'].includes(query.command)) {
     delete options.headers;
   }
 
@@ -88,7 +94,7 @@ function getOptions(query) {
 
 app.use(logger(this));
 
-app.use(async (ctx/* , next */) => {
+app.use(async (ctx /* , next */) => {
   // Parse query and get options
   const options = getOptions(ctx.request.query);
 
@@ -127,7 +133,7 @@ app.use(async (ctx/* , next */) => {
   this.locals.message.allowRenew = authorization.allowRenew;
   this.locals.message.expires = authorization.expires;
 
-  ctx.body = JSON.stringify(Object.assign(/* ctx.request.query,  */this.locals));
+  ctx.body = JSON.stringify(Object.assign(/* ctx.request.query,  */ this.locals));
 });
 
 app.listen(HTTP_PORT, () => {

@@ -17,7 +17,10 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    if (process.env.NODE_ENV === 'test') { return; } // Return early if a test is running.
+    // Return early if a test is running.
+    if (process.env.NODE_ENV === 'test') {
+      return;
+    }
 
     telldusCommand({ command: 'deviceList' }, this.setAlert).then((response) => {
       const indexedById = response.device.reduce((acc, val) => {
@@ -25,8 +28,8 @@ class App extends Component {
         return acc;
       }, {});
 
-      this.setState({ devices: indexedById });
-    });
+      return this.setState({ devices: indexedById });
+    }).catch();
   };
 
   setAlert = (alert) => {

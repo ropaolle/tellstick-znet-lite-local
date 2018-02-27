@@ -7,15 +7,23 @@ import DeviceList from './DeviceList';
 import DeviceTable from './DeviceTable';
 
 class Devices extends Component {
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    devices: PropTypes.shape({
+      name: PropTypes.string,
+      type: PropTypes.string,
+      id: PropTypes.number,
+      methods: PropTypes.number,
+      state: PropTypes.number,
+      statevalue: PropTypes.number,
+    }).isRequired,
+    setAlert: PropTypes.func.isRequired,
+  };
 
-    this.state = { listView: true, devices: {}/* , sensors: {} */ };
-  }
+  state = { listView: true, devices: {} /* , sensors: {} */ };
 
   componentWillReceiveProps = (nextProps) => {
     this.setState({ devices: nextProps.devices });
-  }
+  };
 
   onSliderChange = id => (value) => {
     const { devices } = this.state; // TODO clone
@@ -24,9 +32,8 @@ class Devices extends Component {
   };
 
   updateDevice = (device) => {
-    const clone = Object.assign({}, this.state.devices, { [device.id]: device });
-    this.setState({ devices: clone });
-  }
+    this.setState({ devices: { ...this.state.devices, [device.id]: device } });
+  };
 
   handleDeviceToggle = (e) => {
     const id = Number(e.target.id);
@@ -35,23 +42,22 @@ class Devices extends Component {
     this.updateDevice(device); // Update state
 
     const command = device.state === 1 ? 'on' : 'off';
-    telldusCommand({ command, id }, this.props.setAlert).then(() => {
-      // Get dev info to sync changes
-      updateDeviceInfo(id, this.updateDevice);
-    });
+    telldusCommand({ command, id }, this.props.setAlert)
+      .then(() => updateDeviceInfo(id, this.updateDevice))
+      .catch();
   };
 
   handleDeviceDimmer = id => (value) => {
-    const level = (typeof value === 'number') ? value : 80;
+    const level = typeof value === 'number' ? value : 80;
 
-    telldusCommand({ command: 'dim', id, level }, this.props.setAlert).then(() => {
-      updateDeviceInfo(id, this.updateDevice);
-    });
+    return telldusCommand({ command: 'dim', id, level }, this.props.setAlert)
+      .then(() => updateDeviceInfo(id, this.updateDevice))
+      .catch();
   };
 
   handleToggleListView = () => {
     this.setState({ listView: !this.state.listView });
-  }
+  };
 
   render() {
     const { devices, listView } = this.state;
@@ -64,34 +70,26 @@ class Devices extends Component {
           {listView ? 'Tabell' : 'Lista'}
         </Button>
 
-        {listView && <DeviceList
-          devices={devices}
-          handleDeviceToggle={this.handleDeviceToggle}
-          onSliderChange={this.onSliderChange}
-          handleDeviceDimmer={this.handleDeviceDimmer}
-        />}
+        {listView && (
+          <DeviceList
+            devices={devices}
+            handleDeviceToggle={this.handleDeviceToggle}
+            onSliderChange={this.onSliderChange}
+            handleDeviceDimmer={this.handleDeviceDimmer}
+          />
+        )}
 
-        {!listView && <DeviceTable
-          devices={devices}
-          handleDeviceToggle={this.handleDeviceToggle}
-          onSliderChange={this.onSliderChange}
-          handleDeviceDimmer={this.handleDeviceDimmer}
-        />}
+        {!listView && (
+          <DeviceTable
+            devices={devices}
+            handleDeviceToggle={this.handleDeviceToggle}
+            onSliderChange={this.onSliderChange}
+            handleDeviceDimmer={this.handleDeviceDimmer}
+          />
+        )}
       </Container>
     );
   }
 }
-
-Devices.propTypes = {
-  devices: PropTypes.shape({
-    name: PropTypes.string,
-    type: PropTypes.string,
-    id: PropTypes.number,
-    methods: PropTypes.number,
-    state: PropTypes.number,
-    statevalue: PropTypes.number,
-  }).isRequired,
-  setAlert: PropTypes.func.isRequired,
-};
 
 export default Devices;

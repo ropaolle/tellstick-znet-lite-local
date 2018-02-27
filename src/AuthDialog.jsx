@@ -10,24 +10,30 @@ class AuthDialog extends React.Component {
     setAlert: PropTypes.func.isRequired,
     allowRenew: PropTypes.bool.isRequired,
     expires: PropTypes.number.isRequired,
-  }
+  };
 
   state = {
     step: 0,
     requestToken: '',
     authUrl: '?',
-  }
+  };
 
   handleRequestToken = () => {
-    this.tc({ command: 'requestToken' }).then((result) => {
-      this.setState({ step: 1, authUrl: result.authUrl, requestToken: result.token });
-    });
+    this.tc({ command: 'requestToken' })
+      .then(result =>
+        this.setState({
+          step: 1,
+          authUrl: result.authUrl,
+          requestToken: result.token,
+        }),
+      )
+      .catch();
   };
 
   handleRefreshToken = () => {
-    this.tc({ command: 'refreshToken' }).then((result) => {
-      this.updateAlert(result, true);
-    });
+    this.tc({ command: 'refreshToken' })
+      .then(result => this.updateAlert(result, true))
+      .catch();
   };
 
   handleAuthentication = () => {
@@ -37,9 +43,9 @@ class AuthDialog extends React.Component {
   };
 
   handleAccessToken = () => {
-    this.tc({ command: 'accessToken', requestToken: this.state.requestToken }).then((result) => {
-      this.updateAlert(result, false);
-    });
+    this.tc({ command: 'accessToken', requestToken: this.state.requestToken })
+      .then(result => this.updateAlert(result, false))
+      .catch();
   };
 
   updateAlert = (result, refresh = false) => {
@@ -62,10 +68,20 @@ class AuthDialog extends React.Component {
 
   tc = command => telldusCommand(command, this.props.setAlert);
 
+  date = (expires) => {
+    const date = new Date(expires * 1000);
+    return date.toLocaleString();
+  }
+
   render() {
     const { step, authUrl, alert } = this.state;
     const { expires, allowRenew, show, close } = this.props;
-    const date = new Date(expires * 1000);
+
+    const button = (onClick, color, text) => (
+      <Button onClick={onClick} color={color}>
+        {text}
+      </Button>
+    );
 
     return (
       <div className="dialog">
@@ -75,31 +91,28 @@ class AuthDialog extends React.Component {
           <ModalBody>
             <div>
               <div>
-                Expires: {date.toLocaleString()}, Allow renew: {Boolean(allowRenew).toString()}
+                Expires: {this.date(expires)}, Allow renew: {Boolean(allowRenew).toString()}
               </div>
+
               <h4 className="mt-4">
                 {step > 0 && <span className="text-success">&#x2714;</span>} Step 1. Request/renew
                 token
               </h4>
+
               {step === 0 && (
                 <div>
-                  <Button onClick={this.handleRequestToken} color="warning">
-                    Request new token
-                  </Button>{' '}
-                  <Button onClick={this.handleRefreshToken} color="warning">
-                    Refresh token
-                  </Button>
+                  {button(this.handleRequestToken, 'warning', 'Request new token')}{' '}
+                  {button(this.handleRefreshToken, 'warning', 'Refresh token')}
                 </div>
               )}
 
               <h4 className="mt-4">
                 {step > 1 && <span className="text-success">&#x2714;</span>} Step 2. Authenticate
               </h4>
+
               {step === 1 && (
                 <div>
-                  Go to<Button color="link" onClick={this.handleAuthentication}>
-                    {authUrl}
-                  </Button>and authenticate the app.
+                  Go to{button(this.handleAuthentication, 'link', authUrl)}and authenticate the app.
                 </div>
               )}
 
@@ -107,21 +120,13 @@ class AuthDialog extends React.Component {
                 {step > 2 && <span className="text-success">&#x2714;</span>} Step 3. Access token
               </h4>
               <div>
-                {step === 2 && (
-                  <Button onClick={this.handleAccessToken} color="warning">
-                    Save access token...
-                  </Button>
-                )}
+                {step === 2 && button(this.handleAccessToken, 'warning', 'Save access token...')}
                 {step > 2 && <Alert color="success">{alert}</Alert>}
               </div>
             </div>
           </ModalBody>
 
-          <ModalFooter>
-            <Button color="secondary" onClick={close}>
-              Cancel
-            </Button>
-          </ModalFooter>
+          <ModalFooter>{button(close, 'secondary', 'Cancel')}</ModalFooter>
         </Modal>
       </div>
     );
