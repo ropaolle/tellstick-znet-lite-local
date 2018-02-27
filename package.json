@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.0.0-beta.3",
-    "firebase": "^4.9.0",
     "lodash.map": "^4.6.0",
     "prop-types": "^15.6.0",
     "rc-slider": "^8.6.0",
@@ -14,8 +13,7 @@
     "react-scripts": "1.1.0",
     "react-toggle": "^4.0.2",
     "reactstrap": "^5.0.0-alpha.4",
-    "request-promise": "^4.2.2",
-    "request-promise-native": "^1.0.5"
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
