@@ -4,14 +4,18 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'react
 import telldusCommand from './tellstick-znet-lite';
 
 class AuthDialog extends React.Component {
-  constructor(props) {
-    super(props);
+  propTypes = {
+    show: PropTypes.bool.isRequired,
+    close: PropTypes.func.isRequired,
+    setAlert: PropTypes.func.isRequired,
+    allowRenew: PropTypes.bool.isRequired,
+    expires: PropTypes.number.isRequired,
+  }
 
-    this.state = {
-      step: 0,
-      requestToken: '',
-      authUrl: '?',
-    };
+  state = {
+    step: 0,
+    requestToken: '',
+    authUrl: '?',
   }
 
   handleRequestToken = () => {
@@ -123,13 +127,5 @@ class AuthDialog extends React.Component {
     );
   }
 }
-
-AuthDialog.propTypes = {
-  show: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
-  setAlert: PropTypes.func.isRequired,
-  allowRenew: PropTypes.bool.isRequired,
-  expires: PropTypes.number.isRequired,
-};
 
 export default AuthDialog;

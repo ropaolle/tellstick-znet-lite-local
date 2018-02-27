@@ -7,18 +7,14 @@ import Devices from './components/Devices';
 import telldusCommand from './tellstick-znet-lite';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      alert: '',
-      dialog: false,
-      devices: {},
-      // sensors: {},
-      expires: 0,
-      allowRenew: false,
-    };
-  }
+  state = {
+    alert: '',
+    dialog: false,
+    devices: {},
+    // sensors: {},
+    expires: 0,
+    allowRenew: false,
+  };
 
   componentDidMount = () => {
     telldusCommand({ command: 'deviceList' }, this.setAlert).then((response) => {
