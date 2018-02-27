@@ -4,7 +4,7 @@ import './App.css';
 import AppNavbar from './AppNavbar';
 import AuthDialog from './AuthDialog';
 import Devices from './components/Devices';
-import telldusCommand from './utils';
+import telldusCommand from './tellstick-znet-lite';
 
 class App extends Component {
   constructor(props) {

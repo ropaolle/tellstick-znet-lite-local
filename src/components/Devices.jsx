@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Button } from 'reactstrap';
 import 'rc-slider/assets/index.css';
-import telldusCommand, { updateDeviceInfo } from '../utils';
+import telldusCommand, { updateDeviceInfo } from '../tellstick-znet-lite';
 import DeviceList from './DeviceList';
 import DeviceTable from './DeviceTable';
 
