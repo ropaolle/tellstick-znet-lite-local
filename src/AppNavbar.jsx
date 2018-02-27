@@ -1,6 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
-import { NavLink as RRNavLink } from 'react-router-dom';
 
 export default class AppNavbar extends React.Component {
   constructor(props) {
@@ -13,30 +13,21 @@ export default class AppNavbar extends React.Component {
   }
 
   toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    });
+    this.setState({ isOpen: !this.state.isOpen });
   }
 
   render() {
     return (
       <div>
         <Navbar color="dark" dark expand="md">
-          <NavbarBrand to="/" tag={RRNavLink}>
+          <NavbarBrand href="#">
             <img src="./favicon-32x32.png" alt="" />Tellstick Znet Lite Local
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink to="/devices" activeClassName="active" tag={RRNavLink}>
-                  Devices
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/auth" activeClassName="active" tag={RRNavLink}>
-                  Auth
-                </NavLink>
+              <NavItem >
+                <NavLink href="#" onClick={this.props.showDialog}>Auth</NavLink>
               </NavItem>
             </Nav>
           </Collapse>
@@ -45,3 +36,7 @@ export default class AppNavbar extends React.Component {
     );
   }
 }
+
+AppNavbar.propTypes = {
+  showDialog: PropTypes.bool.isRequired,
+};

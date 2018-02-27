@@ -45,8 +45,18 @@ function getOptions(query) {
     uri = `${API_URL}device/history?id=${id}`;
   } else if (supportedMethods && command === 'deviceList') {
     uri = `${API_URL}devices/list?supportedMethods=${supportedMethods}`;
-  } else if (supportedMethods && command === 'sensorList') {
+
+  // Sensor commands
+  } else if (command === 'sensorList') {
     uri = `${API_URL}sensors/list?includeValues=1`;
+  } else if (id && command === 'sensorInfo') {
+    uri = `${API_URL}sensor/info?id=${id}`;
+
+  // Authentication
+  } else if (command === 'requestToken') {
+    uri = `${API_URL}token`;
+  } else if (command === 'accessToken') {
+    uri = `${API_URL}token?token=${requestToken}`;
   } else if (command === 'refreshToken') {
     uri = `${API_URL}refreshToken`;
   }
@@ -65,17 +75,12 @@ function getOptions(query) {
 
   // Authentication
   if (command === 'requestToken') {
-    options = {
-      method: 'PUT',
-      uri: `${API_URL}token`,
-      form: { app: 'tzll' },
-      json: true,
-    };
-  } else if (command === 'accessToken') {
-    options = {
-      uri: `${API_URL}token?token=${requestToken}`,
-      json: true,
-    };
+    options.method = 'PUT';
+    options.form = { app: 'tzll' };
+  }
+
+  if (['accessToken', 'requestToken'].includes(command)) {
+    delete options.headers;
   }
 
   return options;
@@ -104,7 +109,11 @@ app.use(async (ctx/* , next */) => {
   const { command } = ctx.request.query;
 
   if ((command === 'accessToken' || command === 'refreshToken') && this.locals.message.token) {
-    authorization = { ...this.locals.message, accessToken: this.locals.message.token };
+    authorization = {
+      ...authorization,
+      ...this.locals.message,
+      accessToken: this.locals.message.token,
+    };
     const writeFile = promisify(fs.writeFile);
     await writeFile(AUTH_PATH, JSON.stringify(authorization))
       .then(() => {
@@ -114,6 +123,9 @@ app.use(async (ctx/* , next */) => {
         this.locals.message = err.message;
       });
   }
+
+  this.locals.message.allowRenew = authorization.allowRenew;
+  this.locals.message.expires = authorization.expires;
 
   ctx.body = JSON.stringify(Object.assign(/* ctx.request.query,  */this.locals));
 });

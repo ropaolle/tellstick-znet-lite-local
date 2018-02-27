@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
 
 import React, { Component } from 'react';
-import map from 'lodash.map';
-import { Container, Row, Col } from 'reactstrap';
-import Toggle from 'react-toggle';
-import Slider from 'rc-slider';
+import { Container } from 'reactstrap';
 import 'rc-slider/assets/index.css';
-import telldusCommand, { updateDeviceInfo } from '../../utils';
+import telldusCommand, { updateDeviceInfo } from '../utils';
+import DeviceList from './DeviceList';
 
 class Devices extends Component {
   constructor(props) {
@@ -53,45 +51,15 @@ class Devices extends Component {
   render() {
     const { devices } = this.state;
 
-    const deviceList = map(devices, (dev) => {
-      if (![6, 8, 18].includes(dev.id)) return '';
-
-      return (
-        <div key={dev.id}>
-          <Row>
-            <Col>{dev.name}</Col>
-          </Row>
-          <Row>
-            <Col className="col-2">
-              <label htmlFor={`toggle-${dev.id}`}>
-                <Toggle
-                  checked={dev.state === 1}
-                  id={dev.id.toString()}
-                  onChange={this.handleDeviceToggle}
-                />
-              </label>
-            </Col>
-            <Col className="col-10">
-              <div className="slider">
-                <Slider
-                  min={1}
-                  max={255}
-                  value={Number(dev.statevalue)}
-                  disabled={!(dev.methods & 16)} // eslint-disable-line no-bitwise
-                  onChange={this.onSliderChange(dev.id)}
-                  onAfterChange={this.handleDeviceDimmer(dev.id)}
-                />
-              </div>
-            </Col>
-          </Row>
-        </div>
-      );
-    });
-
     return (
       <Container fluid className="page-content home-page">
         <h1>Home</h1>
-        {deviceList}
+        <DeviceList
+          devices={devices}
+          handleDeviceToggle={this.handleDeviceToggle}
+          onSliderChange={this.onSliderChange}
+          handleDeviceDimmer={this.handleDeviceDimmer}
+        />
       </Container>
     );
   }
