@@ -1,20 +1,19 @@
-/* eslint-disable react/prop-types */
-
 import React, { Component } from 'react';
-import { Container } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { Container, Button } from 'reactstrap';
 import 'rc-slider/assets/index.css';
 import telldusCommand, { updateDeviceInfo } from '../utils';
 import DeviceList from './DeviceList';
+import DeviceTable from './DeviceTable';
 
 class Devices extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { devices: {}, sensors: {} };
+    this.state = { listView: true, devices: {}/* , sensors: {} */ };
   }
 
   componentWillReceiveProps = (nextProps) => {
-    // console.log('nextProps', nextProps);
     this.setState({ devices: nextProps.devices });
   }
 
@@ -43,26 +42,56 @@ class Devices extends Component {
   };
 
   handleDeviceDimmer = id => (value) => {
-    telldusCommand({ command: 'dim', id, level: value }, this.props.setAlert).then(() => {
+    const level = (typeof value === 'number') ? value : 80;
+
+    telldusCommand({ command: 'dim', id, level }, this.props.setAlert).then(() => {
       updateDeviceInfo(id, this.updateDevice);
     });
   };
 
+  handleToggleListView = () => {
+    this.setState({ listView: !this.state.listView });
+  }
+
   render() {
-    const { devices } = this.state;
+    const { devices, listView } = this.state;
 
     return (
       <Container fluid className="page-content home-page">
         <h1>Home</h1>
-        <DeviceList
+
+        <Button className="mb-4" color="success" onClick={this.handleToggleListView}>
+          {listView ? 'Tabell' : 'Lista'}
+        </Button>
+
+        {listView && <DeviceList
           devices={devices}
           handleDeviceToggle={this.handleDeviceToggle}
           onSliderChange={this.onSliderChange}
           handleDeviceDimmer={this.handleDeviceDimmer}
-        />
+        />}
+
+        {!listView && <DeviceTable
+          devices={devices}
+          handleDeviceToggle={this.handleDeviceToggle}
+          onSliderChange={this.onSliderChange}
+          handleDeviceDimmer={this.handleDeviceDimmer}
+        />}
       </Container>
     );
   }
 }
+
+Devices.propTypes = {
+  devices: PropTypes.shape({
+    name: PropTypes.string,
+    type: PropTypes.string,
+    id: PropTypes.number,
+    methods: PropTypes.number,
+    state: PropTypes.number,
+    statevalue: PropTypes.number,
+  }).isRequired,
+  setAlert: PropTypes.func.isRequired,
+};
 
 export default Devices;

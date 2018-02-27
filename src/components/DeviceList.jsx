@@ -1,6 +1,5 @@
-/* eslint-disable react/prop-types */
-
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import map from 'lodash.map';
 import { Row, Col } from 'reactstrap';
 import Toggle from 'react-toggle';
@@ -47,5 +46,12 @@ class Devices extends Component {
     });
   }
 }
+
+Devices.propTypes = {
+  devices: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  handleDeviceToggle: PropTypes.func.isRequired,
+  onSliderChange: PropTypes.func.isRequired,
+  handleDeviceDimmer: PropTypes.func.isRequired,
+};
 
 export default Devices;
