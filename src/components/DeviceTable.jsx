@@ -25,7 +25,6 @@ const Devices = (props) => {
           onClick={handleDeviceDimmer(dev.id)}
           id={dev.id}
           color="warning"
-          value={99}
         >
             Dim
         </Button>}

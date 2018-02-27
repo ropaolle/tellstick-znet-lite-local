@@ -27,8 +27,7 @@ class App extends Component {
         return acc;
       }, {});
 
-      const { expires, allowRenew } = response;
-      this.setState({ devices: indexedById, expires, allowRenew });
+      this.setState({ devices: indexedById });
     });
   };
 
@@ -46,6 +45,7 @@ class App extends Component {
 
   render() {
     const { expires, allowRenew, dialog } = this.state;
+
     return (
       <div className="app">
         <AppNavbar showDialog={this.showDialog} />
@@ -59,6 +59,7 @@ class App extends Component {
           allowRenew={allowRenew}
           show={dialog}
           close={this.closeDialog}
+          setAlert={this.setAlert}
         />
 
         <Devices devices={this.state.devices} setAlert={this.setAlert} />

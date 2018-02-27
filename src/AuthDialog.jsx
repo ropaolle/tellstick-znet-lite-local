@@ -1,10 +1,9 @@
-/* eslint react/no-multi-comp: 0, react/prop-types: 0 */
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import telldusCommand from './utils';
 
-class ModalExample extends React.Component {
+class AuthDialog extends React.Component {
   constructor(props) {
     super(props);
 
@@ -66,7 +65,7 @@ class ModalExample extends React.Component {
 
     return (
       <div className="dialog">
-        <Modal isOpen={show} toggle={close} className={this.props.className}>
+        <Modal isOpen={show} toggle={close}>
           <ModalHeader toggle={close}>Authentication</ModalHeader>
 
           <ModalBody>
@@ -125,4 +124,12 @@ class ModalExample extends React.Component {
   }
 }
 
-export default ModalExample;
+AuthDialog.propTypes = {
+  show: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,
+  allowRenew: PropTypes.bool.isRequired,
+  expires: PropTypes.number.isRequired,
+};
+
+export default AuthDialog;
