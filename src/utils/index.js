@@ -4,8 +4,8 @@ const telldusCommand = async function telldusCommand(qs, alert) {
   if (typeof alert === 'function') alert(''); // Clear alert
 
   const options = {
-    // uri: 'http://192.168.10.146:4000',
-    uri: 'http://localhost:4000',
+    uri: 'http://192.168.10.146:4000',
+    // uri: 'http://localhost:4000',
     qs,
     json: true,
   };

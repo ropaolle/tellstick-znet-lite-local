@@ -38,5 +38,5 @@ export default class AppNavbar extends React.Component {
 }
 
 AppNavbar.propTypes = {
-  showDialog: PropTypes.bool.isRequired,
+  showDialog: PropTypes.func.isRequired,
 };
