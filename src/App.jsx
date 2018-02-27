@@ -4,7 +4,7 @@ import './App.css';
 import AppNavbar from './AppNavbar';
 import AuthDialog from './AuthDialog';
 import Devices from './components/Devices';
-import telldusCommand from './tellstick-znet-lite';
+import telldusCommand from './utils/tellstick-znet-lite';
 
 class App extends Component {
   state = {
@@ -17,6 +17,8 @@ class App extends Component {
   };
 
   componentDidMount = () => {
+    if (process.env.NODE_ENV === 'test') { return; } // Return early if a test is running.
+
     telldusCommand({ command: 'deviceList' }, this.setAlert).then((response) => {
       const indexedById = response.device.reduce((acc, val) => {
         acc[val.id] = val;

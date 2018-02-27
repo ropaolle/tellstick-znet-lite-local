@@ -5,7 +5,6 @@ node_modules
 
 # production
 build
-ssh
 
-# backup
-backup
+# test
+coverage
