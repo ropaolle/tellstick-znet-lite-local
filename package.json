@@ -35,12 +35,20 @@
     "app": "npm start && npm run api"
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": [
+      "react-app"
+    ]
   },
   "eslintConfig": {
     "root": true,
-    "extends": ["plugin:promise/recommended", "airbnb"],
-    "plugins": ["react", "promise"],
+    "extends": [
+      "plugin:promise/recommended",
+      "airbnb"
+    ],
+    "plugins": [
+      "react",
+      "promise"
+    ],
     "parser": "babel-eslint",
     "parserOptions": {
       "ecmaVersion": 6,
@@ -58,7 +66,10 @@
       "react/jsx-filename-extension": [
         1,
         {
-          "extensions": [".js", ".jsx"]
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
         }
       ]
     }
