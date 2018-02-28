@@ -27,6 +27,19 @@ sudo env PATH=$PATH:/usr/bin /home/olle/.npm-global/lib/node_modules/pm2/bin/pm2
 * [API Explorer](http://api.telldus.com/explore/index)
 * [API flags](http://developer.telldus.se/doxygen/group__core.html#gaa732c3323e53d50e893c43492e5660c9) [extras](https://github.com/telldus/telldus/blob/master/examples/python/live/tdtool/tdtool.py)
 
+## Constants
+```javascript
+const TELLSTICK_TURNON = 1;
+const TELLSTICK_TURNOFF = 2;
+const TELLSTICK_BELL = 4;
+const TELLSTICK_TOGGLE = 8;
+const TELLSTICK_DIM = 16;
+const TELLSTICK_LEARN = 32;
+const TELLSTICK_EXECUTE = 64;
+const TELLSTICK_UP = 128;
+const TELLSTICK_DOWN = 256;
+const TELLSTICK_STOP = 512;
+```
 
 ## Get token
 

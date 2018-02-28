@@ -4,7 +4,8 @@ const telldusCommand = async function telldusCommand(qs, alert) {
   if (typeof alert === 'function') alert(''); // Clear alert
 
   const options = {
-    uri: (process.env.NODE_ENV === 'production') ? 'http://localhost:4000' : 'http://192.168.10.146:4000',
+    uri: 'http://192.168.10.146:4000',
+    // uri: 'http://localhost:4000',
     qs,
     json: true,
   };
@@ -15,12 +16,14 @@ const telldusCommand = async function telldusCommand(qs, alert) {
 
   if (!res.success && typeof alert === 'function') alert(res.message);
 
-  return res.success ? res.message : { device: [] };
+  return res;
 };
 
 export function updateDeviceInfo(id, update) {
   setTimeout(() => {
-    telldusCommand({ command: 'info', id: Number(id) }).then(device => update(device)).catch();
+    telldusCommand({ command: 'info', id: Number(id) })
+      .then(response => update(response.message))
+      .catch();
   }, 1000);
 }
 

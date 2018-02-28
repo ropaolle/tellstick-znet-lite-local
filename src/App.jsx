@@ -18,12 +18,17 @@ class App extends Component {
 
   componentDidMount = () => {
     telldusCommand({ command: 'deviceList' }, this.setAlert).then((response) => {
-      const indexedById = response.device.reduce((acc, val) => {
+      if (!response.success) { return response.message; }
+
+      const indexedById = response.message.device.reduce((acc, val) => {
         acc[val.id] = val;
         return acc;
       }, {});
 
-      return this.setState({ devices: indexedById });
+      return this.setState({
+        devices: indexedById,
+        allowRenew: response.allowRenew,
+        expires: response.expires });
     }).catch();
   };
 
