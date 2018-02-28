@@ -77,11 +77,10 @@ class AuthDialog extends React.Component {
     const { step, authUrl, alert } = this.state;
     const { expires, allowRenew, show, close } = this.props;
 
+    const checked = <span className="text-success">&#x2714;</span>;
+
     const button = (onClick, color, text) => (
-      <Button onClick={onClick} color={color}>
-        {text}
-      </Button>
-    );
+      <Button onClick={onClick} color={color}>{text}</Button>);
 
     return (
       <div className="dialog">
@@ -94,11 +93,7 @@ class AuthDialog extends React.Component {
                 Expires: {this.date(expires)}, Allow renew: {Boolean(allowRenew).toString()}
               </div>
 
-              <h4 className="mt-4">
-                {step > 0 && <span className="text-success">&#x2714;</span>} Step 1. Request/renew
-                token
-              </h4>
-
+              <h4 className="mt-4">{step > 0 && checked} Step 1. Request/renew token</h4>
               {step === 0 && (
                 <div>
                   {button(this.handleRequestToken, 'warning', 'Request new token')}{' '}
@@ -106,19 +101,14 @@ class AuthDialog extends React.Component {
                 </div>
               )}
 
-              <h4 className="mt-4">
-                {step > 1 && <span className="text-success">&#x2714;</span>} Step 2. Authenticate
-              </h4>
-
+              <h4 className="mt-4">{step > 1 && checked} Step 2. Authenticate</h4>
               {step === 1 && (
                 <div>
                   Go to{button(this.handleAuthentication, 'link', authUrl)}and authenticate the app.
                 </div>
               )}
 
-              <h4 className="mt-4">
-                {step > 2 && <span className="text-success">&#x2714;</span>} Step 3. Access token
-              </h4>
+              <h4 className="mt-4">{step > 2 && checked} Step 3. Access token</h4>
               <div>
                 {step === 2 && button(this.handleAccessToken, 'warning', 'Save access token...')}
                 {step > 2 && <Alert color="success">{alert}</Alert>}

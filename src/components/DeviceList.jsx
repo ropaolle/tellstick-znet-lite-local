@@ -8,27 +8,6 @@ import 'rc-slider/assets/index.css';
 const Devices = (props) => {
   const { devices, handleDeviceToggle, onSliderChange, handleDeviceDimmer } = props;
 
-  const toggle = device => (
-    <label htmlFor={`toggle-${device.id}`}>
-      <Toggle
-        checked={device.state === 1}
-        id={device.id.toString()}
-        onChange={handleDeviceToggle}
-      />
-    </label>);
-
-  const slider = device => (
-    <div className="slider">
-      <Slider
-        min={1}
-        max={255}
-        value={Number(device.statevalue)}
-        disabled={!(device.methods & 16)} // eslint-disable-line no-bitwise
-        onChange={onSliderChange(device.id)}
-        onAfterChange={handleDeviceDimmer(device.id)}
-      />
-    </div>);
-
   return map(devices, (device) => {
     if (![6, 8, 18].includes(device.id)) return '';
 
@@ -37,10 +16,25 @@ const Devices = (props) => {
         <Row><Col>{device.name}</Col></Row>
         <Row>
           <Col className="col-2">
-            {toggle}
+            <label htmlFor={`toggle-${device.id}`}>
+              <Toggle
+                checked={device.state === 1}
+                id={device.id.toString()}
+                onChange={handleDeviceToggle}
+              />
+            </label>
           </Col>
           <Col className="col-10">
-            {slider}
+            <div className="slider">
+              <Slider
+                min={1}
+                max={255}
+                value={Number(device.statevalue)}
+                disabled={!(device.methods & 16)} // eslint-disable-line no-bitwise
+                onChange={onSliderChange(device.id)}
+                onAfterChange={handleDeviceDimmer(device.id)}
+              />
+            </div>
           </Col>
         </Row>
       </div>

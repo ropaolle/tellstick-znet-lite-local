@@ -20,9 +20,7 @@ const telldusCommand = async function telldusCommand(qs, alert) {
 
 export function updateDeviceInfo(id, update) {
   setTimeout(() => {
-    telldusCommand({ command: 'info', id: Number(id) }).then((device) => {
-      update(device);
-    });
+    telldusCommand({ command: 'info', id: Number(id) }).then(device => update(device)).catch();
   }, 1000);
 }
 
