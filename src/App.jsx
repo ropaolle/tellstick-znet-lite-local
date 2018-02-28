@@ -17,11 +17,6 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    // Return early if a test is running.
-    if (process.env.NODE_ENV === 'test') {
-      return;
-    }
-
     telldusCommand({ command: 'deviceList' }, this.setAlert).then((response) => {
       const indexedById = response.device.reduce((acc, val) => {
         acc[val.id] = val;
