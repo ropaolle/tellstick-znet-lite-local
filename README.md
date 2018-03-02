@@ -1,10 +1,13 @@
-Tellstick Znet Lite local is a web app that lets you control your Tellstick devices locally without an internet connection.
+Tellstick Znet Lite local is a web client that let you control your Tellstick devices locally, without an internet connection.
+
+Tellstick is an IOT gateway that I use to control the lights in my apartment. It can be controlled by Tellstick's mobile/web client thru the service Tellstick Live. Unfortunately it won't work if my internet connection is down. To make sure I can handle my lights independent on internal I maid a local client ([Tellstick Znet Lite Local Client](https://github.com/ropaolle/tellstick-znet-lite-local)) and a proxy/api ([Tellstick Znet Lite Local Proxy/Api](https://github.com/ropaolle/tellstick-znet-lite-local-api)) that talks to the Tellstick.
 
 ### Codebeat
+
 complexity 13 duplications 2 style 41 lines 459
 
 [![codebeat badge](https://codebeat.co/badges/f5872716-6875-467e-abb6-17546612de7f)](https://codebeat.co/projects/github-com-ropaolle-tellstick-znet-lite-local-master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8dc951c84b004f56b2425e10fddcb5fe)](https://www.codacy.com/app/ropaolle/tellstick-znet-lite-local?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ropaolle/tellstick-znet-lite-local&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8dc951c84b004f56b2425e10fddcb5fe)](https://www.codacy.com/app/ropaolle/tellstick-znet-lite-local?utm_source=github.com&utm_medium=referral&utm_content=ropaolle/tellstick-znet-lite-local&utm_campaign=Badge_Grade)
 [![David badge](https://david-dm.org/ropaolle/tellstick-znet-lite-local.svg)](https://david-dm.org/ropaolle/tellstick-znet-lite-local)
 [![DevDependencies](https://img.shields.io/david/dev/ropaolle/tellstick-znet-lite-local.svg)](https://david-dm.org/ropaolle/tellstick-znet-lite-local#info=devDependencies&view=list)
 
@@ -15,7 +18,8 @@ complexity 13 duplications 2 style 41 lines 459
 ![img](extras/devices.png)
 
 ## Start App/Api
-``` bash
+
+```bash
 # App
 service nginx start/status
 # Api
@@ -24,9 +28,10 @@ cd /home/olle/tellstick-znet-lite-local/api && pm2 start app.js
 ```
 
 ## Nginx
+
 * [Info](https://medium.com/@johnbrett/create-react-app-push-state-nginx-config-a9f7530621c1)
 
-``` bash
+```bash
 sudo apt-get install nginx
 sudo nano /etc/nginx/sites-available/default
 
@@ -54,11 +59,11 @@ sudo service nginx start
 
 ## Pull repo
 
-``` bash
+```bash
 # Pull
 git pull origin master
 
-# Force overwrite of local file with what's it origin repo 
+# Force overwrite of local file with what's it origin repo
 git fetch
 git reset --hard origin/master
 ```
