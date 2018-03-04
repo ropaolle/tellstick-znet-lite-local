@@ -13,7 +13,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.0",
+    "react-scripts": "^1.1.1",
     "react-toggle": "^4.0.2",
     "reactstrap": "^5.0.0-alpha.4",
     "request-promise": "^4.2.2"
@@ -40,6 +40,8 @@
     "eject": "react-scripts eject"
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": [
+      "react-app"
+    ]
   }
 }
