@@ -13,7 +13,9 @@ const Devices = (props) => {
 
     return (
       <div key={device.id}>
-        <Row><Col>{device.name}</Col></Row>
+        <Row>
+          <Col>{device.name}</Col>
+        </Row>
         <Row>
           <Col className="col-2">
             <label htmlFor={`toggle-${device.id}`}>

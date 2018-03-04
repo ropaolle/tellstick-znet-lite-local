@@ -19,19 +19,24 @@ class App extends Component {
   componentDidMount = () => {
     if (process.env.NODE_ENV === 'test') return; // TODO: Better tests
 
-    telldusCommand({ command: 'deviceList' }, this.setAlert).then((response) => {
-      if (!response.success) { return response.message; }
+    telldusCommand({ type: 'devices' }, this.setAlert)
+      .then((response) => {
+        if (!response.success) {
+          return response.message;
+        }
 
-      const indexedById = response.message.device.reduce((acc, val) => {
-        acc[val.id] = val;
-        return acc;
-      }, {});
+        const indexedById = response.message.device.reduce((acc, val) => {
+          acc[val.id] = val;
+          return acc;
+        }, {});
 
-      return this.setState({
-        devices: indexedById,
-        allowRenew: response.allowRenew,
-        expires: response.expires });
-    }).catch();
+        return this.setState({
+          devices: indexedById,
+          allowRenew: response.allowRenew,
+          expires: response.expires,
+        });
+      })
+      .catch();
   };
 
   setAlert = (alert) => {

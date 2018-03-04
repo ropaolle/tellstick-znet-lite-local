@@ -3,9 +3,10 @@ import request from 'request-promise';
 const telldusCommand = async function telldusCommand(qs, alert) {
   if (typeof alert === 'function') alert(''); // Clear alert
 
+  const id = qs.id ? `/${qs.id}` : '';
+
   const options = {
-    uri: 'http://192.168.10.146:4000',
-    // uri: 'http://localhost:4000',
+    uri: `http://192.168.10.146:4000/v1/${qs.type}${id}`,
     qs,
     json: true,
     timeout: 1000,
@@ -22,7 +23,7 @@ const telldusCommand = async function telldusCommand(qs, alert) {
 
 export function updateDeviceInfo(id, update) {
   setTimeout(() => {
-    telldusCommand({ command: 'info', id: Number(id) })
+    telldusCommand({ type: 'devices', command: 'info', id: Number(id) })
       .then(response => update(response.message))
       .catch();
   }, 1000);

@@ -21,7 +21,7 @@ Tellstick is an IOT gateway that I use to control the lights in my apartment. It
 # App
 service nginx start/status
 # Api
-cd /home/olle/tellstick-znet-lite-local/api && pm2 start app.js
+cd /home/olle/tellstick-znet-lite-local-api/src && pm2 start server.js
 # pm2 status
 ```
 
@@ -55,9 +55,15 @@ server {
 sudo service nginx start
 ```
 
-## Pull repo
+## Install
 
 ```bash
+# Clone
+git clone git@github.com:ropaolle/tellstick-znet-lite-local.git
+cd tellstick-znet-lite-local
+npm i
+npm run build
+
 # Pull
 git pull origin master
 

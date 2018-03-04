@@ -14,24 +14,22 @@ class AuthDialog extends React.Component {
 
   state = {
     step: 0,
-    requestToken: '',
     authUrl: '?',
   };
 
   handleRequestToken = () => {
-    this.tc({ command: 'requestToken' })
+    this.tc({ type: 'token', command: 'new' })
       .then(result =>
         this.setState({
           step: 1,
-          authUrl: result.authUrl,
-          requestToken: result.token,
+          authUrl: result.message.authUrl,
         }),
       )
       .catch();
   };
 
   handleRefreshToken = () => {
-    this.tc({ command: 'refreshToken' })
+    this.tc({ type: 'token', command: 'refresh' })
       .then(result => this.updateAlert(result, true))
       .catch();
   };
@@ -43,13 +41,13 @@ class AuthDialog extends React.Component {
   };
 
   handleAccessToken = () => {
-    this.tc({ command: 'accessToken', requestToken: this.state.requestToken })
+    this.tc({ type: 'token', command: 'access' })
       .then(result => this.updateAlert(result, false))
       .catch();
   };
 
   updateAlert = (result, refresh = false) => {
-    const date = new Date(result.expires * 1000);
+    const date = new Date(result.expires);
     const alert = (
       <div>
         {!refresh && (
@@ -69,9 +67,9 @@ class AuthDialog extends React.Component {
   tc = command => telldusCommand(command, this.props.setAlert);
 
   date = (expires) => {
-    const date = new Date(expires * 1000);
+    const date = new Date(expires);
     return date.toLocaleString();
-  }
+  };
 
   render() {
     const { step, authUrl, alert } = this.state;
@@ -80,7 +78,10 @@ class AuthDialog extends React.Component {
     const checked = <span className="text-success">&#x2714;</span>;
 
     const button = (onClick, color, text) => (
-      <Button onClick={onClick} color={color}>{text}</Button>);
+      <Button onClick={onClick} color={color}>
+        {text}
+      </Button>
+    );
 
     return (
       <div className="dialog">

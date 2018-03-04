@@ -7,7 +7,14 @@ import DeviceList from './DeviceList';
 import DeviceTable from './DeviceTable';
 
 const defaultDevices = {
-  0: { id: 0, methods: 19, name: 'Stickpropp Dim Zwave', state: 16, statevalue: 64, type: 'device' },
+  0: {
+    id: 0,
+    methods: 19,
+    name: 'Stickpropp Dim Zwave',
+    state: 16,
+    statevalue: 64,
+    type: 'device',
+  },
 };
 
 class Devices extends Component {
@@ -37,23 +44,29 @@ class Devices extends Component {
 
   updateDevice = (device) => {
     this.setState({ devices: { ...this.state.devices, [device.id]: device } });
+    // this.setState(prevState => ({ devices: { ...prevState.devices, [device.id]: device } }));
   };
 
   handleDeviceToggle = (e) => {
     const id = Number(e.target.id);
-    const device = this.state.devices[id];
-    device.state = device.state === 1 ? 2 : 1; // Toggle state
-    this.updateDevice(device); // Update state
 
-    const command = device.state === 1 ? 'on' : 'off';
-    telldusCommand({ command, id }, this.props.setAlert)
-      .then(() => updateDeviceInfo(id, this.updateDevice))
-      .catch();
+    const { devices } = this.state;
+    const device = devices[id];
+
+    device.state = device.state === 1 ? 2 : 1; // Toggle state
+    // this.updateDevice(device); // Update state
+
+    this.setState({ devices: { ...this.state.devices, [device.id]: device } }, () => {
+      const command = device.state === 1 ? 'turnOn' : 'turnOff';
+      telldusCommand({ type: 'devices', command, id }, this.props.setAlert)
+        .then(() => updateDeviceInfo(id, this.updateDevice))
+        .catch();
+    });
   };
 
   handleDeviceDimmer = id => (value) => {
     const level = typeof value === 'number' ? value : 80;
-    return telldusCommand({ command: 'dim', id, level }, this.props.setAlert)
+    return telldusCommand({ type: 'devices', command: 'dim', id, level }, this.props.setAlert)
       .then(() => updateDeviceInfo(id, this.updateDevice))
       .catch();
   };
