@@ -6,6 +6,8 @@ it('Call tellstick-znet-lite api - valid IP', (done) => {
 
 it('Call tellstick-znet-lite api - Invalid IP + pass Alert function', (done) => {
   process.env.NODE_ENV = 'production';
-  telldusCommand({ command: 'deviceList' }, () => {}).then(() => done()).catch();
+  telldusCommand({ command: 'deviceList' }, () => {})
+    .then(() => done())
+    .catch();
   process.env.NODE_ENV = 'test';
 });

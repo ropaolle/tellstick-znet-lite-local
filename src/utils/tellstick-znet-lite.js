@@ -8,6 +8,7 @@ const telldusCommand = async function telldusCommand(qs, alert) {
     // uri: 'http://localhost:4000',
     qs,
     json: true,
+    timeout: 1000,
   };
 
   const res = await request(options)
