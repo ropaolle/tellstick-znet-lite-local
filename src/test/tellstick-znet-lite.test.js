@@ -1,4 +1,4 @@
-import telldusCommand, { updateDeviceInfo } from './tellstick-znet-lite';
+import telldusCommand, { updateDeviceInfo } from '../utils/tellstick-znet-lite';
 
 it('Call tellstick-znet-lite api - valid IP', (done) => {
   updateDeviceInfo(6, done);

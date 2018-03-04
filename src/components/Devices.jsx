@@ -6,6 +6,10 @@ import telldusCommand, { updateDeviceInfo } from '../utils/tellstick-znet-lite';
 import DeviceList from './DeviceList';
 import DeviceTable from './DeviceTable';
 
+const defaultDevices = {
+  0: { id: 0, methods: 19, name: 'Stickpropp Dim Zwave', state: 16, statevalue: 64, type: 'device' },
+};
+
 class Devices extends Component {
   static propTypes = {
     devices: PropTypes.shape({
@@ -19,7 +23,7 @@ class Devices extends Component {
     setAlert: PropTypes.func.isRequired,
   };
 
-  state = { listView: true, devices: {} /* , sensors: {} */ };
+  state = { listView: true, devices: defaultDevices /* , sensors: {} */ };
 
   componentWillReceiveProps = (nextProps) => {
     this.setState({ devices: nextProps.devices });
@@ -49,7 +53,6 @@ class Devices extends Component {
 
   handleDeviceDimmer = id => (value) => {
     const level = typeof value === 'number' ? value : 80;
-
     return telldusCommand({ command: 'dim', id, level }, this.props.setAlert)
       .then(() => updateDeviceInfo(id, this.updateDevice))
       .catch();

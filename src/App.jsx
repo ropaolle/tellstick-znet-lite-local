@@ -17,6 +17,8 @@ class App extends Component {
   };
 
   componentDidMount = () => {
+    if (process.env.NODE_ENV === 'test') return; // TODO: Better tests
+
     telldusCommand({ command: 'deviceList' }, this.setAlert).then((response) => {
       if (!response.success) { return response.message; }
 
