@@ -4,7 +4,8 @@ import './App.css';
 import AppNavbar from './AppNavbar';
 import AuthDialog from './AuthDialog';
 import Devices from './components/Devices';
-import telldusCommand from './utils/tellstick-znet-lite';
+// import telldusCommand from './utils/tellstick-znet-lite-request';
+import telldusCommand from './utils/tellstick-znet-lite-wreck';
 
 class App extends Component {
   state = {
@@ -17,7 +18,7 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    if (process.env.NODE_ENV === 'test') return; // TODO: Better tests
+    if (process.env.NODE_ENV === 'test') return; // Do not load data during tests
 
     telldusCommand({ type: 'devices' }, this.setAlert)
       .then((response) => {

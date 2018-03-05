@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
-import telldusCommand from './utils/tellstick-znet-lite';
+import telldusCommand from './utils/tellstick-znet-lite-request';
 
 class AuthDialog extends React.Component {
   static propTypes = {

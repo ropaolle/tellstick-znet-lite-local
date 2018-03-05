@@ -9,6 +9,7 @@
     "bootstrap": "^4.0.0-beta.3",
     "lodash.map": "^4.6.0",
     "prop-types": "^15.6.0",
+    "query-string": "^5.1.0",
     "rc-slider": "^8.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -16,7 +17,8 @@
     "react-scripts": "^1.1.1",
     "react-toggle": "^4.0.2",
     "reactstrap": "^5.0.0-alpha.4",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "wreck": "^14.0.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
