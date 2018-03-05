@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-// import map from 'lodash.map';
+import uniqueId from 'lodash.uniqueid';
 import { UncontrolledAlert } from 'reactstrap';
 import './App.css';
 import AppNavbar from './AppNavbar';
 import AuthDialog from './AuthDialog';
 import Devices from './components/Devices';
-// import telldusCommand from './utils/tellstick-znet-lite-request';
-import telldusCommand from './utils/tellstick-znet-lite-wreck';
+import telldusCommand from './utils/tellstick-znet-lite';
 
 class App extends Component {
   state = {
@@ -57,8 +56,17 @@ class App extends Component {
     this.setState((prevState) => {
       if (command) {
         const query = { type: 'devices', command, id: device.id };
-        if (command === 'dim') { query.level = device.statevalue; }
-        telldusCommand(query, this.setAlert);
+        if (command === 'dim') {
+          query.level = device.statevalue;
+        }
+        telldusCommand(query, this.setAlert)
+          .then((response) => {
+            if (!response.success) {
+              this.setAlert(response.message);
+            }
+            return response.success;
+          })
+          .catch();
       }
       return { devices: { ...prevState.devices, [device.id]: device } };
     });
@@ -67,8 +75,10 @@ class App extends Component {
   render() {
     const { expires, allowRenew, dialog, alerts } = this.state;
 
-    const alertList = alerts.map((value, i) => (
-      <UncontrolledAlert key={i} color="warning">{value}</UncontrolledAlert>
+    const alertList = alerts.map(value => (
+      <UncontrolledAlert key={uniqueId} color="warning">
+        {value}
+      </UncontrolledAlert>
     ));
 
     return (

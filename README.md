@@ -73,6 +73,8 @@ git reset --hard origin/master
 ```
 
 ## Todo
-- [ ] Save favorites
-- [ ] Add sensors 
-- [ ] Fix tests
+
+* [ ] Save favorites
+* [ ] Add sensors
+* [ ] Fix tests
+* [ ] Command shall always be a query string

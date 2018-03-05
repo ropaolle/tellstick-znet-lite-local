@@ -24,7 +24,7 @@ class Devices extends Component {
   onSliderChange = id => (value) => {
     this.props.updateDevice({
       ...this.props.devices[id], // Clone
-      statevalue: (value > 255) ? 80 : value,
+      statevalue: value,
     });
   };
 

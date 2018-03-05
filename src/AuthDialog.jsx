@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
-import telldusCommand from './utils/tellstick-znet-lite-request';
+import telldusCommand from './utils/tellstick-znet-lite';
 
 class AuthDialog extends React.Component {
   static propTypes = {
     show: PropTypes.bool.isRequired,
     close: PropTypes.func.isRequired,
-    setAlert: PropTypes.func.isRequired,
     allowRenew: PropTypes.bool.isRequired,
     expires: PropTypes.number.isRequired,
   };
@@ -18,7 +17,7 @@ class AuthDialog extends React.Component {
   };
 
   handleRequestToken = () => {
-    this.tc({ type: 'token', command: 'new' })
+    telldusCommand({ type: 'token', command: 'new' })
       .then(result =>
         this.setState({
           step: 1,
@@ -29,7 +28,7 @@ class AuthDialog extends React.Component {
   };
 
   handleRefreshToken = () => {
-    this.tc({ type: 'token', command: 'refresh' })
+    telldusCommand({ type: 'token', command: 'refresh' })
       .then(result => this.updateAlert(result, true))
       .catch();
   };
@@ -41,7 +40,7 @@ class AuthDialog extends React.Component {
   };
 
   handleAccessToken = () => {
-    this.tc({ type: 'token', command: 'access' })
+    telldusCommand({ type: 'token', command: 'access' })
       .then(result => this.updateAlert(result, false))
       .catch();
   };
@@ -64,15 +63,13 @@ class AuthDialog extends React.Component {
     this.setState({ step: 3, alert });
   };
 
-  tc = command => telldusCommand(command, this.props.setAlert);
-
   date = (expires) => {
     const date = new Date(expires);
     return date.toLocaleString();
   };
 
   render() {
-    const { step, authUrl, alert } = this.state;
+    const { step, alert } = this.state;
     const { expires, allowRenew, show, close } = this.props;
 
     const checked = <span className="text-success">&#x2714;</span>;
@@ -105,7 +102,7 @@ class AuthDialog extends React.Component {
               <h4 className="mt-4">{step > 1 && checked} Step 2. Authenticate</h4>
               {step === 1 && (
                 <div>
-                  Go to{button(this.handleAuthentication, 'link', authUrl)}and authenticate the app.
+                  Go to{button(this.handleAuthentication, 'link', 'link')}and authenticate the app.
                 </div>
               )}
 

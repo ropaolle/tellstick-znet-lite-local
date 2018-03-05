@@ -10,15 +10,9 @@ import DeviceTable from '../components/DeviceTable';
 configure({ adapter: new Adapter() });
 
 const devices = {
-  0: {
-    id: 0,
-    methods: 19,
-    name: 'Stickpropp Dim Zwave',
-    state: 16,
-    statevalue: 64,
-    type: 'device',
-  },
-  6: { id: 6, methods: 19, name: 'Sovrum Tak', state: 2, statevalue: '', type: 'device' },
+  2: { id: 2, methods: 19, name: 'Zwave', state: 2, statevalue: 64, type: 'device' },
+  1000: { id: 1000, methods: 19, name: 'Zwave', state: 1, statevalue: 64, type: 'device' },
+  1001: { id: 1001, methods: 19, name: 'Zwave', state: 2, statevalue: 64, type: 'device' },
 };
 
 test('Render Devices', () => {
@@ -43,8 +37,12 @@ test('Devices run methods', () => {
       handleFavoriteChange={() => {}}
     />,
   );
-  wrapper.instance().handleDeviceDimmer(0)(80);
-  wrapper.instance().handleDeviceToggle({ target: { id: 0 } });
+  wrapper.instance().handleDeviceDimmer(1000)(80);
+  wrapper.instance().handleDeviceDimmer(1001)({});
+  wrapper.instance().onSliderChange(1000)(80);
+  wrapper.instance().handleDeviceToggle({ target: { id: 1000 } });
+  wrapper.instance().handleDeviceToggle({ target: { id: 1001 } });
+  wrapper.instance().handleFavoriteChange({ target: { id: 1000 } });
   wrapper.instance().handleToggleListView();
 });
 
