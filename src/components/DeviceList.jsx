@@ -6,10 +6,10 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 const Devices = (props) => {
-  const { devices, handleDeviceToggle, onSliderChange, handleDeviceDimmer } = props;
+  const { devices, handleDeviceToggle, handleDeviceDimmer, onSliderChange } = props;
 
   return map(devices, (device) => {
-    if (![6, 8, 18].includes(device.id)) return '';
+    if (![2, 6, 8, 18].includes(device.id)) return '';
 
     return (
       <div key={device.id}>
@@ -20,7 +20,7 @@ const Devices = (props) => {
           <Col className="col-2">
             <label htmlFor={`toggle-${device.id}`}>
               <Toggle
-                checked={device.state === 1}
+                checked={device.state !== 2}
                 id={device.id.toString()}
                 onChange={handleDeviceToggle}
               />

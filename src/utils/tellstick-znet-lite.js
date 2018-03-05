@@ -1,32 +1,44 @@
-import request from 'request-promise';
+import Wreck from 'wreck';
+import queryString from 'query-string';
 
-const telldusCommand = async function telldusCommand(qs, alert) {
-  if (typeof alert === 'function') alert(''); // Clear alert
+function queryToPath(query) {
+  const { type, id, ...qsObj } = query;
+  let url = type;
+  if (id) {
+    url += `/${id}`;
+  }
+  const qs = queryString.stringify(qsObj);
+  if (qs) {
+    url += `?${qs}`;
+  }
 
-  const id = qs.id ? `/${qs.id}` : '';
-
-  const options = {
-    uri: `http://192.168.10.146:4000/v1/${qs.type}${id}`,
-    qs,
-    json: true,
-    timeout: 1000,
-  };
-
-  const res = await request(options)
-    .then(response => response)
-    .catch(err => ({ success: false, message: err.message }));
-
-  if (!res.success && typeof alert === 'function') alert(res.message);
-
-  return res;
-};
-
-export function updateDeviceInfo(id, update) {
-  setTimeout(() => {
-    telldusCommand({ type: 'devices', command: 'info', id: Number(id) })
-      .then(response => update(response.message))
-      .catch();
-  }, 1000);
+  return url;
 }
+
+const telldusCommand = async function telldusCommand(query) {
+  const options = {
+    timeout: 1000,
+    baseUrl: 'http://192.168.10.146:4000/v1/',
+  };
+  const url = queryToPath(query);
+  const promise = Wreck.request('GET', url, options);
+
+  try {
+    const res = await promise;
+    const body = await Wreck.read(res, { json: true });
+
+    // If body.favorites
+    const favorites = '1,2,6,7'.split(',');
+    body.message.device = body.message.device.map(val => ({
+      ...val,
+      favorite: favorites.indexOf(val.id.toString()) !== -1,
+    }));
+    console.log('Body', body);
+
+    return body;
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
+};
 
 export default telldusCommand;

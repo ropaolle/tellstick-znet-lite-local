@@ -1,13 +1,9 @@
-import telldusCommand, { updateDeviceInfo } from '../utils/tellstick-znet-lite';
+import telldusCommand from '../utils/tellstick-znet-lite';
 
-it('Call tellstick-znet-lite api - valid IP', (done) => {
-  updateDeviceInfo(6, done);
-});
-
-it('Call tellstick-znet-lite api - Invalid IP + pass Alert function', (done) => {
+it('Call tellstick-znet-lite api with Wreck - Invalid IP + pass Alert function', async () => {
   process.env.NODE_ENV = 'production';
-  telldusCommand({ command: 'deviceList' }, () => {})
-    .then(() => done())
+  await telldusCommand({ command: 'devices', id: 1000 }, () => {})
+    .then()
     .catch();
   process.env.NODE_ENV = 'test';
 });

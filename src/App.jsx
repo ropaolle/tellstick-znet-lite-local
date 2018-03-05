@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import uniqueId from 'lodash.uniqueid';
 import { UncontrolledAlert } from 'reactstrap';
 import './App.css';
 import AppNavbar from './AppNavbar';
@@ -8,7 +9,7 @@ import telldusCommand from './utils/tellstick-znet-lite';
 
 class App extends Component {
   state = {
-    alert: '',
+    alerts: [],
     dialog: false,
     devices: {},
     // sensors: {},
@@ -17,7 +18,7 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    if (process.env.NODE_ENV === 'test') return; // TODO: Better tests
+    if (process.env.NODE_ENV === 'test') return; // Do not load data during tests
 
     telldusCommand({ type: 'devices' }, this.setAlert)
       .then((response) => {
@@ -40,7 +41,7 @@ class App extends Component {
   };
 
   setAlert = (alert) => {
-    this.setState({ alert });
+    this.setState(prevState => ({ alerts: [...prevState.alerts, alert] }));
   };
 
   showDialog = () => {
@@ -51,16 +52,40 @@ class App extends Component {
     this.setState({ dialog: false });
   };
 
+  updateDevice = (device, command) => {
+    this.setState((prevState) => {
+      if (command) {
+        const query = { type: 'devices', command, id: device.id };
+        if (command === 'dim') {
+          query.level = device.statevalue;
+        }
+        telldusCommand(query, this.setAlert)
+          .then((response) => {
+            if (!response.success) {
+              this.setAlert(response.message);
+            }
+            return response.success;
+          })
+          .catch();
+      }
+      return { devices: { ...prevState.devices, [device.id]: device } };
+    });
+  };
+
   render() {
-    const { expires, allowRenew, dialog } = this.state;
+    const { expires, allowRenew, dialog, alerts } = this.state;
+
+    const alertList = alerts.map(value => (
+      <UncontrolledAlert key={uniqueId} color="warning">
+        {value}
+      </UncontrolledAlert>
+    ));
 
     return (
       <div className="app">
         <AppNavbar showDialog={this.showDialog} />
 
-        {this.state.alert && (
-          <UncontrolledAlert color="warning">{this.state.alert}</UncontrolledAlert>
-        )}
+        {alertList}
 
         <AuthDialog
           expires={expires}
@@ -70,7 +95,11 @@ class App extends Component {
           setAlert={this.setAlert}
         />
 
-        <Devices devices={this.state.devices} setAlert={this.setAlert} />
+        <Devices
+          devices={this.state.devices}
+          updateDevice={this.updateDevice}
+          setAlert={this.setAlert}
+        />
       </div>
     );
   }

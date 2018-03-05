@@ -20,12 +20,47 @@
  * Home
 **/
 
-.home-page .react-toggle {
+.home-page .row .react-toggle {
   margin-top: 4px;
 }
 
 .home-page .slider {
   margin-top: 9px;
+}
+
+.alert {
+  margin: 2px;
+}
+
+/**
+ * Checkbox
+**/
+
+input[type=checkbox] {
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  padding: 10px;
+}
+
+/* Might want to wrap a span around your checkbox text
+.checkboxtext {
+  font-size: 110%;
+  display: inline;
+}
+ */
+
+/**
+ * Table
+**/
+
+.cellWidthMax {
+  width: 100%
+}
+
+table label {
+  margin-bottom: 0;
 }
 
 /**
