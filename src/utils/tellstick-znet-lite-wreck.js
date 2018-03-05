@@ -7,12 +7,11 @@ const options = {
 };
 
 const telldusCommand = async function telldusCommand(qs, alert) {
-  if (typeof alert === 'function') alert(''); // Clear alert
-
   const id = qs.id ? `/${qs.id}` : '';
   const url = `${qs.type}${id}`;
   console.log(url, qs);
   console.log(queryString.stringify(qs));
+
   const promise = Wreck.request('GET', url, options);
 
   try {
@@ -20,22 +19,13 @@ const telldusCommand = async function telldusCommand(qs, alert) {
     // json: 'strict' returns an error in case of none json resonse.
     const body = await Wreck.read(res, { json: 'strict' });
 
-    console.log(body);
+    console.log('Body', body);
 
     return body;
   } catch (err) {
+    if (typeof alert === 'function') alert(err.message);
     return { success: false, message: err.message };
   }
 };
 
-// const telldusCommand = async function telldusCommand(qs, alert) {
-
-//   const res = await request(options)
-//     .then(response => response)
-//     .catch(err => ({ success: false, message: err.message }));
-
-//   if (!res.success && typeof alert === 'function') alert(res.message);
-
-//   return res;
-// };
 export default telldusCommand;

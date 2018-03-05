@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import map from 'lodash.map';
 import { UncontrolledAlert } from 'reactstrap';
 import './App.css';
 import AppNavbar from './AppNavbar';
@@ -9,7 +10,7 @@ import telldusCommand from './utils/tellstick-znet-lite-wreck';
 
 class App extends Component {
   state = {
-    alert: '',
+    alerts: [],
     dialog: false,
     devices: {},
     // sensors: {},
@@ -41,7 +42,7 @@ class App extends Component {
   };
 
   setAlert = (alert) => {
-    this.setState({ alert });
+    this.setState(prevState => ({ alerts: [...prevState.alerts, alert] }));
   };
 
   showDialog = () => {
@@ -55,23 +56,25 @@ class App extends Component {
   updateDevice = (device, command) => {
     this.setState((prevState) => {
       if (command) {
-        const level = (command === 'dim') ? device.statevalue : undefined;
-        telldusCommand({ type: 'devices', command, id: device.id, level });
+        const level = command === 'dim' ? device.statevalue : undefined;
+        telldusCommand({ type: 'devices', command, id: device.id, level }, this.setAlert);
       }
       return { devices: { ...prevState.devices, [device.id]: device } };
     });
-  }
+  };
 
   render() {
-    const { expires, allowRenew, dialog } = this.state;
+    const { expires, allowRenew, dialog, alerts } = this.state;
+
+    const alertList = alerts.map((value, i) => (
+      <UncontrolledAlert key={i} color="warning">{value}</UncontrolledAlert>
+    ));
 
     return (
       <div className="app">
         <AppNavbar showDialog={this.showDialog} />
 
-        {this.state.alert && (
-          <UncontrolledAlert color="warning">{this.state.alert}</UncontrolledAlert>
-        )}
+        {alertList}
 
         <AuthDialog
           expires={expires}

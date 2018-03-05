@@ -28,6 +28,9 @@
   margin-top: 9px;
 }
 
+.alert {
+  margin: 2px;
+}
 
 /**
  * Checkbox
