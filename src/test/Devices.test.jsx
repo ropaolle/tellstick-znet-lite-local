@@ -10,24 +10,42 @@ import DeviceTable from '../components/DeviceTable';
 configure({ adapter: new Adapter() });
 
 const devices = {
-  0: { id: 0, methods: 19, name: 'Stickpropp Dim Zwave', state: 16, statevalue: 64, type: 'device' },
+  0: {
+    id: 0,
+    methods: 19,
+    name: 'Stickpropp Dim Zwave',
+    state: 16,
+    statevalue: 64,
+    type: 'device',
+  },
   6: { id: 6, methods: 19, name: 'Sovrum Tak', state: 2, statevalue: '', type: 'device' },
 };
 
 test('Render Devices', () => {
   const component = renderer.create(
-    <Devices devices={devices} setAlert={() => {}} />,
+    <Devices
+      devices={devices}
+      updateDevice={() => {}}
+      setAlert={() => {}}
+      handleFavoriteChange={() => {}}
+    />,
   );
   const tree = component.toJSON();
   expect(tree).toMatchSnapshot();
 });
 
 test('Devices run methods', () => {
-  const wrapper = shallow(<Devices devices={devices} setAlert={() => {}} />);
+  const wrapper = shallow(
+    <Devices
+      devices={devices}
+      updateDevice={() => {}}
+      setAlert={() => {}}
+      handleFavoriteChange={() => {}}
+    />,
+  );
   wrapper.instance().handleDeviceDimmer(0)(80);
   wrapper.instance().handleDeviceToggle({ target: { id: 0 } });
   wrapper.instance().handleToggleListView();
-  wrapper.instance().componentWillReceiveProps({ devices });
 });
 
 test('Render DeviceList', () => {
@@ -36,12 +54,12 @@ test('Render DeviceList', () => {
       devices={devices}
       handleDeviceToggle={() => {}}
       handleDeviceDimmer={() => {}}
+      onSliderChange={() => {}}
     />,
   );
   const tree = component.toJSON();
   expect(tree).toMatchSnapshot();
 });
-
 
 test('Render DeviceTable', () => {
   const component = renderer.create(
@@ -49,6 +67,7 @@ test('Render DeviceTable', () => {
       devices={devices}
       handleDeviceToggle={() => {}}
       handleDeviceDimmer={() => {}}
+      handleFavoriteChange={() => {}}
     />,
   );
   const tree = component.toJSON();

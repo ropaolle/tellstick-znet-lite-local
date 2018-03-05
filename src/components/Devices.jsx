@@ -85,7 +85,6 @@ class Devices extends Component {
           <DeviceTable
             devices={devices}
             handleDeviceToggle={this.handleDeviceToggle}
-
             handleFavoriteChange={this.handleFavoriteChange}
           />
         )}

@@ -71,3 +71,8 @@ git pull origin master
 git fetch
 git reset --hard origin/master
 ```
+
+## Todo
+- [ ] Save favorites
+- [ ] Add sensors 
+- [ ] Fix tests
