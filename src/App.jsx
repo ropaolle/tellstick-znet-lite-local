@@ -56,8 +56,9 @@ class App extends Component {
   updateDevice = (device, command) => {
     this.setState((prevState) => {
       if (command) {
-        const level = command === 'dim' ? device.statevalue : undefined;
-        telldusCommand({ type: 'devices', command, id: device.id, level }, this.setAlert);
+        const query = { type: 'devices', command, id: device.id };
+        if (command === 'dim') { query.level = device.statevalue; }
+        telldusCommand(query, this.setAlert);
       }
       return { devices: { ...prevState.devices, [device.id]: device } };
     });
