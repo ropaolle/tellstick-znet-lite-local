@@ -26,6 +26,15 @@ const telldusCommand = async function telldusCommand(query) {
   try {
     const res = await promise;
     const body = await Wreck.read(res, { json: true });
+
+    // If body.favorites
+    const favorites = '1,2,6,7'.split(',');
+    body.message.device = body.message.device.map(val => ({
+      ...val,
+      favorite: favorites.indexOf(val.id.toString()) !== -1,
+    }));
+    console.log('Body', body);
+
     return body;
   } catch (err) {
     return { success: false, message: err.message };
