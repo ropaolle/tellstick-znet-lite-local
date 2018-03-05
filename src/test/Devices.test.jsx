@@ -26,7 +26,6 @@ test('Devices run methods', () => {
   const wrapper = shallow(<Devices devices={devices} setAlert={() => {}} />);
   wrapper.instance().handleDeviceDimmer(0)(80);
   wrapper.instance().handleDeviceToggle({ target: { id: 0 } });
-  wrapper.instance().onSliderChange(0)(80);
   wrapper.instance().handleToggleListView();
   wrapper.instance().componentWillReceiveProps({ devices });
 });
@@ -36,7 +35,6 @@ test('Render DeviceList', () => {
     <DeviceList
       devices={devices}
       handleDeviceToggle={() => {}}
-      onSliderChange={() => {}}
       handleDeviceDimmer={() => {}}
     />,
   );
@@ -50,7 +48,6 @@ test('Render DeviceTable', () => {
     <DeviceTable
       devices={devices}
       handleDeviceToggle={() => {}}
-      onSliderChange={() => {}}
       handleDeviceDimmer={() => {}}
     />,
   );

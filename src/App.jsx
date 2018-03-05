@@ -51,6 +51,16 @@ class App extends Component {
     this.setState({ dialog: false });
   };
 
+  updateDevice = (device, command) => {
+    this.setState((prevState) => {
+      if (command) {
+        const level = (command === 'dim') ? device.statevalue : undefined;
+        telldusCommand({ type: 'devices', command, id: device.id, level });
+      }
+      return { devices: { ...prevState.devices, [device.id]: device } };
+    });
+  }
+
   render() {
     const { expires, allowRenew, dialog } = this.state;
 
@@ -70,7 +80,11 @@ class App extends Component {
           setAlert={this.setAlert}
         />
 
-        <Devices devices={this.state.devices} setAlert={this.setAlert} />
+        <Devices
+          devices={this.state.devices}
+          updateDevice={this.updateDevice}
+          setAlert={this.setAlert}
+        />
       </div>
     );
   }

@@ -36,7 +36,7 @@
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test -u --env=jsdom --verbose --coverage",
-    "test-cov": "react-scripts test --env=jsdom --verbose --coverage",
+    "test-tmp": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "babel": {

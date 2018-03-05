@@ -21,12 +21,12 @@ const telldusCommand = async function telldusCommand(qs, alert) {
   return res;
 };
 
-export function updateDeviceInfo(id, update) {
-  setTimeout(() => {
-    telldusCommand({ type: 'devices', command: 'info', id: Number(id) })
-      .then(response => update(response.message))
-      .catch();
-  }, 1000);
-}
+// export function updateDeviceInfo(id, update) {
+//   setTimeout(() => {
+//     telldusCommand({ type: 'devices', command: 'info', id: Number(id) })
+//       .then(response => update(response.message))
+//       .catch();
+//   }, 1000);
+// }
 
 export default telldusCommand;
