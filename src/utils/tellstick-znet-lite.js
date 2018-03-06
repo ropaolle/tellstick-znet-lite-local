@@ -18,7 +18,8 @@ function queryToPath(query) {
 const telldusCommand = async function telldusCommand(query) {
   const options = {
     timeout: 1000,
-    baseUrl: 'http://192.168.10.146:4000/v1/',
+    // baseUrl: 'http://192.168.10.146:4000/v1/',
+    baseUrl: 'http://localhost:4000/v1/',
   };
   const url = queryToPath(query);
   const promise = Wreck.request('GET', url, options);
@@ -28,11 +29,11 @@ const telldusCommand = async function telldusCommand(query) {
     const body = await Wreck.read(res, { json: true });
 
     // If body.favorites
-    const favorites = '1,2,6,7'.split(',');
-    body.message.device = body.message.device.map(val => ({
-      ...val,
-      favorite: favorites.indexOf(val.id.toString()) !== -1,
-    }));
+    // const favorites = '1,2,6,7'.split(',');
+    // body.message.device = body.message.device.map(val => ({
+    //   ...val,
+    //   favorite: favorites.indexOf(val.id.toString()) !== -1,
+    // }));
     console.log('Body', body);
 
     return body;

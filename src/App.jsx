@@ -20,10 +20,10 @@ class App extends Component {
   componentDidMount = () => {
     if (process.env.NODE_ENV === 'test') return; // Do not load data during tests
 
-    telldusCommand({ type: 'devices' }, this.setAlert)
+    telldusCommand({ type: 'init' }, this.setAlert)
       .then((response) => {
         if (!response.success) {
-          return response.message;
+          return this.setAlert(response.message);
         }
 
         const indexedById = response.message.device.reduce((acc, val) => {

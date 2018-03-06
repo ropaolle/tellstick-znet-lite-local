@@ -65,6 +65,7 @@ npm i
 npm run build
 
 # Pull
+git stach
 git pull origin master
 
 # Force overwrite of local file with what's it origin repo
@@ -86,13 +87,17 @@ git reset --hard origin/master
   "expires": 1522495266000,
   "favorites": "2, 6, 8"
 
-New
+
+### Always
+"updated": 1520328223170
+"favorites": [2,6,7],
+### New
 authUrl: "http://192.168.10.104/api/authorize?token=872408e867bf4e8286384446d281c7e4"
 token: "872408e867bf4e8286384446d281c7e4"
-Access
+### Access
 allowRenew: true
 expires: 1522699447000
 token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImF1ZCI6InR6bGwiLCJleHAiOjE1MjI2OTk0NDd9..."
-Refresh
+### Refresh
 expires: 1522699562000
 token: "eyJhbGciOiJIUzI1NiIsInR5c
