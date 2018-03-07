@@ -9,6 +9,7 @@ class AuthDialog extends React.Component {
     close: PropTypes.func.isRequired,
     allowRenew: PropTypes.bool.isRequired,
     expires: PropTypes.number.isRequired,
+    setExpiresAndAllowRenew: PropTypes.func.isRequired,
   };
 
   state = {
@@ -29,7 +30,7 @@ class AuthDialog extends React.Component {
 
   handleRefreshToken = () => {
     telldusCommand({ type: 'token', command: 'refresh' })
-      .then(result => this.updateAlert(result, true))
+      .then(result => this.showAlert(result, true))
       .catch();
   };
 
@@ -41,27 +42,24 @@ class AuthDialog extends React.Component {
 
   handleAccessToken = () => {
     telldusCommand({ type: 'token', command: 'access' })
-      .then(result => this.updateAlert(result, false))
+      .then(result => this.showAlert(result, false))
       .catch();
   };
 
-  updateAlert = (result, refresh = false) => {
-    const date = new Date(result.expires);
-    const alert = (
-      <div>
-        {!refresh && (
-          <div>
-            <div>Token stored on server.</div>
-            <div>Allow renew: {result.allowRenew ? 'True' : 'False'}</div>
-          </div>
-        )}
-        {refresh && <div>Token renewed and stored on server.</div>}
-        <div>Expires: {date.toDateString()}</div>
-      </div>
-    );
+  showAlert = (result, renew) => {
+    const alert = (<div>{(renew) ? 'Token renewed' : 'New token received' }</div>);
+
+    if (result.message.newAccessToken) {
+      this.props.setExpiresAndAllowRenew(result.message);
+    }
 
     this.setState({ step: 3, alert });
   };
+
+  handleClose = () => {
+    this.setState({ step: 0, alert: '' });
+    this.props.close();
+  }
 
   date = (expires) => {
     const date = new Date(expires);
@@ -69,8 +67,8 @@ class AuthDialog extends React.Component {
   };
 
   render() {
-    const { step, alert } = this.state;
-    const { expires, allowRenew, show, close } = this.props;
+    const { step, alert, authUrl } = this.state;
+    const { expires, allowRenew, show } = this.props;
 
     const checked = <span className="text-success">&#x2714;</span>;
 
@@ -82,39 +80,38 @@ class AuthDialog extends React.Component {
 
     return (
       <div className="dialog">
-        <Modal isOpen={show} toggle={close}>
-          <ModalHeader toggle={close}>Authentication</ModalHeader>
+        <Modal isOpen={show} toggle={this.handleClose}>
+          <ModalHeader toggle={this.handleClose}>Authentication</ModalHeader>
 
           <ModalBody>
             <div>
-              <div>
-                Expires: {this.date(expires)}, Allow renew: {Boolean(allowRenew).toString()}
-              </div>
+              <Alert color="success">{alert}</Alert>
 
-              <h4 className="mt-4">{step > 0 && checked} Step 1. Request/renew token</h4>
+              <h4>{step > 0 && checked} Step 1. Request or renew token</h4>
               {step === 0 && (
                 <div>
                   {button(this.handleRequestToken, 'warning', 'Request new token')}{' '}
-                  {button(this.handleRefreshToken, 'warning', 'Refresh token')}
+                  {allowRenew && button(this.handleRefreshToken, 'warning', 'Renew token')}
                 </div>
               )}
 
               <h4 className="mt-4">{step > 1 && checked} Step 2. Authenticate</h4>
-              {step === 1 && (
-                <div>
-                  Go to{button(this.handleAuthentication, 'link', 'link')}and authenticate the app.
-                </div>
+              {(step === 1 || step === 2) && (
+                <div>Use this link <a href={authUrl} onClick={this.handleAuthentication} target="_blank">{authUrl}</a>{' '}
+                to authenticate the app, you will be redirected <i>login.telldus.com</i>.</div>
               )}
 
               <h4 className="mt-4">{step > 2 && checked} Step 3. Access token</h4>
               <div>
                 {step === 2 && button(this.handleAccessToken, 'warning', 'Save access token...')}
-                {step > 2 && <Alert color="success">{alert}</Alert>}
               </div>
             </div>
           </ModalBody>
 
-          <ModalFooter>{button(close, 'secondary', 'Cancel')}</ModalFooter>
+          <ModalFooter>
+            <div className="footer-text">Expires: {this.date(expires)}</div>
+            {button(this.handleClose, 'secondary', 'Close')}
+          </ModalFooter>
         </Modal>
       </div>
     );

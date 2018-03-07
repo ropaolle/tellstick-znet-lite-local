@@ -65,6 +65,7 @@ npm i
 npm run build
 
 # Pull
+git stach
 git pull origin master
 
 # Force overwrite of local file with what's it origin repo
@@ -74,25 +75,7 @@ git reset --hard origin/master
 
 ## Todo
 
-* [ ] Save favorites
+* [x] Save favorites
 * [ ] Add sensors
 * [ ] Fix tests
-* [ ] Command shall always be a query string
-
-  "authUrl": "http://192.168.10.104/api/authorize?token=713fb8406b8c4b44a1f41bb5b692ad2c",
-  "token": "713fb8406b8c4b44a1f41bb5b692ad2c",
-  "updated": 1520176896482,
-  "allowRenew": true,
-  "expires": 1522495266000,
-  "favorites": "2, 6, 8"
-
-New
-authUrl: "http://192.168.10.104/api/authorize?token=872408e867bf4e8286384446d281c7e4"
-token: "872408e867bf4e8286384446d281c7e4"
-Access
-allowRenew: true
-expires: 1522699447000
-token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImF1ZCI6InR6bGwiLCJleHAiOjE1MjI2OTk0NDd9..."
-Refresh
-expires: 1522699562000
-token: "eyJhbGciOiJIUzI1NiIsInR5c
+* [x] Command shall always be a query string

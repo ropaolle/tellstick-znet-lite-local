@@ -12,10 +12,9 @@ const Devices = (props) => {
       <td>{dev.id}</td>
       <td>
         <input
-          id={dev.id}
           type="checkbox"
-          checked={dev.favorite || false}
-          onChange={handleFavoriteChange}
+          checked={dev.favorite}
+          onChange={handleFavoriteChange(dev.id, 'toggleFavorite')}
         />
       </td>
       <td>{dev.name}</td>
@@ -24,8 +23,7 @@ const Devices = (props) => {
         <label htmlFor={`toggle-${dev.id}`}>
           <Toggle
             checked={dev.state !== 2}
-            id={dev.id.toString()}
-            onChange={handleDeviceToggle}
+            onChange={handleDeviceToggle(dev.id, 'toggleState')}
           />
         </label>
       </td>

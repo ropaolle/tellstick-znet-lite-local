@@ -6,10 +6,10 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 const Devices = (props) => {
-  const { devices, handleDeviceToggle, handleDeviceDimmer, onSliderChange } = props;
+  const { devices, handleDeviceToggle, handleDeviceDimmer } = props;
 
   return map(devices, (device) => {
-    if (![2, 6, 8, 18].includes(device.id)) return '';
+    if (!device.favorite) return '';
 
     return (
       <div key={device.id}>
@@ -21,8 +21,7 @@ const Devices = (props) => {
             <label htmlFor={`toggle-${device.id}`}>
               <Toggle
                 checked={device.state !== 2}
-                id={device.id.toString()}
-                onChange={handleDeviceToggle}
+                onChange={handleDeviceToggle(device.id, 'toggleState')}
               />
             </label>
           </Col>
@@ -33,8 +32,8 @@ const Devices = (props) => {
                 max={255}
                 value={Number(device.statevalue)}
                 disabled={!(device.methods & 16)} // eslint-disable-line no-bitwise
-                onChange={onSliderChange(device.id)}
-                onAfterChange={handleDeviceDimmer(device.id)}
+                onChange={handleDeviceDimmer(device.id, 'updateSlider')}
+                onAfterChange={handleDeviceDimmer(device.id, 'dim')}
               />
             </div>
           </Col>

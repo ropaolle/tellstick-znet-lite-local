@@ -21,40 +21,17 @@ class Devices extends Component {
 
   state = { listView: true };
 
-  onSliderChange = id => (value) => {
-    this.props.updateDevice({
-      ...this.props.devices[id], // Clone
-      statevalue: value,
-    });
+  handleDeviceDimmer = (id, action) => (value) => {
+    this.props.updateDevice(id, action, value);
   };
 
-  handleDeviceDimmer = id => (value) => {
-    this.props.updateDevice({
-      ...this.props.devices[id], // Clone
-      state: 16,
-      // If called handleDeviceDimmer from a button's onClick value is passed as an Event.
-      statevalue: (typeof value === 'object') ? 80 : value,
-    },
-    'dim');
+  handleDeviceToggle = (id, action) => () => {
+    this.props.updateDevice(id, action);
   };
 
-  handleDeviceToggle = (e) => {
-    const id = e.target.id; // Number(e.target.id);
-    const device = { ...this.props.devices[id] }; // Clone
-    device.state = device.state === 2 ? 1 : 2; // Toggle state
-    device.statevalue = 0;
-    const command = device.state === 1 ? 'turnOn' : 'turnOff';
-
-    this.props.updateDevice(device, command);
+  handleFavoriteChange = (id, action) => () => {
+    this.props.updateDevice(id, action);
   };
-
-  handleFavoriteChange = (e) => {
-    const target = e.target;
-    this.props.updateDevice({
-      ...this.props.devices[target.id], // Clone
-      favorite: target.checked,
-    });
-  }
 
   handleToggleListView = () => {
     this.setState({ listView: !this.state.listView });
@@ -75,7 +52,6 @@ class Devices extends Component {
         {listView && (
           <DeviceList
             devices={devices}
-            onSliderChange={this.onSliderChange}
             handleDeviceToggle={this.handleDeviceToggle}
             handleDeviceDimmer={this.handleDeviceDimmer}
           />
