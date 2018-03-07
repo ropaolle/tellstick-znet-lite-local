@@ -9,7 +9,7 @@ const Devices = (props) => {
   const { devices, handleDeviceToggle, handleDeviceDimmer, onSliderChange } = props;
 
   return map(devices, (device) => {
-    if (![2, 6, 8, 18].includes(device.id)) return '';
+    if (!device.favorite) return '';
 
     return (
       <div key={device.id}>

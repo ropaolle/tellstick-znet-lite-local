@@ -14,7 +14,7 @@ const Devices = (props) => {
         <input
           id={dev.id}
           type="checkbox"
-          checked={dev.favorite || false}
+          checked={dev.favorite}
           onChange={handleFavoriteChange}
         />
       </td>

@@ -7,6 +7,16 @@ import AuthDialog from './AuthDialog';
 import Devices from './components/Devices';
 import telldusCommand from './utils/tellstick-znet-lite';
 
+function getDevicesIndexedById(devices, favorites) {
+  return devices.reduce((acc, device) => {
+    acc[device.id] = {
+      ...device,
+      favorite: favorites.indexOf(device.id) !== -1,
+    };
+    return acc;
+  }, {});
+}
+
 class App extends Component {
   state = {
     alerts: [],
@@ -26,13 +36,8 @@ class App extends Component {
           return this.setAlert(response.message);
         }
 
-        const indexedById = response.message.device.reduce((acc, val) => {
-          acc[val.id] = val;
-          return acc;
-        }, {});
-
         return this.setState({
-          devices: indexedById,
+          devices: getDevicesIndexedById(response.message.device, response.favorites),
           allowRenew: response.allowRenew,
           expires: response.expires,
         });
