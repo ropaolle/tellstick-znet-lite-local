@@ -64,6 +64,22 @@ table label {
 }
 
 /**
+ * AuthDialog
+**/
+
+.alert:empty {
+  display: none;
+}
+
+.alert {
+  margin-bottom: 12px;
+}
+.footer-text {
+  display: flex;
+  flex-grow: 1;
+}
+
+/**
  * Toggle button
 **/
 

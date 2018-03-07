@@ -44,6 +44,10 @@ class App extends Component {
     this.setState(prevState => ({ alerts: [...prevState.alerts, alert] }));
   };
 
+  setExpiresAndAllowRenew = (message) => {
+    this.setState(() => ({ ...message }));
+  };
+
   showDialog = () => {
     this.setState({ dialog: true });
   };
@@ -92,7 +96,7 @@ class App extends Component {
           allowRenew={allowRenew}
           show={dialog}
           close={this.closeDialog}
-          setAlert={this.setAlert}
+          setExpiresAndAllowRenew={this.setExpiresAndAllowRenew}
         />
 
         <Devices
