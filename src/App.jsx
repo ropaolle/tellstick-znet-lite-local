@@ -53,22 +53,39 @@ class App extends Component {
     this.setState(() => ({ ...message }));
   };
 
-  showDialog = () => {
-    this.setState({ dialog: true });
+  showDialog = (show) => {
+    this.setState({ dialog: show });
   };
 
-  closeDialog = () => {
-    this.setState({ dialog: false });
-  };
-
-  updateDevice = (device, command) => {
+  updateDevice = (id, action, value) => {
     this.setState((prevState) => {
-      if (command) {
-        const query = { type: 'devices', command, id: device.id };
-        if (command === 'dim') {
+      const device = { ...prevState.devices[id] };
+      let query = { type: 'devices', id };
+
+      switch (action) {
+        case 'updateSlider':
+          device.state = 16;
+          device.statevalue = value;
+          query = null;
+          break;
+        case 'toggleState':
+          device.state = device.state === 2 ? 1 : 2;
+          device.statevalue = 0;
+          query.command = device.state === 1 ? 'turnOn' : 'turnOff';
+          break;
+        case 'dim':
+          query.command = 'dim';
           query.level = device.statevalue;
-        }
-        telldusCommand(query, this.setAlert)
+          break;
+        case 'toggleFavorite':
+          device.favorite = !device.favorite;
+          query.type = 'favorites';
+          break;
+        default:
+      }
+
+      if (query) {
+        telldusCommand(query)
           .then((response) => {
             if (!response.success) {
               this.setAlert(response.message);
@@ -77,7 +94,8 @@ class App extends Component {
           })
           .catch();
       }
-      return { devices: { ...prevState.devices, [device.id]: device } };
+
+      return { devices: { ...prevState.devices, [id]: device } };
     });
   };
 
@@ -92,7 +110,7 @@ class App extends Component {
 
     return (
       <div className="app">
-        <AppNavbar showDialog={this.showDialog} />
+        <AppNavbar showDialog={() => this.showDialog(true)} />
 
         {alertList}
 
@@ -100,14 +118,14 @@ class App extends Component {
           expires={expires}
           allowRenew={allowRenew}
           show={dialog}
-          close={this.closeDialog}
+          close={() => this.showDialog(false)}
           setExpiresAndAllowRenew={this.setExpiresAndAllowRenew}
         />
 
         <Devices
           devices={this.state.devices}
           updateDevice={this.updateDevice}
-          setAlert={this.setAlert}
+          // updateFavorites={this.updateFavorites}
         />
       </div>
     );
