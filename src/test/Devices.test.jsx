@@ -16,44 +16,23 @@ const devices = {
 };
 
 test('Render Devices', () => {
-  const component = renderer.create(
-    <Devices
-      devices={devices}
-      updateDevice={() => {}}
-      setAlert={() => {}}
-      handleFavoriteChange={() => {}}
-    />,
-  );
+  const component = renderer.create(<Devices devices={devices} updateDevice={() => {}} />);
   const tree = component.toJSON();
   expect(tree).toMatchSnapshot();
 });
 
 test('Devices run methods', () => {
-  const wrapper = shallow(
-    <Devices
-      devices={devices}
-      updateDevice={() => {}}
-      setAlert={() => {}}
-      handleFavoriteChange={() => {}}
-    />,
-  );
-  wrapper.instance().handleDeviceDimmer(1000)(80);
-  wrapper.instance().handleDeviceDimmer(1001)({});
-  wrapper.instance().onSliderChange(1000)(80);
-  wrapper.instance().handleDeviceToggle({ target: { id: 1000 } });
-  wrapper.instance().handleDeviceToggle({ target: { id: 1001 } });
-  wrapper.instance().handleFavoriteChange({ target: { id: 1000 } });
+  const wrapper = shallow(<Devices devices={devices} updateDevice={() => {}} />);
+  wrapper.instance().handleDeviceDimmer(1000, 'updateSlider')(80);
+  wrapper.instance().handleDeviceDimmer(1001, 'dim')(0);
+  wrapper.instance().handleDeviceToggle(1000, 'toggleState')();
+  wrapper.instance().handleFavoriteChange(1000, 'toggleFavorite')();
   wrapper.instance().handleToggleListView();
 });
 
 test('Render DeviceList', () => {
   const component = renderer.create(
-    <DeviceList
-      devices={devices}
-      handleDeviceToggle={() => {}}
-      handleDeviceDimmer={() => {}}
-      onSliderChange={() => {}}
-    />,
+    <DeviceList devices={devices} handleDeviceToggle={() => {}} handleDeviceDimmer={() => {}} />,
   );
   const tree = component.toJSON();
   expect(tree).toMatchSnapshot();
@@ -61,12 +40,7 @@ test('Render DeviceList', () => {
 
 test('Render DeviceTable', () => {
   const component = renderer.create(
-    <DeviceTable
-      devices={devices}
-      handleDeviceToggle={() => {}}
-      handleDeviceDimmer={() => {}}
-      handleFavoriteChange={() => {}}
-    />,
+    <DeviceTable devices={devices} handleDeviceToggle={() => {}} handleFavoriteChange={() => {}} />,
   );
   const tree = component.toJSON();
   expect(tree).toMatchSnapshot();

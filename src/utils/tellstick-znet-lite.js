@@ -3,12 +3,12 @@ import queryString from 'query-string';
 
 function queryToPath(query) {
   const { type, id, ...qsObj } = query;
-  if (!type) return '';
 
   let url = `/${type}`;
   if (id) {
     url += `/${id}`;
   }
+
   const qs = queryString.stringify(qsObj);
   if (qs) {
     url += `?${qs}`;

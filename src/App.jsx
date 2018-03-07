@@ -122,11 +122,7 @@ class App extends Component {
           setExpiresAndAllowRenew={this.setExpiresAndAllowRenew}
         />
 
-        <Devices
-          devices={this.state.devices}
-          updateDevice={this.updateDevice}
-          // updateFavorites={this.updateFavorites}
-        />
+        <Devices devices={this.state.devices} updateDevice={this.updateDevice} />
       </div>
     );
   }
