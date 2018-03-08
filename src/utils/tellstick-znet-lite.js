@@ -1,42 +1,24 @@
-import Wreck from 'wreck';
-import queryString from 'query-string';
-
-function queryToPath(query) {
-  const { type, id, ...qsObj } = query;
-
-  let url = `/${type}`;
-  if (id) {
-    url += `/${id}`;
-  }
-
-  const qs = queryString.stringify(qsObj);
-  if (qs) {
-    url += `?${qs}`;
-  }
-
-  return url;
-}
+import request from 'request-promise';
 
 const telldusCommand = async function telldusCommand(query) {
+  const { type, id, ...qs } = query;
+
+  const paramId = id ? `/${id}` : '';
+
   const options = {
+    uri: `http://192.168.10.146:4000/api/v1/${type}${paramId}`,
+    qs,
+    json: true,
     timeout: 1000,
-    baseUrl: 'http://localhost:4000/api/v1',
-    // headers: {
-    //   'Access-Control-Allow-Origin': '*',
-    //   'Access-Control-Allow-Methods': 'GET',
-    // },
   };
-  const url = queryToPath(query);
-  const promise = Wreck.request('GET', url, options);
 
-  try {
-    const res = await promise;
-    const body = await Wreck.read(res, { json: true });
+  const res = await request(options)
+    .then(response => response)
+    .catch(err => ({ success: false, message: err.message }));
 
-    return body;
-  } catch (err) {
-    return { success: false, message: err.message };
-  }
+  // console.log('RES', options, res);
+
+  return res;
 };
 
 export default telldusCommand;

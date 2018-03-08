@@ -21,16 +21,8 @@ class Devices extends Component {
 
   state = { listView: true };
 
-  handleDeviceDimmer = (id, action) => (value) => {
+  handleUpdateDevice = (id, action) => (value) => {
     this.props.updateDevice(id, action, value);
-  };
-
-  handleDeviceToggle = (id, action) => () => {
-    this.props.updateDevice(id, action);
-  };
-
-  handleFavoriteChange = (id, action) => () => {
-    this.props.updateDevice(id, action);
   };
 
   handleToggleListView = () => {
@@ -43,26 +35,21 @@ class Devices extends Component {
 
     return (
       <Container fluid className="page-content home-page">
-        <h1>Home</h1>
 
-        <Button className="mb-4" color="success" onClick={this.handleToggleListView}>
-          {listView ? 'Tabell' : 'Lista'}
+        <Button className={listView ? 'btn-light btn-sm' : 'btn-secondary btn-sm'} onClick={this.handleToggleListView}>
+          All <i className="fa fa-table" aria-hidden="true" />
         </Button>
 
-        {listView && (
-          <DeviceList
-            devices={devices}
-            handleDeviceToggle={this.handleDeviceToggle}
-            handleDeviceDimmer={this.handleDeviceDimmer}
-          />
-        )}
+        <Button className={!listView ? 'btn-light btn-sm' : 'btn-secondary btn-sm'} onClick={this.handleToggleListView}>
+          Favorites <i className="fa fa-list" aria-hidden="true" />
+        </Button>
+
+        <h1>Devices</h1>
+
+        {listView && <DeviceList devices={devices} handleUpdateDevice={this.handleUpdateDevice} />}
 
         {!listView && (
-          <DeviceTable
-            devices={devices}
-            handleDeviceToggle={this.handleDeviceToggle}
-            handleFavoriteChange={this.handleFavoriteChange}
-          />
+          <DeviceTable devices={devices} handleUpdateDevice={this.handleUpdateDevice} />
         )}
       </Container>
     );

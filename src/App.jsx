@@ -112,17 +112,20 @@ class App extends Component {
       <div className="app">
         <AppNavbar showDialog={() => this.showDialog(true)} />
 
-        {alertList}
+        <div className="content">
+          {alertList}
 
-        <AuthDialog
-          expires={expires}
-          allowRenew={allowRenew}
-          show={dialog}
-          close={() => this.showDialog(false)}
-          setExpiresAndAllowRenew={this.setExpiresAndAllowRenew}
-        />
+          <AuthDialog
+            expires={expires}
+            allowRenew={allowRenew}
+            show={dialog}
+            close={() => this.showDialog(false)}
+            setExpiresAndAllowRenew={this.setExpiresAndAllowRenew}
+          />
 
-        <Devices devices={this.state.devices} updateDevice={this.updateDevice} />
+          <Devices devices={this.state.devices} updateDevice={this.updateDevice} />
+        </div>
+        <footer><div>By ropaolle, &#169; 2018 - <a href="https://github.com/ropaolle/tellstick-znet-lite-local">GitHub</a></div></footer>
       </div>
     );
   }

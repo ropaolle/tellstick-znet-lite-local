@@ -1,6 +1,11 @@
 /**
  * App
 **/
+.app {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
 
 .app .nav {
   background: #eee;
@@ -12,8 +17,19 @@
   color: #555;
 }
 
+.content {
+  flex: 1;
+}
+
 .page-content {
   margin: 20px 0;
+}
+
+footer {
+  background-color: #e7e7e7;
+  padding: 15px;
+  text-align: center;
+  font-size: 10px;
 }
 
 /**
@@ -32,15 +48,17 @@
   margin: 2px;
 }
 
+.home-page button {
+  float: right;
+  margin-left: 10px;
+}
+
 /**
  * Checkbox
 **/
 
 input[type=checkbox] {
-  -ms-transform: scale(2); /* IE */
-  -moz-transform: scale(2); /* FF */
-  -webkit-transform: scale(2); /* Safari and Chrome */
-  -o-transform: scale(2); /* Opera */
+  transform: scale(2);
   padding: 10px;
 }
 

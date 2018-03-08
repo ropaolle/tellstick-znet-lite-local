@@ -14,7 +14,7 @@ class AuthDialog extends React.Component {
 
   state = {
     step: 0,
-    authUrl: '?',
+    authUrl: '',
   };
 
   handleRequestToken = () => {
