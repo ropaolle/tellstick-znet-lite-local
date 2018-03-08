@@ -35,11 +35,16 @@ class Devices extends Component {
 
     return (
       <Container fluid className="page-content home-page">
-        <h1>Home</h1>
 
-        <Button className="mb-4" color="success" onClick={this.handleToggleListView}>
-          {listView ? 'Tabell' : 'Lista'}
+        <Button className={listView ? 'btn-light btn-sm' : 'btn-secondary btn-sm'} onClick={this.handleToggleListView}>
+          All <i className="fa fa-table" aria-hidden="true" />
         </Button>
+
+        <Button className={!listView ? 'btn-light btn-sm' : 'btn-secondary btn-sm'} onClick={this.handleToggleListView}>
+          Favorites <i className="fa fa-list" aria-hidden="true" />
+        </Button>
+
+        <h1>Home</h1>
 
         {listView && <DeviceList devices={devices} handleUpdateDevice={this.handleUpdateDevice} />}
 
