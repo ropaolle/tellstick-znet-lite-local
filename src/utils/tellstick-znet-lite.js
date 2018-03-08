@@ -1,6 +1,5 @@
 import request from 'request-promise';
 
-
 const telldusCommand = async function telldusCommand(query) {
   const { type, id, ...qs } = query;
 

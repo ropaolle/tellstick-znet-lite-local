@@ -21,16 +21,8 @@ class Devices extends Component {
 
   state = { listView: true };
 
-  handleDeviceDimmer = (id, action) => (value) => {
+  handleUpdateDevice = (id, action) => (value) => {
     this.props.updateDevice(id, action, value);
-  };
-
-  handleDeviceToggle = (id, action) => () => {
-    this.props.updateDevice(id, action);
-  };
-
-  handleFavoriteChange = (id, action) => () => {
-    this.props.updateDevice(id, action);
   };
 
   handleToggleListView = () => {
@@ -49,20 +41,10 @@ class Devices extends Component {
           {listView ? 'Tabell' : 'Lista'}
         </Button>
 
-        {listView && (
-          <DeviceList
-            devices={devices}
-            handleDeviceToggle={this.handleDeviceToggle}
-            handleDeviceDimmer={this.handleDeviceDimmer}
-          />
-        )}
+        {listView && <DeviceList devices={devices} handleUpdateDevice={this.handleUpdateDevice} />}
 
         {!listView && (
-          <DeviceTable
-            devices={devices}
-            handleDeviceToggle={this.handleDeviceToggle}
-            handleFavoriteChange={this.handleFavoriteChange}
-          />
+          <DeviceTable devices={devices} handleUpdateDevice={this.handleUpdateDevice} />
         )}
       </Container>
     );

@@ -5,7 +5,7 @@ import Toggle from 'react-toggle';
 import map from 'lodash.map';
 
 const Devices = (props) => {
-  const { devices, handleDeviceToggle, handleFavoriteChange } = props;
+  const { devices, handleUpdateDevice } = props;
 
   const deviceTable = map(devices, dev => (
     <tr key={dev.id}>
@@ -14,7 +14,7 @@ const Devices = (props) => {
         <input
           type="checkbox"
           checked={dev.favorite}
-          onChange={handleFavoriteChange(dev.id, 'toggleFavorite')}
+          onChange={handleUpdateDevice(dev.id, 'toggleFavorite')}
         />
       </td>
       <td>{dev.name}</td>
@@ -23,7 +23,7 @@ const Devices = (props) => {
         <label htmlFor={`toggle-${dev.id}`}>
           <Toggle
             checked={dev.state !== 2}
-            onChange={handleDeviceToggle(dev.id, 'toggleState')}
+            onChange={handleUpdateDevice(dev.id, 'toggleState')}
           />
         </label>
       </td>
@@ -48,8 +48,7 @@ const Devices = (props) => {
 
 Devices.propTypes = {
   devices: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  handleDeviceToggle: PropTypes.func.isRequired,
-  handleFavoriteChange: PropTypes.func.isRequired,
+  handleUpdateDevice: PropTypes.func.isRequired,
 };
 
 export default Devices;
