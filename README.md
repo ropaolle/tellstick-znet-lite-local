@@ -76,6 +76,11 @@ git reset --hard origin/master
 ## Todo
 
 * [x] Save favorites
+* [x] Command shall always be a query string
 * [ ] Add sensors
 * [ ] Fix tests
-* [x] Command shall always be a query string
+
+'/api/v1/favorites/{id}',
+'/api/v1/init',
+'/api/v1/token'
+'/api/v1/{type}/{id?}', devices
