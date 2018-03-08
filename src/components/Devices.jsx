@@ -44,7 +44,7 @@ class Devices extends Component {
           Favorites <i className="fa fa-list" aria-hidden="true" />
         </Button>
 
-        <h1>Home</h1>
+        <h1>Devices</h1>
 
         {listView && <DeviceList devices={devices} handleUpdateDevice={this.handleUpdateDevice} />}
 
