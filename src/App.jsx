@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import uniqueId from 'lodash.uniqueid';
 import { UncontrolledAlert } from 'reactstrap';
 import './App.css';
-import AppNavbar from './AppNavbar';
+import Navbar from './Navbar';
 import AuthDialog from './AuthDialog';
 import Devices from './components/Devices';
 import telldusCommand from './utils/tellstick-znet-lite';
@@ -112,7 +112,7 @@ class App extends Component {
 
     return (
       <div className="app">
-        <AppNavbar showDialog={() => this.showDialog(true)} />
+        <Navbar showDialog={() => this.showDialog(true)} />
 
         <div className="content">
           {alertList}

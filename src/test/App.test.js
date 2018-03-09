@@ -6,7 +6,7 @@ import Adapter from 'enzyme-adapter-react-16';
 
 import App from '../App';
 import AuthDialog from '../AuthDialog';
-import AppNavbar from '../AppNavbar';
+import Navbar from '../Navbar';
 
 configure({ adapter: new Adapter() });
 
@@ -46,8 +46,8 @@ test('AuthDialog run methods', () => {
   wrapper.instance().handleClose();
 });
 
-test('AppNavbar run methods', () => {
-  const wrapper = shallow(<AppNavbar showDialog={() => {}} />);
+test('Navbar run methods', () => {
+  const wrapper = shallow(<Navbar showDialog={() => {}} />);
   wrapper.instance().toggle();
   wrapper.instance().toggle();
 });
