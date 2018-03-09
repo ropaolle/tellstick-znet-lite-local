@@ -30,7 +30,7 @@ class App extends Component {
   componentDidMount = () => {
     if (process.env.NODE_ENV === 'test') return; // Do not load data during tests
 
-    telldusCommand({ type: 'init' }, this.setAlert)
+    telldusCommand('init')
       .then((response) => {
         if (!response.success) {
           return this.setAlert(response.message);
@@ -60,18 +60,20 @@ class App extends Component {
   updateDevice = (id, action, value) => {
     this.setState((prevState) => {
       const device = { ...prevState.devices[id] };
-      let query = { type: 'devices', id };
+
+      const query = {};
+      let type = 'devices';
 
       switch (action) {
         case 'updateSlider':
           device.state = 16;
           device.statevalue = value;
-          query = null;
+          type = null;
           break;
         case 'toggleState':
           device.state = device.state === 2 ? 1 : 2;
+          query.command = device.state !== 2 ? 'turnOff' : 'turnOn';
           device.statevalue = 0;
-          query.command = device.state === 1 ? 'turnOn' : 'turnOff';
           break;
         case 'dim':
           query.command = 'dim';
@@ -79,13 +81,13 @@ class App extends Component {
           break;
         case 'toggleFavorite':
           device.favorite = !device.favorite;
-          query.type = 'favorites';
+          type = 'favorites';
           break;
         default:
       }
 
-      if (query) {
-        telldusCommand(query)
+      if (type) {
+        telldusCommand(type, id, query)
           .then((response) => {
             if (!response.success) {
               this.setAlert(response.message);

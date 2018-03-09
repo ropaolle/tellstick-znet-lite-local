@@ -28,7 +28,7 @@ const Devices = (props) => {
           <Col className="col-10">
             <div className="slider">
               <Slider
-                min={1}
+                min={0}
                 max={255}
                 value={Number(device.statevalue)}
                 disabled={!(device.methods & 16)} // eslint-disable-line no-bitwise

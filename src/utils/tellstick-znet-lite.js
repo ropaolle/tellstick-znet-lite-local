@@ -1,8 +1,6 @@
 import request from 'request-promise';
 
-const telldusCommand = async function telldusCommand(query) {
-  const { type, id, ...qs } = query;
-
+export default async function telldusCommand(type, id, qs) {
   const paramId = id ? `/${id}` : '';
 
   const options = {
@@ -20,5 +18,3 @@ const telldusCommand = async function telldusCommand(query) {
 
   return res;
 };
-
-export default telldusCommand;
