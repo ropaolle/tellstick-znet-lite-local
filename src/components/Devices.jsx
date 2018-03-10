@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Container, Button } from 'reactstrap';
 import 'rc-slider/assets/index.css';
 import DeviceList from './DeviceList';
+import SensorList from './SensorList';
 import DeviceTable from './DeviceTable';
 
 class Devices extends Component {
@@ -16,6 +17,7 @@ class Devices extends Component {
       statevalue: PropTypes.number,
       favorite: PropTypes.bool,
     }).isRequired,
+    sensors: PropTypes.object.isRequired,
     updateDevice: PropTypes.func.isRequired,
   };
 
@@ -25,13 +27,17 @@ class Devices extends Component {
     this.props.updateDevice(id, action, value);
   };
 
+  handleUpdateSensor = (id, action) => (value) => {
+    // this.props.updateDevice(id, action, value);
+  };
+
   handleToggleListView = () => {
     this.setState({ listView: !this.state.listView });
   };
 
   render() {
     const { listView } = this.state;
-    const { devices } = this.props;
+    const { devices, sensors } = this.props;
 
     return (
       <Container fluid className="page-content home-page">
@@ -47,9 +53,10 @@ class Devices extends Component {
         <h1>Devices</h1>
 
         {listView && <DeviceList devices={devices} handleUpdateDevice={this.handleUpdateDevice} />}
+        {listView && <SensorList sensors={sensors} handleUpdateSensor={this.handleUpdateSensor} />}
 
         {!listView && (
-          <DeviceTable devices={devices} handleUpdateDevice={this.handleUpdateDevice} />
+          <DeviceTable devices={devices} sensors={sensors} handleUpdateDevice={this.handleUpdateDevice} />
         )}
       </Container>
     );

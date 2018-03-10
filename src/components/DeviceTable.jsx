@@ -5,7 +5,7 @@ import Toggle from 'react-toggle';
 import map from 'lodash.map';
 
 const Devices = (props) => {
-  const { devices, handleUpdateDevice } = props;
+  const { devices, handleUpdateDevice, sensors } = props;
 
   const deviceTable = map(devices, dev => (
     <tr key={dev.id}>
@@ -30,6 +30,24 @@ const Devices = (props) => {
     </tr>
   ));
 
+  const state = data => data.map(s => <p>{s.name}: {s.value}</p>);
+
+  const sensorTable = map(sensors, sensor => (
+    <tr key={sensor.id}>
+      <td>{sensor.id}</td>
+      <td>
+        <input
+          type="checkbox"
+          checked={sensor.favorite}
+          // onChange={handleUpdateDevice(sensor.id, 'toggleFavorite')}
+        />
+      </td>
+      <td>{sensor.name}</td>
+      <td>sensor</td>
+      <td>{state(sensor.data)}</td>
+    </tr>
+  ));
+
   return (
     <Table striped hover responsive>
       <thead>
@@ -41,13 +59,14 @@ const Devices = (props) => {
           <th >Status</th>
         </tr>
       </thead>
-      <tbody>{deviceTable}</tbody>
+      <tbody>{deviceTable}{sensorTable}</tbody>
     </Table>
   );
 };
 
 Devices.propTypes = {
   devices: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  sensors: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   handleUpdateDevice: PropTypes.func.isRequired,
 };
 

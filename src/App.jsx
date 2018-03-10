@@ -7,12 +7,22 @@ import AuthDialog from './AuthDialog';
 import Devices from './components/Devices';
 import telldusCommand from './utils/tellstick-znet-lite';
 
-function getDevicesIndexedById(devices, favorites) {
+// function getDevicesIndexedById(devices, favorites) {
+//   return devices.reduce((acc, device) => {
+//     acc[device.id] = {
+//       ...device,
+//       favorite: favorites.indexOf(device.id) !== -1,
+//     };
+//     return acc;
+//   }, {});
+// }
+
+function indexedById(devices, favorites) {
   return devices.reduce((acc, device) => {
-    acc[device.id] = {
-      ...device,
-      favorite: favorites.indexOf(device.id) !== -1,
-    };
+    acc[device.id] = { ...device };
+    if (favorites) {
+      acc[device.id].favorite = favorites.indexOf(device.id) !== -1;
+    }
     return acc;
   }, {});
 }
@@ -22,7 +32,7 @@ class App extends Component {
     alerts: [],
     dialog: false,
     devices: {},
-    // sensors: {},
+    sensors: {},
     expires: 0,
     allowRenew: false,
   };
@@ -32,12 +42,18 @@ class App extends Component {
 
     telldusCommand('init')
       .then((response) => {
-        if (!response.success) {
-          return this.setAlert(response.message);
+        if (!response.devices.success) {
+          return this.setAlert(response.devices.message);
+        }
+        if (!response.sensors.success) {
+          return this.setAlert(response.sensors.message);
         }
 
+        console.log(response);
+
         return this.setState({
-          devices: getDevicesIndexedById(response.message.device, response.favorites),
+          devices: indexedById(response.devices.message.device, response.favorites),
+          sensors: indexedById(response.sensors.message.sensor, response.favorites),
           allowRenew: response.allowRenew,
           expires: response.expires,
         });
@@ -72,7 +88,7 @@ class App extends Component {
           break;
         case 'toggleState':
           device.state = device.state === 2 ? 1 : 2;
-          query.command = device.state !== 2 ? 'turnOff' : 'turnOn';
+          query.command = device.state === 2 ? 'turnOff' : 'turnOn';
           device.statevalue = 0;
           break;
         case 'dim':
@@ -102,7 +118,7 @@ class App extends Component {
   };
 
   render() {
-    const { expires, allowRenew, dialog, alerts } = this.state;
+    const { expires, allowRenew, dialog, alerts, devices, sensors } = this.state;
 
     const alertList = alerts.map(value => (
       <UncontrolledAlert key={uniqueId} color="warning">
@@ -125,7 +141,7 @@ class App extends Component {
             setExpiresAndAllowRenew={this.setExpiresAndAllowRenew}
           />
 
-          <Devices devices={this.state.devices} updateDevice={this.updateDevice} />
+          <Devices devices={devices} sensors={sensors} updateDevice={this.updateDevice} />
         </div>
         <footer><div>By ropaolle, &#169; 2018 - <a href="https://github.com/ropaolle/tellstick-znet-lite-local">GitHub</a></div></footer>
       </div>
