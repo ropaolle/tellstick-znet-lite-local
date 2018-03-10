@@ -69,7 +69,7 @@ class App extends Component {
         case 'updateSlider':
           device.state = 16;
           device.statevalue = value;
-          type = null;
+          // type = null;
           break;
         case 'toggleState':
           device.state = device.state === 2 ? 1 : 2;
@@ -92,15 +92,18 @@ class App extends Component {
           return {};
       }
 
-      // eslint-disable-next-line promise/valid-params
-      telldusCommand(type, id, query)
-        .then((response) => {
-          if (!response.success) {
-            this.setAlert(response.message);
-          }
-          return response.success;
-        })
-        .catch();
+
+      if (action !== 'updateSlider') {
+        // eslint-disable-next-line promise/valid-params
+        telldusCommand(type, id, query)
+          .then((response) => {
+            if (!response.success) {
+              this.setAlert(response.message);
+            }
+            return response.success;
+          })
+          .catch();
+      }
 
       if (action === 'toggleFavorite-sensor') {
         return { sensors: { ...prevState.sensors, [id]: sensor } };

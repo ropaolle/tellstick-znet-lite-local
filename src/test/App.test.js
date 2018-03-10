@@ -11,6 +11,10 @@ import Navbar from '../Navbar';
 configure({ adapter: new Adapter() });
 
 it('Renders App without crashing', () => {
+
+});
+
+it('Renders App without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(<App />, div);
   ReactDOM.unmountComponentAtNode(div);
@@ -24,7 +28,9 @@ test('App run methods', () => {
   wrapper.instance().setAlert('some text');
   wrapper.instance().setExpiresAndAllowRenew({});
   wrapper.instance().updateDevice(1000, 'updateSlider', 80);
-  wrapper.instance().updateDevice(1000, 'toggleFavorite', 80);
+  wrapper.instance().updateDevice(1000, 'toggleFavorite-sensor');
+  wrapper.instance().updateDevice(1000, 'toggleFavorite-device');
+  wrapper.instance().updateDevice(1000, 'dummy');
   wrapper.instance().updateDevice(1000, 'toggleState', 80);
   wrapper.instance().updateDevice(1000, 'dim', 80);
 });
