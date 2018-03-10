@@ -1,8 +1,8 @@
 import React from 'react';
-import map from 'lodash.map';
 import { Row, Col } from 'reactstrap';
 import Toggle from 'react-toggle';
 import Slider from 'rc-slider';
+import map from 'lodash.map';
 import 'rc-slider/assets/index.css';
 
 const Devices = (props) => {
@@ -11,9 +11,11 @@ const Devices = (props) => {
   return map(devices, (device) => {
     if (!device.favorite) return '';
 
+    const isDimmable = Boolean(device.methods & 16); // eslint-disable-line no-bitwise
+
     return (
       <div key={device.id}>
-        <Row>
+        <Row className="row-header">
           <Col>{device.name}</Col>
         </Row>
         <Row>
@@ -26,16 +28,16 @@ const Devices = (props) => {
             </label>
           </Col>
           <Col className="col-10">
-            <div className="slider">
+            {isDimmable && <div className="slider">
               <Slider
                 min={0}
                 max={255}
                 value={Number(device.statevalue)}
-                disabled={!(device.methods & 16)} // eslint-disable-line no-bitwise
+                disabled={!isDimmable}
                 onChange={handleUpdateDevice(device.id, 'updateSlider')}
                 onAfterChange={handleUpdateDevice(device.id, 'dim')}
               />
-            </div>
+            </div>}
           </Col>
         </Row>
       </div>

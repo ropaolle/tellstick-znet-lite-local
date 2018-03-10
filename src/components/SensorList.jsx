@@ -1,44 +1,27 @@
 import React from 'react';
-import map from 'lodash.map';
 import { Row, Col } from 'reactstrap';
-import Toggle from 'react-toggle';
-import Slider from 'rc-slider';
+import map from 'lodash.map';
 import 'rc-slider/assets/index.css';
 
-// "id": 21,
-// "sensorId": 21,
-// "name": "Tvl\u00e5da",
-
-// "model": "temperaturehumidity",
-// "battery": 254,
-// "protocol": "fineoffset",
-
-// "humidity": "20",
-// "temp": "24.0"
-// "lum": "2.0",
-
-
 const Sensors = (props) => {
-  const { sensors, handleUpdateSensor } = props;
+  const { sensors } = props;
 
   return map(sensors, (sensor) => {
-    console.log('X', sensors);
     if (!sensor.favorite) return '';
 
+    const { id, name, temp, lum, humidity, battery/* , model, protocol */ } = sensor;
+
     return (
-      <div key={sensor.id}>
-        <Row>
-          <Col>{sensor.name}</Col>
+      <div key={id}>
+        <Row className="row-header">
+          <Col>{name} {temp} &deg;C</Col>
         </Row>
-        <Row>
-          <Col className="col-2">
-            {sensor.model}
-          </Col>
-          <Col className="col-10">
-            <div className="slider">
-              {sensor.protocol}
-            </div>
-          </Col>
+        <Row className="amb-2">
+          {lum && <Col className="cola-2">Lum: {lum}</Col>}
+          {humidity && <Col className="cola-2">Humidity: {humidity}%</Col>}
+        </Row>
+        <Row className="amb-2">
+          {battery && <Col className="cola-2">Battery: {battery}</Col>}
         </Row>
       </div>
     );

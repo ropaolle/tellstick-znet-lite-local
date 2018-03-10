@@ -1,50 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'reactstrap';
-import Toggle from 'react-toggle';
 import map from 'lodash.map';
+import Toggle from 'react-toggle';
 
 const Devices = (props) => {
   const { devices, handleUpdateDevice, sensors } = props;
 
-  const deviceTable = map(devices, dev => (
-    <tr key={dev.id}>
-      <td>{dev.id}</td>
+  const deviceTable = list => map(list, device => (
+    <tr key={device.id}>
+      <td>{device.id}</td>
       <td>
         <input
           type="checkbox"
-          checked={dev.favorite}
-          onChange={handleUpdateDevice(dev.id, 'toggleFavorite')}
+          checked={device.favorite}
+          onChange={handleUpdateDevice(device.id, 'toggleFavorite')}
         />
       </td>
-      <td>{dev.name}</td>
-      <td>{dev.type}</td>
-      <td>
-        <label htmlFor={`toggle-${dev.id}`}>
+      <td>{device.name}</td>
+      <td>{device.type}</td>
+      {device.type === 'sensor' && <td>
+        {device.temp} &deg;C
+      </td>}
+      {device.type === 'device' && <td>
+        <label htmlFor={`toggle-${device.id}`}>
           <Toggle
-            checked={dev.state !== 2}
-            onChange={handleUpdateDevice(dev.id, 'toggleState')}
+            checked={device.state !== 2}
+            onChange={handleUpdateDevice(device.id, 'toggleState')}
           />
         </label>
-      </td>
-    </tr>
-  ));
-
-  const state = data => data.map(s => <p>{s.name}: {s.value}</p>);
-
-  const sensorTable = map(sensors, sensor => (
-    <tr key={sensor.id}>
-      <td>{sensor.id}</td>
-      <td>
-        <input
-          type="checkbox"
-          checked={sensor.favorite}
-          // onChange={handleUpdateDevice(sensor.id, 'toggleFavorite')}
-        />
-      </td>
-      <td>{sensor.name}</td>
-      <td>sensor</td>
-      <td>{state(sensor.data)}</td>
+      </td>}
     </tr>
   ));
 
@@ -59,7 +44,10 @@ const Devices = (props) => {
           <th >Status</th>
         </tr>
       </thead>
-      <tbody>{deviceTable}{sensorTable}</tbody>
+      <tbody>
+        {deviceTable(sensors)}
+        {deviceTable(devices)}
+      </tbody>
     </Table>
   );
 };

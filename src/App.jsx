@@ -7,26 +7,6 @@ import AuthDialog from './AuthDialog';
 import Devices from './components/Devices';
 import telldusCommand from './utils/tellstick-znet-lite';
 
-// function getDevicesIndexedById(devices, favorites) {
-//   return devices.reduce((acc, device) => {
-//     acc[device.id] = {
-//       ...device,
-//       favorite: favorites.indexOf(device.id) !== -1,
-//     };
-//     return acc;
-//   }, {});
-// }
-
-function indexedById(devices, favorites) {
-  return devices.reduce((acc, device) => {
-    acc[device.id] = { ...device };
-    if (favorites) {
-      acc[device.id].favorite = favorites.indexOf(device.id) !== -1;
-    }
-    return acc;
-  }, {});
-}
-
 class App extends Component {
   state = {
     alerts: [],
@@ -40,20 +20,17 @@ class App extends Component {
   componentDidMount = () => {
     if (process.env.NODE_ENV === 'test') return; // Do not load data during tests
 
+    // eslint-disable-next-line promise/valid-params
     telldusCommand('init')
       .then((response) => {
-        if (!response.devices.success) {
-          return this.setAlert(response.devices.message);
-        }
-        if (!response.sensors.success) {
-          return this.setAlert(response.sensors.message);
-        }
-
         console.log(response);
+        if (!response.success) {
+          return this.setAlert(response.error);
+        }
 
         return this.setState({
-          devices: indexedById(response.devices.message.device, response.favorites),
-          sensors: indexedById(response.sensors.message.sensor, response.favorites),
+          devices: response.devices,
+          sensors: response.sensors,
           allowRenew: response.allowRenew,
           expires: response.expires,
         });
@@ -103,6 +80,7 @@ class App extends Component {
       }
 
       if (type) {
+        // eslint-disable-next-line promise/valid-params
         telldusCommand(type, id, query)
           .then((response) => {
             if (!response.success) {
