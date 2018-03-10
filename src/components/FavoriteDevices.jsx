@@ -5,10 +5,10 @@ import Slider from 'rc-slider';
 import map from 'lodash.map';
 import 'rc-slider/assets/index.css';
 
-const Devices = (props) => {
-  const { devices, handleUpdateDevice } = props;
+const FavoriteDevices = (props) => {
+  const { handleUpdateDevice } = props;
 
-  return map(devices, (device) => {
+  return map(props.devices, (device) => {
     if (!device.favorite) return '';
 
     const isDimmable = Boolean(device.methods & 16); // eslint-disable-line no-bitwise
@@ -45,4 +45,4 @@ const Devices = (props) => {
   });
 };
 
-export default Devices;
+export default FavoriteDevices;

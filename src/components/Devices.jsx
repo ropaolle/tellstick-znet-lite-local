@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Button } from 'reactstrap';
 import 'rc-slider/assets/index.css';
-import DeviceList from './DeviceList';
-import SensorList from './SensorList';
+import FavoriteDevices from './FavoriteDevices';
+import FavoriteSensors from './FavoriteSensors';
 import DeviceTable from './DeviceTable';
 
 class Devices extends Component {
@@ -70,15 +70,20 @@ class Devices extends Component {
           Favorites <i className="fa fa-list" aria-hidden="true" />
         </Button>
 
-        <h1>Favorites</h1>
-        <h4>Devices</h4>
-        {listView && <DeviceList devices={devices} handleUpdateDevice={this.handleUpdateDevice} />}
-        <h3 className="mt-2">Sensors</h3>
-        {listView && <SensorList sensors={sensors} />}
+        {listView && <div>
+          <h1>Favorites</h1>
 
-        {!listView && (
+          <h4 className="mt-2">Devices</h4>
+          <FavoriteDevices devices={devices} handleUpdateDevice={this.handleUpdateDevice} />
+
+          <h4 className="mt-2">Sensors</h4>
+          <FavoriteSensors sensors={sensors} />
+        </div>}
+
+        {!listView && <div>
+          <h1>Devices and sensors</h1>
           <DeviceTable devices={devices} sensors={sensors} handleUpdateDevice={this.handleUpdateDevice} />
-        )}
+        </div>}
       </Container>
     );
   }

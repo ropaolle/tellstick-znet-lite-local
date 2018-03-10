@@ -23,7 +23,6 @@ class App extends Component {
     // eslint-disable-next-line promise/valid-params
     telldusCommand('init')
       .then((response) => {
-        console.log(response);
         if (!response.success) {
           return this.setAlert(response.error);
         }
@@ -39,7 +38,10 @@ class App extends Component {
   };
 
   setAlert = (alert) => {
-    this.setState(prevState => ({ alerts: [...prevState.alerts, alert] }));
+    this.setState((prevState) => {
+      const alertArray = typeof alert === 'string' ? [alert] : alert;
+      return { alerts: [...prevState.alerts, ...alertArray] };
+    });
   };
 
   setExpiresAndAllowRenew = (message) => {
@@ -52,10 +54,21 @@ class App extends Component {
 
   updateDevice = (id, action, value) => {
     this.setState((prevState) => {
-      const device = { ...prevState.devices[id] };
-
+      let device;
+      let sensor;
+      let newState;
+      let type = 'favorites';
       const query = {};
-      let type = 'devices';
+
+      if (action === 'toggleFavorite-sensor') {
+        sensor = { ...prevState.sensors[id] };
+        sensor.favorite = !sensor.favorite;
+        newState = { sensors: { ...prevState.sensors, [id]: sensor } };
+      } else {
+        device = { ...prevState.devices[id] };
+        device.favorite = !device.favorite;
+        newState = { devices: { ...prevState.devices, [id]: device } };
+      }
 
       switch (action) {
         case 'updateSlider':
@@ -72,26 +85,24 @@ class App extends Component {
           query.command = 'dim';
           query.level = device.statevalue;
           break;
-        case 'toggleFavorite':
-          device.favorite = !device.favorite;
-          type = 'favorites';
+        case 'toggleFavorite-device':
+        case 'toggleFavorite-sensor':
           break;
         default:
+          return {};
       }
 
-      if (type) {
-        // eslint-disable-next-line promise/valid-params
-        telldusCommand(type, id, query)
-          .then((response) => {
-            if (!response.success) {
-              this.setAlert(response.message);
-            }
-            return response.success;
-          })
-          .catch();
-      }
+      // eslint-disable-next-line promise/valid-params
+      telldusCommand(type, id, query)
+        .then((response) => {
+          if (!response.success) {
+            this.setAlert(response.message);
+          }
+          return response.success;
+        })
+        .catch();
 
-      return { devices: { ...prevState.devices, [id]: device } };
+      return newState;
     });
   };
 
@@ -119,9 +130,18 @@ class App extends Component {
             setExpiresAndAllowRenew={this.setExpiresAndAllowRenew}
           />
 
-          <Devices devices={devices} sensors={sensors} updateDevice={this.updateDevice} />
+          <Devices
+            devices={devices}
+            sensors={sensors}
+            updateDevice={this.updateDevice}
+          />
         </div>
-        <footer><div>By ropaolle, &#169; 2018 - <a href="https://github.com/ropaolle/tellstick-znet-lite-local">GitHub</a></div></footer>
+        <footer>
+          <div>
+            By ropaolle, &#169; 2018 -{' '}
+            <a href="https://github.com/ropaolle/tellstick-znet-lite-local">GitHub</a>
+          </div>
+        </footer>
       </div>
     );
   }

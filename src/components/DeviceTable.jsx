@@ -14,12 +14,12 @@ const Devices = (props) => {
         <input
           type="checkbox"
           checked={device.favorite}
-          onChange={handleUpdateDevice(device.id, 'toggleFavorite')}
+          onChange={handleUpdateDevice(device.id, `toggleFavorite-${device.type}`)}
         />
       </td>
       <td>{device.name}</td>
       <td>{device.type}</td>
-      {device.type === 'sensor' && <td>
+      {device.type === 'sensor' && <td className="text-nowrap">
         {device.temp} &deg;C
       </td>}
       {device.type === 'device' && <td>
