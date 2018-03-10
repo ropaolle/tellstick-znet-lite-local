@@ -2,27 +2,17 @@ import React, { Component } from 'react';
 import uniqueId from 'lodash.uniqueid';
 import { UncontrolledAlert } from 'reactstrap';
 import './App.css';
-import AppNavbar from './AppNavbar';
+import Navbar from './Navbar';
 import AuthDialog from './AuthDialog';
 import Devices from './components/Devices';
 import telldusCommand from './utils/tellstick-znet-lite';
-
-function getDevicesIndexedById(devices, favorites) {
-  return devices.reduce((acc, device) => {
-    acc[device.id] = {
-      ...device,
-      favorite: favorites.indexOf(device.id) !== -1,
-    };
-    return acc;
-  }, {});
-}
 
 class App extends Component {
   state = {
     alerts: [],
     dialog: false,
     devices: {},
-    // sensors: {},
+    sensors: {},
     expires: 0,
     allowRenew: false,
   };
@@ -30,14 +20,16 @@ class App extends Component {
   componentDidMount = () => {
     if (process.env.NODE_ENV === 'test') return; // Do not load data during tests
 
-    telldusCommand({ type: 'init' }, this.setAlert)
+    // eslint-disable-next-line promise/valid-params
+    telldusCommand('init')
       .then((response) => {
         if (!response.success) {
-          return this.setAlert(response.message);
+          return this.setAlert(response.error);
         }
 
         return this.setState({
-          devices: getDevicesIndexedById(response.message.device, response.favorites),
+          devices: response.devices,
+          sensors: response.sensors,
           allowRenew: response.allowRenew,
           expires: response.expires,
         });
@@ -46,7 +38,10 @@ class App extends Component {
   };
 
   setAlert = (alert) => {
-    this.setState(prevState => ({ alerts: [...prevState.alerts, alert] }));
+    this.setState((prevState) => {
+      const alertArray = typeof alert === 'string' ? [alert] : alert;
+      return { alerts: [...prevState.alerts, ...alertArray] };
+    });
   };
 
   setExpiresAndAllowRenew = (message) => {
@@ -59,33 +54,48 @@ class App extends Component {
 
   updateDevice = (id, action, value) => {
     this.setState((prevState) => {
-      const device = { ...prevState.devices[id] };
-      let query = { type: 'devices', id };
+      let device;
+      let sensor;
+      let type = 'devices';
+      const query = {};
+
+      if (action === 'toggleFavorite-sensor') {
+        sensor = { ...prevState.sensors[id] };
+      } else {
+        device = { ...prevState.devices[id] };
+      }
 
       switch (action) {
         case 'updateSlider':
           device.state = 16;
           device.statevalue = value;
-          query = null;
+          // type = null;
           break;
         case 'toggleState':
           device.state = device.state === 2 ? 1 : 2;
+          query.command = device.state === 2 ? 'turnOff' : 'turnOn';
           device.statevalue = 0;
-          query.command = device.state === 1 ? 'turnOn' : 'turnOff';
           break;
         case 'dim':
           query.command = 'dim';
           query.level = device.statevalue;
           break;
-        case 'toggleFavorite':
+        case 'toggleFavorite-device':
           device.favorite = !device.favorite;
-          query.type = 'favorites';
+          type = 'favorites';
+          break;
+        case 'toggleFavorite-sensor':
+          sensor.favorite = !sensor.favorite;
+          type = 'favorites';
           break;
         default:
+          return {};
       }
 
-      if (query) {
-        telldusCommand(query)
+
+      if (action !== 'updateSlider') {
+        // eslint-disable-next-line promise/valid-params
+        telldusCommand(type, id, query)
           .then((response) => {
             if (!response.success) {
               this.setAlert(response.message);
@@ -95,12 +105,15 @@ class App extends Component {
           .catch();
       }
 
+      if (action === 'toggleFavorite-sensor') {
+        return { sensors: { ...prevState.sensors, [id]: sensor } };
+      }
       return { devices: { ...prevState.devices, [id]: device } };
     });
   };
 
   render() {
-    const { expires, allowRenew, dialog, alerts } = this.state;
+    const { expires, allowRenew, dialog, alerts, devices, sensors } = this.state;
 
     const alertList = alerts.map(value => (
       <UncontrolledAlert key={uniqueId} color="warning">
@@ -110,7 +123,7 @@ class App extends Component {
 
     return (
       <div className="app">
-        <AppNavbar showDialog={() => this.showDialog(true)} />
+        <Navbar showDialog={() => this.showDialog(true)} />
 
         <div className="content">
           {alertList}
@@ -123,9 +136,18 @@ class App extends Component {
             setExpiresAndAllowRenew={this.setExpiresAndAllowRenew}
           />
 
-          <Devices devices={this.state.devices} updateDevice={this.updateDevice} />
+          <Devices
+            devices={devices}
+            sensors={sensors}
+            updateDevice={this.updateDevice}
+          />
         </div>
-        <footer><div>By ropaolle, &#169; 2018 - <a href="https://github.com/ropaolle/tellstick-znet-lite-local">GitHub</a></div></footer>
+        <footer>
+          <div>
+            By ropaolle, &#169; 2018 -{' '}
+            <a href="https://github.com/ropaolle/tellstick-znet-lite-local">GitHub</a>
+          </div>
+        </footer>
       </div>
     );
   }

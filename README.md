@@ -75,10 +75,13 @@ git reset --hard origin/master
 
 ## Todo
 
+* [x] Change the telldusCommand parameter list
 * [x] Save favorites
 * [x] Command shall always be a query string
-* [ ] Add sensors
-* [ ] Fix tests
+* [x] Add sensors
+* [x] Fix tests
+* [ ] Validate commands in routes
+* [ ] VS Code filehandlers: https://code.visualstudio.com/docs/setup/linux#_error-enospc
 
 '/api/v1/favorites/{id}',
 '/api/v1/init',

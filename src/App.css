@@ -53,6 +53,16 @@ footer {
   margin-left: 10px;
 }
 
+.row.row-header {
+  font-weight: 600;
+  color: #777;
+  margin-top: 8px;
+}
+
+.home-page label {
+  margin-bottom: 0;
+}
+
 /**
  * Checkbox
 **/
@@ -62,23 +72,12 @@ input[type=checkbox] {
   padding: 10px;
 }
 
-/* Might want to wrap a span around your checkbox text
-.checkboxtext {
-  font-size: 110%;
-  display: inline;
-}
- */
-
 /**
  * Table
 **/
 
 .cellWidthMax {
   width: 100%
-}
-
-table label {
-  margin-bottom: 0;
 }
 
 /**

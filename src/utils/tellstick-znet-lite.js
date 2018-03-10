@@ -1,12 +1,11 @@
 import request from 'request-promise';
 
-const telldusCommand = async function telldusCommand(query) {
-  const { type, id, ...qs } = query;
-
+export default async function telldusCommand(type, id, qs) {
   const paramId = id ? `/${id}` : '';
 
   const options = {
     uri: `http://192.168.10.146:4000/api/v1/${type}${paramId}`,
+    // uri: `http://localhost:4000/api/v1/${type}${paramId}`,
     qs,
     json: true,
     timeout: 1000,
@@ -20,5 +19,3 @@ const telldusCommand = async function telldusCommand(query) {
 
   return res;
 };
-
-export default telldusCommand;

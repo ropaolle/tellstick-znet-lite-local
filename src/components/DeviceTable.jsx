@@ -1,32 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'reactstrap';
-import Toggle from 'react-toggle';
 import map from 'lodash.map';
+import Toggle from 'react-toggle';
 
 const Devices = (props) => {
-  const { devices, handleUpdateDevice } = props;
+  const { devices, handleUpdateDevice, sensors } = props;
 
-  const deviceTable = map(devices, dev => (
-    <tr key={dev.id}>
-      <td>{dev.id}</td>
+  const deviceTable = list => map(list, device => (
+    <tr key={device.id}>
+      <td>{device.id}</td>
       <td>
         <input
           type="checkbox"
-          checked={dev.favorite}
-          onChange={handleUpdateDevice(dev.id, 'toggleFavorite')}
+          checked={device.favorite}
+          onChange={handleUpdateDevice(device.id, `toggleFavorite-${device.type}`)}
         />
       </td>
-      <td>{dev.name}</td>
-      <td>{dev.type}</td>
-      <td>
-        <label htmlFor={`toggle-${dev.id}`}>
+      <td>{device.name}</td>
+      <td>{device.type}</td>
+      {device.type === 'sensor' && <td className="text-nowrap">
+        {device.temp} &deg;C
+      </td>}
+      {device.type === 'device' && <td>
+        <label htmlFor={`toggle-${device.id}`}>
           <Toggle
-            checked={dev.state !== 2}
-            onChange={handleUpdateDevice(dev.id, 'toggleState')}
+            checked={device.state !== 2}
+            onChange={handleUpdateDevice(device.id, 'toggleState')}
           />
         </label>
-      </td>
+      </td>}
     </tr>
   ));
 
@@ -41,13 +44,17 @@ const Devices = (props) => {
           <th >Status</th>
         </tr>
       </thead>
-      <tbody>{deviceTable}</tbody>
+      <tbody>
+        {deviceTable(sensors)}
+        {deviceTable(devices)}
+      </tbody>
     </Table>
   );
 };
 
 Devices.propTypes = {
   devices: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  sensors: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   handleUpdateDevice: PropTypes.func.isRequired,
 };
 
