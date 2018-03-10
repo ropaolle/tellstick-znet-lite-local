@@ -78,11 +78,9 @@ git reset --hard origin/master
 * [x] Change the telldusCommand parameter list
 * [x] Save favorites
 * [x] Command shall always be a query string
-* [ ] Add sensors
+* [x] Add sensors
 * [x] Fix tests
 * [ ] Validate commands in routes
-* [ ] Remove toggle?
-* [ ] Remove state from AUthDialog
 
 '/api/v1/favorites/{id}',
 '/api/v1/init',

@@ -56,18 +56,13 @@ class App extends Component {
     this.setState((prevState) => {
       let device;
       let sensor;
-      let newState;
-      let type = 'favorites';
+      let type = 'devices';
       const query = {};
 
       if (action === 'toggleFavorite-sensor') {
         sensor = { ...prevState.sensors[id] };
-        sensor.favorite = !sensor.favorite;
-        newState = { sensors: { ...prevState.sensors, [id]: sensor } };
       } else {
         device = { ...prevState.devices[id] };
-        device.favorite = !device.favorite;
-        newState = { devices: { ...prevState.devices, [id]: device } };
       }
 
       switch (action) {
@@ -86,7 +81,12 @@ class App extends Component {
           query.level = device.statevalue;
           break;
         case 'toggleFavorite-device':
+          device.favorite = !device.favorite;
+          type = 'favorites';
+          break;
         case 'toggleFavorite-sensor':
+          sensor.favorite = !sensor.favorite;
+          type = 'favorites';
           break;
         default:
           return {};
@@ -102,7 +102,10 @@ class App extends Component {
         })
         .catch();
 
-      return newState;
+      if (action === 'toggleFavorite-sensor') {
+        return { sensors: { ...prevState.sensors, [id]: sensor } };
+      }
+      return { devices: { ...prevState.devices, [id]: device } };
     });
   };
 
