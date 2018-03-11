@@ -1,5 +1,7 @@
 language: node_js
 node_js:
   - "node"
-notifications:
-  email: false
+cache:
+  directories:
+    - "node_modules"
+script: react-scripts test -u --env=jsdom --verbose --coverage

@@ -7,19 +7,19 @@
   },
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.18.0",
     "bootstrap": "^4.0.0",
     "jquery": "^3.3.1",
     "lodash.map": "^4.6.0",
     "lodash.uniqueid": "^4.0.1",
     "prop-types": "^15.6.1",
+    "qs": "^6.5.1",
     "rc-slider": "^8.6.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "^1.1.1",
     "react-toggle": "^4.0.2",
-    "reactstrap": "5.0.0-beta",
-    "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "reactstrap": "5.0.0-beta"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
@@ -39,13 +39,12 @@
   "scripts": {
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test -u --env=jsdom --verbose --coverage",
-    "test-org": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom",
+    "test-full": "react-scripts test --env=jsdom  --verbose --coverage",
+    "test-travis-ci": "react-scripts test -u --env=jsdom  --verbose --coverage",
     "eject": "react-scripts eject"
   },
   "babel": {
-    "presets": [
-      "react-app"
-    ]
+    "presets": ["react-app"]
   }
 }
