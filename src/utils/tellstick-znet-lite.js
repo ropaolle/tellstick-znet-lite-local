@@ -1,21 +1,25 @@
-import request from 'request-promise';
+import axios from 'axios';
+import qs from 'qs';
 
-export default async function telldusCommand(type, id, qs) {
-  const paramId = id ? `/${id}` : '';
+axios.defaults.baseURL = 'http://192.168.10.146:4000/api/v1/';
+// axios.defaults.baseURL = 'http://localhost::4000/api/v1/';
+axios.defaults.timeout = 1000;
 
-  const options = {
-    // uri: `http://192.168.10.146:4000/api/v1/${type}${paramId}`,
-    uri: `http://localhost:4000/api/v1/${type}${paramId}`,
-    qs,
-    json: true,
-    timeout: 1000,
-  };
+function getUrl(type, id, query) {
+  const queryString = qs.stringify(query);
+  let path = type;
+  if (id) path += `/${id}`;
+  if (queryString) path += `?${queryString}`;
+  return path;
+}
 
-  const res = await request(options)
-    .then(response => response)
-    .catch(err => ({ success: false, message: err.message }));
+export default async function telldusCommand(type, id, query) {
+  try {
+    const response = await axios.get(getUrl(type, id, query));
+    console.log('Response', response);
 
-  // console.log('RES', options, res);
-
-  return res;
-};
+    return response.data;
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
+}
