@@ -16,7 +16,7 @@ function getUrl(type, id, query) {
 export default async function telldusCommand(type, id, query) {
   try {
     const response = await axios.get(getUrl(type, id, query));
-    console.log('Response', response);
+    // console.log('Response', response);
 
     return response.data;
   } catch (err) {
