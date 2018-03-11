@@ -4,3 +4,4 @@ node_js:
 cache:
   directories:
     - "node_modules"
+script: react-scripts test -u --env=jsdom --verbose --coverage
