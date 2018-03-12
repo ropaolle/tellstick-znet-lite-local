@@ -1,8 +1,8 @@
 import axios from 'axios';
 import qs from 'qs';
 
-axios.defaults.baseURL = 'http://192.168.10.146:4000/api/v1/';
-// axios.defaults.baseURL = 'http://localhost::4000/api/v1/';
+// Load IP from .env
+axios.defaults.baseURL = `${process.env.REACT_APP_TELLDUS_URL}:4000/api/v1/`;
 axios.defaults.timeout = 1000;
 
 function getUrl(type, id, query) {
@@ -15,6 +15,8 @@ function getUrl(type, id, query) {
 
 export default async function telldusCommand(type, id, query) {
   try {
+    if (process.env.REACT_APP_MODE === 'DEMO') { return { success: false, message: 'demo' }; }
+
     const response = await axios.get(getUrl(type, id, query));
     // console.log('Response', response);
 

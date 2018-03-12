@@ -44,8 +44,8 @@ footer {
   margin-top: 9px;
 }
 
-.alert {
-  margin: 2px;
+.content .alert {
+  margin: 5px;
 }
 
 .home-page button {

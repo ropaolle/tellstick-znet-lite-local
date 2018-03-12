@@ -7,6 +7,37 @@ import AuthDialog from './AuthDialog';
 import Devices from './components/Devices';
 import telldusCommand from './utils/tellstick-znet-lite';
 
+const DEFAULT = {
+  expires: 1523214827000,
+  allowRenew: true,
+  devices: {
+    2: { id: 2, methods: 19, name: 'Stickpropp Dim Zwave', state: 2, statevalue: '', type: 'device', favorite: true },
+    6: {
+      id: 6,
+      methods: 19,
+      name: 'Sovrum Tak',
+      state: 2,
+      statevalue: '',
+      type: 'device',
+      favorite: true },
+    8: {
+      id: 8,
+      methods: 19,
+      name: 'Vardagsrum Tak',
+      state: 2,
+      statevalue: '',
+      type: 'device',
+      favorite: false,
+
+    },
+  },
+  sensors: {
+    1: { battery: 254, id: 1, model: 'temperature', name: 'Kylen', protocol: 'fineoffset', temp: '11.8', type: 'sensor', favorite: true },
+    7: { id: 7, lum: '2.0', model: 'n/a', name: 'Multisensor', protocol: 'zwave', temp: '30.6', type: 'sensor', favorite: true },
+    21: { battery: 254, humidity: '20', id: 21, model: 'temperaturehumidity', name: 'Tvlåda', protocol: 'fineoffset', temp: '23.9', type: 'sensor', favorite: true },
+  },
+};
+
 class App extends Component {
   state = {
     alerts: [],
@@ -23,7 +54,11 @@ class App extends Component {
     // eslint-disable-next-line promise/valid-params
     telldusCommand('init')
       .then((response) => {
-        // console.log(response);
+        console.log(response);
+        if (process.env.REACT_APP_MODE === 'DEMO') {
+          return this.setState(DEFAULT);
+        }
+
         if (!response.success) {
           return this.setAlert(response.error);
         }
@@ -57,7 +92,7 @@ class App extends Component {
     this.setState((prevState) => {
       let device;
       let sensor;
-      let type = 'devices';
+      let type;
       const query = {};
 
       if (action === 'toggleFavorite-sensor') {
@@ -70,16 +105,17 @@ class App extends Component {
         case 'updateSlider':
           device.state = 16;
           device.statevalue = value;
-          // type = null;
           break;
         case 'toggleState':
           device.state = device.state === 2 ? 1 : 2;
           query.command = device.state === 2 ? 'turnOff' : 'turnOn';
           device.statevalue = 0;
+          type = 'devices';
           break;
         case 'dim':
           query.command = 'dim';
           query.level = device.statevalue;
+          type = 'devices';
           break;
         case 'toggleFavorite-device':
           device.favorite = !device.favorite;
@@ -92,7 +128,6 @@ class App extends Component {
         default:
           return {};
       }
-
 
       if (action !== 'updateSlider') {
         // eslint-disable-next-line promise/valid-params
@@ -116,8 +151,10 @@ class App extends Component {
   render() {
     const { expires, allowRenew, dialog, alerts, devices, sensors } = this.state;
 
+    const demo = Boolean(process.env.REACT_APP_MODE === 'DEMO');
+
     const alertList = alerts.map(value => (
-      <UncontrolledAlert key={uniqueId} color="warning">
+      <UncontrolledAlert key={uniqueId()} color="warning">
         {value}
       </UncontrolledAlert>
     ));
@@ -127,7 +164,7 @@ class App extends Component {
         <Navbar showDialog={() => this.showDialog(true)} />
 
         <div className="content">
-          {alertList}
+          {!demo && alertList}
 
           <AuthDialog
             expires={expires}
@@ -137,13 +174,12 @@ class App extends Component {
             setExpiresAndAllowRenew={this.setExpiresAndAllowRenew}
           />
 
-          <Devices
-            devices={devices}
-            sensors={sensors}
-            updateDevice={this.updateDevice}
-          />
+          <Devices devices={devices} sensors={sensors} updateDevice={this.updateDevice} />
         </div>
         <footer>
+          <div>
+            Env: {process.env.NODE_ENV}, Mode: {process.env.REACT_APP_MODE}
+          </div>
           <div>
             By ropaolle, &#169; 2018 -{' '}
             <a href="https://github.com/ropaolle/tellstick-znet-lite-local">GitHub</a>
