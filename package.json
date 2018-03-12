@@ -45,6 +45,8 @@
     "eject": "react-scripts eject"
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": [
+      "react-app"
+    ]
   }
 }

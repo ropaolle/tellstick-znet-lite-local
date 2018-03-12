@@ -23,6 +23,7 @@ class App extends Component {
     // eslint-disable-next-line promise/valid-params
     telldusCommand('init')
       .then((response) => {
+        // console.log(response);
         if (!response.success) {
           return this.setAlert(response.error);
         }
