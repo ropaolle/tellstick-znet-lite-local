@@ -43,7 +43,7 @@ class App extends Component {
       .catch();
   };
 
-  setAlert = (alert) => {
+  setAlert = (alert = []) => {
     this.setState((prevState) => {
       const alertArray = typeof alert === 'string' ? [alert] : alert;
       return { alerts: [...prevState.alerts, ...alertArray] };
