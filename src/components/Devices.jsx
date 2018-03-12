@@ -34,11 +34,13 @@ class Devices extends Component {
       lum: PropTypes.string, // Sacle %
 
       // If includeScale=1
-      data: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.number,
-        sacal: PropTypes.number,
-        value: PropTypes.number,
-      })),
+      data: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.number,
+          sacal: PropTypes.number,
+          value: PropTypes.number,
+        }),
+      ),
     }).isRequired,
     updateDevice: PropTypes.func.isRequired,
   };
@@ -61,7 +63,6 @@ class Devices extends Component {
 
     return (
       <Container fluid className="page-content home-page">
-
         <Button className={btnClass(listView)} onClick={this.handleToggleListView}>
           All <i className="fa fa-table" aria-hidden="true" />
         </Button>
@@ -70,20 +71,30 @@ class Devices extends Component {
           Favorites <i className="fa fa-list" aria-hidden="true" />
         </Button>
 
-        {listView && <div>
-          <h1>Favorites</h1>
+        {listView && (
+          <div>
+            <h1>Favorites</h1>
 
-          <h4 className="mt-2">Devices</h4>
-          <FavoriteDevices devices={devices} handleUpdateDevice={this.handleUpdateDevice} />
+            <h4 className="mt-2">Devices</h4>
+            <FavoriteDevices devices={devices} handleUpdateDevice={this.handleUpdateDevice} />
 
-          <h4 className="mt-2">Sensors</h4>
-          <FavoriteSensors sensors={sensors} />
-        </div>}
+            <h4 className="mt-2">Sensors</h4>
+            <div className="sensors">
+              <FavoriteSensors sensors={sensors} />
+            </div>
+          </div>
+        )}
 
-        {!listView && <div>
-          <h1>Devices and sensors</h1>
-          <DeviceTable devices={devices} sensors={sensors} handleUpdateDevice={this.handleUpdateDevice} />
-        </div>}
+        {!listView && (
+          <div>
+            <h1>All</h1>
+            <DeviceTable
+              devices={devices}
+              sensors={sensors}
+              handleUpdateDevice={this.handleUpdateDevice}
+            />
+          </div>
+        )}
       </Container>
     );
   }

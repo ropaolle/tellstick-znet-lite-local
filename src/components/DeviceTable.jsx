@@ -7,48 +7,54 @@ import Toggle from 'react-toggle';
 const Devices = (props) => {
   const { devices, handleUpdateDevice, sensors } = props;
 
-  const deviceTable = list => map(list, device => (
-    <tr key={device.id}>
-      <td>{device.id}</td>
-      <td>
-        <input
-          type="checkbox"
-          checked={device.favorite}
-          onChange={handleUpdateDevice(device.id, `toggleFavorite-${device.type}`)}
-        />
-      </td>
-      <td>{device.name}</td>
-      <td>{device.type}</td>
-      {device.type === 'sensor' && <td className="text-nowrap">
-        {device.temp} &deg;C
-      </td>}
-      {device.type === 'device' && <td>
-        <label htmlFor={`toggle-${device.id}`}>
-          <Toggle
-            checked={device.state !== 2}
-            onChange={handleUpdateDevice(device.id, 'toggleState')}
+  const deviceTable = list =>
+    map(list, device => (
+      <tr key={device.id}>
+        <td>
+          <input
+            type="checkbox"
+            checked={device.favorite}
+            onChange={handleUpdateDevice(device.id, `toggleFavorite-${device.type}`)}
           />
-        </label>
-      </td>}
-    </tr>
-  ));
+        </td>
+        <td>{device.name}</td>
+        <td>{device.type}</td>
+        {device.type === 'sensor' && <td className="text-nowrap">{device.temp} &deg;C</td>}
+        {device.type === 'device' && (
+          <td>
+            <label htmlFor={`toggle-${device.id}`}>
+              <Toggle
+                checked={device.state !== 2}
+                onChange={handleUpdateDevice(device.id, 'toggleState')}
+              />
+            </label>
+          </td>
+        )}
+      </tr>
+    ));
+
+  const table = (list, title) => (
+    <div>
+      <h4 className="mt-2">{title}</h4>
+      <Table striped hover responsive>
+        <thead>
+          <tr>
+            <th>Fav.</th>
+            <th className="cellWidthMax">Name</th>
+            <th>Type</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>{deviceTable(list)}</tbody>
+      </Table>
+    </div>
+  );
 
   return (
-    <Table striped hover responsive>
-      <thead>
-        <tr>
-          <th >Id</th>
-          <th >Favorit</th>
-          <th className="cellWidthMax">Name</th>
-          <th >Type</th>
-          <th >Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {deviceTable(sensors)}
-        {deviceTable(devices)}
-      </tbody>
-    </Table>
+    <div>
+      {table(sensors, 'Sensors')}
+      {table(devices, 'Devices')}
+    </div>
   );
 };
 

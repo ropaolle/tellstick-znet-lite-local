@@ -6,6 +6,7 @@ import Navbar from './Navbar';
 import AuthDialog from './AuthDialog';
 import Devices from './components/Devices';
 import telldusCommand from './utils/tellstick-znet-lite';
+import demoData from './demoData';
 
 class App extends Component {
   state = {
@@ -23,6 +24,11 @@ class App extends Component {
     // eslint-disable-next-line promise/valid-params
     telldusCommand('init')
       .then((response) => {
+        // console.log(response);
+        if (process.env.REACT_APP_MODE === 'DEMO') {
+          return this.setState(demoData);
+        }
+
         if (!response.success) {
           return this.setAlert(response.error);
         }
@@ -56,7 +62,7 @@ class App extends Component {
     this.setState((prevState) => {
       let device;
       let sensor;
-      let type = 'devices';
+      let type;
       const query = {};
 
       if (action === 'toggleFavorite-sensor') {
@@ -69,16 +75,17 @@ class App extends Component {
         case 'updateSlider':
           device.state = 16;
           device.statevalue = value;
-          // type = null;
           break;
         case 'toggleState':
           device.state = device.state === 2 ? 1 : 2;
           query.command = device.state === 2 ? 'turnOff' : 'turnOn';
           device.statevalue = 0;
+          type = 'devices';
           break;
         case 'dim':
           query.command = 'dim';
           query.level = device.statevalue;
+          type = 'devices';
           break;
         case 'toggleFavorite-device':
           device.favorite = !device.favorite;
@@ -91,7 +98,6 @@ class App extends Component {
         default:
           return {};
       }
-
 
       if (action !== 'updateSlider') {
         // eslint-disable-next-line promise/valid-params
@@ -115,8 +121,10 @@ class App extends Component {
   render() {
     const { expires, allowRenew, dialog, alerts, devices, sensors } = this.state;
 
+    const demo = Boolean(process.env.REACT_APP_MODE === 'DEMO');
+
     const alertList = alerts.map(value => (
-      <UncontrolledAlert key={uniqueId} color="warning">
+      <UncontrolledAlert key={uniqueId()} color="warning">
         {value}
       </UncontrolledAlert>
     ));
@@ -126,7 +134,7 @@ class App extends Component {
         <Navbar showDialog={() => this.showDialog(true)} />
 
         <div className="content">
-          {alertList}
+          {!demo && alertList}
 
           <AuthDialog
             expires={expires}
@@ -136,13 +144,12 @@ class App extends Component {
             setExpiresAndAllowRenew={this.setExpiresAndAllowRenew}
           />
 
-          <Devices
-            devices={devices}
-            sensors={sensors}
-            updateDevice={this.updateDevice}
-          />
+          <Devices devices={devices} sensors={sensors} updateDevice={this.updateDevice} />
         </div>
         <footer>
+          <div>
+            Env: {process.env.NODE_ENV}, Mode: {process.env.REACT_APP_MODE}
+          </div>
           <div>
             By ropaolle, &#169; 2018 -{' '}
             <a href="https://github.com/ropaolle/tellstick-znet-lite-local">GitHub</a>

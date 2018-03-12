@@ -2,6 +2,7 @@
 ## Todo
 
 * [ ] Add project to ropaolle.se
+* [ ] Moce id to a query command?
 
 
 ## Start App/Api

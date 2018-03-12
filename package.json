@@ -1,14 +1,18 @@
 {
   "name": "tzll",
-  "version": "0.2.0",
+  "version": "0.3.0",
+  "author": "Ropaolle <ropaolle@gmail.com>",
   "repository": {
     "type": "git",
     "url": "git@github.com:ropaolle/tellstick-znet-lite-local.git"
   },
+  "homepage": "https://ropaolle.github.io/tellstick-znet-lite-local",
+  "main": "index.js",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.0.0",
+    "gh-pages": "^1.1.0",
     "jquery": "^3.3.1",
     "lodash.map": "^4.6.0",
     "lodash.uniqueid": "^4.0.1",
@@ -42,9 +46,12 @@
     "test": "react-scripts test --env=jsdom",
     "test-full": "react-scripts test --env=jsdom  --verbose --coverage",
     "test-travis-ci": "react-scripts test -u --env=jsdom  --verbose --coverage",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "npm run build && gh-pages -d build"
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": [
+      "react-app"
+    ]
   }
 }
