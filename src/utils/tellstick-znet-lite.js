@@ -15,13 +15,13 @@ function getUrl(type, id, query) {
 
 export default async function telldusCommand(type, id, query) {
   try {
-    if (process.env.REACT_APP_MODE === 'DEMO') { return { success: false, message: 'demo' }; }
+    if (process.env.REACT_APP_MODE === 'DEMO') { return { success: false, error: 'demo' }; }
 
     const response = await axios.get(getUrl(type, id, query));
     // console.log('Response', response);
 
     return response.data;
   } catch (err) {
-    return { success: false, message: err.message };
+    return { success: false, error: err.message };
   }
 }
