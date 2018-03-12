@@ -62,3 +62,14 @@ git pull origin master
 git fetch
 git reset --hard origin/master
 ```
+
+## Deploy to GitHub Pages
+* Add beow to package.json.
+
+```bash
+"homepage": "https://ropaolle.github.io/tellstick-znet-lite-local",
+"main": "index.js",
+```
+
+* Run ```npm run deploy```
+* Uncomment ```# REACT_APP_MODE=DEMO``` in .env

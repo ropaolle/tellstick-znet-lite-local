@@ -6,8 +6,6 @@
     "type": "git",
     "url": "git@github.com:ropaolle/tellstick-znet-lite-local.git"
   },
-  "homepage": "https://ropaolle.github.io/tellstick-znet-lite-local",
-  "main": "index.js",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.18.0",
