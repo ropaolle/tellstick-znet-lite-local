@@ -147,9 +147,9 @@ class App extends Component {
           <Devices devices={devices} sensors={sensors} updateDevice={this.updateDevice} />
         </div>
         <footer>
-          <div>
+          {(process.env.REACT_APP_MODE === 'DEMO') && <div>
             Env: {process.env.NODE_ENV}, Mode: {process.env.REACT_APP_MODE}
-          </div>
+          </div>}
           <div>
             By ropaolle, &#169; 2018 -{' '}
             <a href="https://github.com/ropaolle/tellstick-znet-lite-local">GitHub</a>
