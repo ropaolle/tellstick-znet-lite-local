@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import uniqueId from 'lodash.uniqueid';
+import map from 'lodash.map';
 import { UncontrolledAlert } from 'reactstrap';
 import './App.css';
 import Navbar from './Navbar';
@@ -24,6 +25,7 @@ class App extends Component {
     // eslint-disable-next-line promise/valid-params
     telldusCommand('init')
       .then((response) => {
+        // console.log(response);
         if (process.env.REACT_APP_MODE === 'DEMO') {
           return this.setState(demoData);
         }
@@ -50,6 +52,25 @@ class App extends Component {
 
   setExpiresAndAllowRenew = (message) => {
     this.setState(() => ({ ...message }));
+  };
+
+  clearMinMax = () => {
+    // eslint-disable-next-line promise/valid-params
+    telldusCommand('minmax')
+      .then((response) => {
+        if (response.success) {
+          this.setAlert(response.message);
+
+          this.setState((prevState) => {
+            const sensors = { ...prevState.sensors };
+            // eslint-disable-next-line no-param-reassign
+            map(sensors, (sensor) => { delete sensor.minMax; });
+            return { sensors };
+          });
+        }
+        return response.message;
+      })
+      .catch();
   };
 
   showDialog = (show) => {
@@ -129,7 +150,10 @@ class App extends Component {
 
     return (
       <div className="app">
-        <Navbar showDialog={() => this.showDialog(true)} />
+        <Navbar
+          showDialog={() => this.showDialog(true)}
+          clearMinMax={this.clearMinMax}
+        />
 
         <div className="content">
           {!demo && alertList}

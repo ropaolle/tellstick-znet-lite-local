@@ -1,6 +1,5 @@
 import React from 'react';
-import { Row, Col } from 'reactstrap';
-import { UncontrolledTooltip } from 'reactstrap';
+import { Row, Col, UncontrolledTooltip } from 'reactstrap';
 import map from 'lodash.map';
 import 'rc-slider/assets/index.css';
 
@@ -21,15 +20,16 @@ const FavoriteSensors = props => map(props.sensors, (sensor) => {
       </Row>
       <Row>
         {<Col>
-          <a id={`tooltip${id}`}>
-            <i className="fa fa-thermometer-half" aria-hidden="true" /> {temp} &deg;C{' '}
+          <i className="fa fa-thermometer-half" aria-hidden="true" /> {temp} &deg;C{' '}
+          {minMax && <span>
+            <a id={`tooltip${id}`}>
             (<i className="fa fa-caret-down text-primary" aria-hidden="true" /> {minMax.min.temp},{' '}
-            <i className="fa fa-caret-up text-danger" aria-hidden="true" /> {minMax.max.temp}){' '}
-          </a>
-          <UncontrolledTooltip target={`tooltip${id}`}>
+              <i className="fa fa-caret-up text-danger" aria-hidden="true" /> {minMax.max.temp}){' '}
+            </a>
+            <UncontrolledTooltip target={`tooltip${id}`}>
             Max: {dateStr(minMax.max.updated)},
             Min: {dateStr(minMax.min.updated)},
-          </UncontrolledTooltip>
+            </UncontrolledTooltip></span>}
         </Col>}
 
       </Row>
