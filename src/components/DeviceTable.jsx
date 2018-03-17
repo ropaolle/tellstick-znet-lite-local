@@ -25,8 +25,8 @@ const Devices = (props) => {
           <td>
             <label htmlFor={`toggle-${device.id}`}>
               <Toggle
-                checked={device.state !== 2}
                 onChange={handleUpdateDevice(device.id, 'toggleState')}
+                checked={device.state !== 2}
               />
             </label>
           </td>

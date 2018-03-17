@@ -2,9 +2,6 @@
 ## Todo
 
 * [ ] Add project to ropaolle.se
-* [ ] Move id to a query command?
-* [ ] Add history to client (prod + demo)
-* [ ] Sparklines https://github.com/borisyankov/react-sparklines
 
 
 ## Start App/Api

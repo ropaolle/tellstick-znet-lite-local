@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import uniqueId from 'lodash.uniqueid';
+import map from 'lodash.map';
 import { UncontrolledAlert } from 'reactstrap';
 import './App.css';
 import Navbar from './Navbar';
@@ -39,8 +40,7 @@ class App extends Component {
           allowRenew: response.allowRenew,
           expires: response.expires,
         });
-      })
-      .catch();
+      }).catch();
   };
 
   setAlert = (alert = []) => {
@@ -54,6 +54,25 @@ class App extends Component {
     this.setState(() => ({ ...message }));
   };
 
+  clearMinMax = () => {
+    // eslint-disable-next-line promise/valid-params
+    telldusCommand('minmax')
+      .then((response) => {
+        if (response.success) {
+          this.setAlert(response.message);
+
+          this.setState((prevState) => {
+            const sensors = { ...prevState.sensors };
+            // eslint-disable-next-line no-param-reassign
+            map(sensors, (sensor) => { delete sensor.minMax; });
+            return { sensors };
+          });
+        }
+        return response.message;
+      })
+      .catch();
+  };
+
   showDialog = (show) => {
     this.setState({ dialog: show });
   };
@@ -63,7 +82,7 @@ class App extends Component {
       let device;
       let sensor;
       let type;
-      const query = {};
+      const query = { id };
 
       if (action === 'toggleFavorite-sensor') {
         sensor = { ...prevState.sensors[id] };
@@ -101,7 +120,7 @@ class App extends Component {
 
       if (action !== 'updateSlider') {
         // eslint-disable-next-line promise/valid-params
-        telldusCommand(type, id, query)
+        telldusCommand(type, query)
           .then((response) => {
             if (!response.success) {
               this.setAlert(response.message);
@@ -131,7 +150,10 @@ class App extends Component {
 
     return (
       <div className="app">
-        <Navbar showDialog={() => this.showDialog(true)} />
+        <Navbar
+          showDialog={() => this.showDialog(true)}
+          clearMinMax={this.clearMinMax}
+        />
 
         <div className="content">
           {!demo && alertList}

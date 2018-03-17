@@ -18,7 +18,7 @@ class AuthDialog extends React.Component {
   };
 
   handleRequestToken = () =>
-    telldusCommand('token', null, { command: 'new' })
+    telldusCommand('token', { command: 'new' })
       .then(result =>
         this.setState({
           step: 1,
@@ -27,7 +27,7 @@ class AuthDialog extends React.Component {
       );
 
   handleRefreshToken = () =>
-    telldusCommand('token', null, { command: 'refresh' })
+    telldusCommand('token', { command: 'refresh' })
       .then(result => this.showAlert(result, true));
 
   handleAuthentication = () => {
@@ -37,7 +37,7 @@ class AuthDialog extends React.Component {
   };
 
   handleAccessToken = () =>
-    telldusCommand('token', null, { command: 'access' })
+    telldusCommand('token', { command: 'access' })
       .then(result => this.showAlert(result, false));
 
   showAlert = (result, renew) => {

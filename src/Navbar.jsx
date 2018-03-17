@@ -5,6 +5,7 @@ import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } f
 export default class AppNavbar extends React.Component {
   static propTypes = {
     showDialog: PropTypes.func.isRequired,
+    clearMinMax: PropTypes.func.isRequired,
   }
 
   state = {
@@ -27,6 +28,9 @@ export default class AppNavbar extends React.Component {
             <Nav className="ml-auto" navbar>
               <NavItem >
                 <NavLink href="#" onClick={this.props.showDialog}>Auth</NavLink>
+              </NavItem>
+              <NavItem >
+                <NavLink href="#" onClick={this.props.clearMinMax}>Clear minMax</NavLink>
               </NavItem>
             </Nav>
           </Collapse>
