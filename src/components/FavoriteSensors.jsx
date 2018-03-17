@@ -22,11 +22,11 @@ const FavoriteSensors = props => map(props.sensors, (sensor) => {
         {<Col>
           <i className="fa fa-thermometer-half" aria-hidden="true" /> {temp} &deg;C{' '}
           {minMax && <span>
-            <a id={`tooltip${id}`}>
+            <a id={`tooltip-${id}`}>
             (<i className="fa fa-caret-down text-primary" aria-hidden="true" /> {minMax.min.temp},{' '}
               <i className="fa fa-caret-up text-danger" aria-hidden="true" /> {minMax.max.temp}){' '}
             </a>
-            <UncontrolledTooltip target={`tooltip${id}`}>
+            <UncontrolledTooltip target={`tooltip-${id}`}>
             Max: {dateStr(minMax.max.updated)},
             Min: {dateStr(minMax.min.updated)},
             </UncontrolledTooltip></span>}

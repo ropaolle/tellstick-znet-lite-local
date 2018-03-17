@@ -49,7 +49,7 @@ test('AuthDialog run methods', () => {
 });
 
 test('Navbar run methods', () => {
-  const wrapper = shallow(<Navbar showDialog={() => {}} />);
+  const wrapper = shallow(<Navbar showDialog={() => {}} clearMinMax={() => {}} />);
   wrapper.instance().toggle();
   wrapper.instance().toggle();
 });
