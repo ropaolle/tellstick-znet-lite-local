@@ -24,7 +24,6 @@ class App extends Component {
     // eslint-disable-next-line promise/valid-params
     telldusCommand('init')
       .then((response) => {
-        // console.log(response);
         if (process.env.REACT_APP_MODE === 'DEMO') {
           return this.setState(demoData);
         }
@@ -39,8 +38,7 @@ class App extends Component {
           allowRenew: response.allowRenew,
           expires: response.expires,
         });
-      })
-      .catch();
+      }).catch();
   };
 
   setAlert = (alert = []) => {
@@ -63,7 +61,7 @@ class App extends Component {
       let device;
       let sensor;
       let type;
-      const query = {};
+      const query = { id };
 
       if (action === 'toggleFavorite-sensor') {
         sensor = { ...prevState.sensors[id] };
@@ -101,7 +99,7 @@ class App extends Component {
 
       if (action !== 'updateSlider') {
         // eslint-disable-next-line promise/valid-params
-        telldusCommand(type, id, query)
+        telldusCommand(type, query)
           .then((response) => {
             if (!response.success) {
               this.setAlert(response.message);

@@ -5,20 +5,15 @@ import qs from 'qs';
 axios.defaults.baseURL = `${process.env.REACT_APP_API_URL}:4000/api/v1/`;
 axios.defaults.timeout = 1000;
 
-function getUrl(type, id, query) {
-  const queryString = qs.stringify(query);
-  let path = type;
-  if (id) path += `/${id}`;
-  if (queryString) path += `?${queryString}`;
-  return path;
-}
-
-export default async function telldusCommand(type, id, query) {
+export default async function telldusCommand(type, query) {
   try {
     if (process.env.REACT_APP_MODE === 'DEMO') { return { success: false, error: 'demo' }; }
 
-    const response = await axios.get(getUrl(type, id, query));
-    // console.log('Response', response);
+    const queryString = qs.stringify(query);
+    const path = (queryString) ? `${type}?${queryString}` : type;
+
+    const response = await axios.get(path);
+    // console.log('Response', response, path);
 
     return response.data;
   } catch (err) {
