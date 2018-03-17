@@ -11,10 +11,6 @@ import Navbar from '../Navbar';
 configure({ adapter: new Adapter() });
 
 it('Renders App without crashing', () => {
-
-});
-
-it('Renders App without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(<App />, div);
   ReactDOM.unmountComponentAtNode(div);

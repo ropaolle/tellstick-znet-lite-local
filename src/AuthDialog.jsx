@@ -17,22 +17,22 @@ class AuthDialog extends React.Component {
     authUrl: '',
   };
 
-  handleRequestToken = () => {
+  handleRequestToken = () =>
     telldusCommand('token', null, { command: 'new' })
       .then(result =>
         this.setState({
           step: 1,
-          authUrl: result.message.authUrl,
+          authUrl: result.message && result.message.authUrl,
         }),
       )
-      .catch();
-  };
+      // .catch();
+  ;
 
-  handleRefreshToken = () => {
+  handleRefreshToken = () =>
     telldusCommand('token', null, { command: 'refresh' })
       .then(result => this.showAlert(result, true))
-      .catch();
-  };
+      // .catch();
+  ;
 
   handleAuthentication = () => {
     const win = window.open(this.state.authUrl, '_blank');
@@ -40,16 +40,16 @@ class AuthDialog extends React.Component {
     this.setState({ step: 2 });
   };
 
-  handleAccessToken = () => {
+  handleAccessToken = () =>
     telldusCommand('token', null, { command: 'access' })
       .then(result => this.showAlert(result, false))
-      .catch();
-  };
+      // .catch();
+  ;
 
   showAlert = (result, renew) => {
     const alert = (<div>{(renew) ? 'Token renewed' : 'New token received' }</div>);
 
-    if (result.message.newAccessToken) {
+    if (result.success && result.message.newAccessToken) {
       this.props.setExpiresAndAllowRenew(result.message);
     }
 

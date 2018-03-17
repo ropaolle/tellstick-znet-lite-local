@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 // Load IP from .env
-axios.defaults.baseURL = `${process.env.REACT_APP_TELLDUS_URL}:4000/api/v1/`;
+axios.defaults.baseURL = `${process.env.REACT_APP_API_URL}:4000/api/v1/`;
 axios.defaults.timeout = 1000;
 
 function getUrl(type, id, query) {
