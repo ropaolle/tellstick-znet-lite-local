@@ -6,7 +6,7 @@ import 'rc-slider/assets/index.css';
 const FavoriteSensors = props => map(props.sensors, (sensor) => {
   if (!sensor.favorite) return '';
 
-  const { id, name, temp, lum, humidity, battery } = sensor;
+  const { id, name, temp, lum, humidity, battery, minMax } = sensor;
 
   // Icons: battery-half|full|quarter|three-quarters
   const batteryIcon = (battery > 200) ? 'fa fa-battery-full text-success' : 'fa fa-battery-quarter text-danger';
@@ -18,7 +18,11 @@ const FavoriteSensors = props => map(props.sensors, (sensor) => {
       </Row>
       <Row className="amb-2">
         {<Col className="cola-2">
-          <i className="fa fa-thermometer-half" aria-hidden="true" /> Temp: {temp} &deg;C</Col>}
+          <i className="fa fa-thermometer-half" aria-hidden="true" /> {temp} &deg;C{' '}
+          (<i className="fa fa-caret-down text-primary" aria-hidden="true" /> {minMax.min.temp},{' '}
+          <i className="fa fa-caret-up text-danger" aria-hidden="true" /> {minMax.max.temp})
+        </Col>}
+
       </Row>
       <Row className="amb-2">
         {lum && <Col className="cola-2">

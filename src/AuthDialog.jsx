@@ -17,22 +17,18 @@ class AuthDialog extends React.Component {
     authUrl: '',
   };
 
-  handleRequestToken = () => {
+  handleRequestToken = () =>
     telldusCommand('token', null, { command: 'new' })
       .then(result =>
         this.setState({
           step: 1,
-          authUrl: result.message.authUrl,
+          authUrl: result.message && result.message.authUrl,
         }),
-      )
-      .catch();
-  };
+      );
 
-  handleRefreshToken = () => {
+  handleRefreshToken = () =>
     telldusCommand('token', null, { command: 'refresh' })
-      .then(result => this.showAlert(result, true))
-      .catch();
-  };
+      .then(result => this.showAlert(result, true));
 
   handleAuthentication = () => {
     const win = window.open(this.state.authUrl, '_blank');
@@ -40,16 +36,14 @@ class AuthDialog extends React.Component {
     this.setState({ step: 2 });
   };
 
-  handleAccessToken = () => {
+  handleAccessToken = () =>
     telldusCommand('token', null, { command: 'access' })
-      .then(result => this.showAlert(result, false))
-      .catch();
-  };
+      .then(result => this.showAlert(result, false));
 
   showAlert = (result, renew) => {
     const alert = (<div>{(renew) ? 'Token renewed' : 'New token received' }</div>);
 
-    if (result.message.newAccessToken) {
+    if (result.success && result.message.newAccessToken) {
       this.props.setExpiresAndAllowRenew(result.message);
     }
 
@@ -73,10 +67,7 @@ class AuthDialog extends React.Component {
     const checked = <span className="text-success">&#x2714;</span>;
 
     const button = (onClick, color, text) => (
-      <Button onClick={onClick} color={color}>
-        {text}
-      </Button>
-    );
+      <Button onClick={onClick} color={color}>{text}</Button>);
 
     return (
       <div className="dialog">

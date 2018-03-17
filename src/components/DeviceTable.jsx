@@ -13,13 +13,14 @@ const Devices = (props) => {
         <td>
           <input
             type="checkbox"
-            checked={device.favorite}
             onChange={handleUpdateDevice(device.id, `toggleFavorite-${device.type}`)}
+            checked={device.favorite}
           />
         </td>
         <td>{device.name}</td>
-        <td>{device.type}</td>
         {device.type === 'sensor' && <td className="text-nowrap">{device.temp} &deg;C</td>}
+        {device.type === 'sensor' && <td>{device.humidity && `${device.humidity}%`}</td>}
+        {device.type === 'sensor' && <td>{device.lum && `${device.lum}%`}</td>}
         {device.type === 'device' && (
           <td>
             <label htmlFor={`toggle-${device.id}`}>
@@ -41,8 +42,10 @@ const Devices = (props) => {
           <tr>
             <th>Fav.</th>
             <th className="cellWidthMax">Name</th>
-            <th>Type</th>
-            <th>Status</th>
+            {title === 'Sensors' && <th>Temp</th>}
+            {title === 'Sensors' && <th>Humidity</th>}
+            {title === 'Sensors' && <th>Luminosity</th>}
+            {title === 'Devices' && <th>Status</th>}
           </tr>
         </thead>
         <tbody>{deviceTable(list)}</tbody>
