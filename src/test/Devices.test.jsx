@@ -79,7 +79,7 @@ test('Render DeviceTable', () => {
 });
 
 test('Devices run methods', () => {
-  const wrapper = shallow(
+  shallow(
     <DeviceTable devices={devices} sensors={sensors} handleUpdateDevice={() => {}} />,
   );
 });
