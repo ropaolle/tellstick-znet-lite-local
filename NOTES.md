@@ -2,7 +2,7 @@
 ## Todo
 
 * [ ] Add project to ropaolle.se
-* [ ] Reset minmax
+
 
 ## Start App/Api
 
