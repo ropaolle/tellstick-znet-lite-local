@@ -6,7 +6,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import Devices from '../components/Devices';
 import DeviceTable from '../components/DeviceTable';
 import FavoriteDevices from '../components/FavoriteDevices';
-import FavoriteSensors from '../components/FavoriteSensors';
 
 configure({ adapter: new Adapter() });
 
