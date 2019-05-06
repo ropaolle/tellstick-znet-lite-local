@@ -21,7 +21,8 @@
     "react-dom": "^16.2.0",
     "react-scripts": "^1.1.1",
     "react-toggle": "^4.0.2",
-    "reactstrap": "5.0.0-beta"
+    "reactstrap": "5.0.0-beta",
+    "snyk": "^1.161.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
@@ -45,11 +46,14 @@
     "test-full": "react-scripts test --env=jsdom --verbose --coverage",
     "test-travis-ci": "react-scripts test -u --env=jsdom --verbose --coverage",
     "eject": "react-scripts eject",
-    "deploy": "npm run build && gh-pages -d build"
+    "deploy": "npm run build && gh-pages -d build",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "babel": {
     "presets": [
       "react-app"
     ]
-  }
+  },
+  "snyk": true
 }
