@@ -1,7 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Taklampa Av
-Comment=Launch DirSyncPro
-Exec=gnome-terminal -e "/home/ropaolle/go.bat off"
-Icon=utilities-terminal
-Type=Application
